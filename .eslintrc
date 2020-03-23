@@ -1,13 +1,22 @@
 {
-    "extends": [
-        "airbnb"
-    ],
-    "rules": {
-        "react/jsx-filename-extension": "off"
-        //You can override any rules you want
-    },
-    "env": {
-        "node": true,
-        "browser": true
-    }
+  "extends": ["airbnb"],
+  "rules": {
+    "react/jsx-filename-extension": "off",
+  },
+  "env": {
+    "node": true,
+    "browser": true,
+  },
+  "globals": {
+    "window": true,
+    "document": true,
+    "localStorage": true,
+    "FormData": true,
+    "FileReader": true,
+    "Blob": true,
+    "navigator": true,
+    "Headers": true,
+    "Request": true,
+    "fetch": true
+  }
 }
