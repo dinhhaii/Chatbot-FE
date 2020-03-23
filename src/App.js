@@ -1,10 +1,13 @@
 import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Auth from './pages/Auth';
 
 function App() {
   return (
     <div className="App">
-      <Auth></Auth>
+      <Router>
+        <Auth />
+      </Router>
     </div>
   );
 }

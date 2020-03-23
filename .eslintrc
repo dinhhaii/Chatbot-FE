@@ -1,12 +1,20 @@
 {
-  "extends": ["airbnb"],
+  "extends": ["airbnb","plugin:jest/recommended"],
   "rules": {
     "react/jsx-filename-extension": "off",
-    "no-console": "warn"
+    "react/button-has-type": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "arrow-body-style": "off",
+    "max-len": "off",
+    "no-use-before-define": "off",
+    "no-console": "off",
+    "arrow-parens": "off",
+    "no-param-reassign": "off"
   },
   "env": {
     "node": true,
     "browser": true,
+    "jest": true
   },
   "globals": {
     "window": true,
