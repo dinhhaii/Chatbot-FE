@@ -28,7 +28,7 @@ const Home = () => {
           </div>
           <Carousel />
           <div className="container">
-            <p className="btn_home_align"><Link href="courses-grid.html" class="btn_1 rounded">View all courses</Link></p>
+            <p className="btn_home_align"><Link to="/auth/login" class="btn_1 rounded">View all courses</Link></p>
           </div>
 
           <hr />

@@ -1,26 +1,27 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { layoutRoutes } from './routes/routes';
+import { Route, Switch } from 'react-router-dom';
 
 import Header from './components/header/header';
+import Home from './pages/Home';
 
-function App() {
+function App({ routes }) {
   return (
-    <Router>
+    <div>
       <Header />
       <Switch>
-        {layoutRoutes.map((route, index) => {
+        {routes.map((route, index) => {
           return (
             <Route
               key={index.toString()}
               path={route.path}
               exact={route.exact}
-              component={route.main}
+              render={route.component}
             />
           );
         })}
       </Switch>
-    </Router>
+      <Home />
+    </div>
   );
 }
 

@@ -5,8 +5,9 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import reducer from './reducers/index';
 import './index.css';
-import { routes } from './routes/routes';
+import routes from './routes/routes';
 import * as serviceWorker from './serviceWorker';
+import Header from './components/header/header';
 
 const store = createStore(reducer);
 
@@ -14,6 +15,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router>
+        <Header />
         <Switch>
           {routes.map((route, index) => {
             return (
@@ -21,7 +23,7 @@ ReactDOM.render(
                 key={index.toString()}
                 path={route.path}
                 exact={route.exact}
-                component={route.main}
+                render={route.component}
               />
             );
           })}

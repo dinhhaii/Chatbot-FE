@@ -5,56 +5,45 @@ import Register from '../components/auth/register';
 import ForgotPassword from '../components/auth/forgot-password';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
-import App from '../App';
-
-// Layout with Header and Footer
-export const layoutRoutes = [
-  {
-    path: '/',
-    exact: true,
-    main: () => <Home />,
-  },
-  {
-    path: '/test',
-    exact: true,
-    main: () => <NotFound />,
-  },
-];
-
-// For Auth Page
-export const authRoutes = [
-  {
-    path: '/login',
-    exact: true,
-    main: () => <Login />,
-  },
-  {
-    path: '/register',
-    exact: false,
-    main: () => <Register />,
-  },
-  {
-    path: '/forgot-password',
-    exact: false,
-    main: () => <ForgotPassword />,
-  },
-];
+// import App from '../App';
 
 // Main routes
-export const routes = [
+const routes = [
   {
     path: '/',
     exact: true,
-    main: () => <App />,
+    component: () => <Home />,
   },
   {
     path: '/auth',
     exact: false,
-    main: () => <Auth />,
+    component: () => (
+      <Auth
+        routes={[
+          {
+            path: '/auth/login',
+            exact: false,
+            component: () => <Login />,
+          },
+          {
+            path: '/auth/register',
+            exact: false,
+            component: () => <Register />,
+          },
+          {
+            path: '/auth/forgot-password',
+            exact: false,
+            component: () => <ForgotPassword />,
+          },
+        ]}
+      />
+    ),
   },
   {
     path: '',
     exact: false,
-    main: () => <NotFound />,
+    component: () => <NotFound />,
   },
 ];
+
+export default routes;

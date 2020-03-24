@@ -12,7 +12,9 @@
     "no-param-reassign": "off",
     "no-unused-vars": "off",
     "no-trailing-spaces": "off",
-    "import/no-cycle": "off"
+    "import/no-cycle": "off",
+    "react/prop-types": "off",
+    "react/jsx-props-no-spreading": "off"
   },
   "env": {
     "node": true,
