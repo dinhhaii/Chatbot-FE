@@ -1,11 +1,18 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Menu from './menu';
 
 const Header = () => {
+  const [isDisplayedMenu, setIsDisplayedMenu] = useState(false);
+
+  const showMenuContent = () => {
+    setIsDisplayedMenu(!isDisplayedMenu);
+  };
+
   return (
     <div>
-      <header className="header fadeInDown">
+      <header className={isDisplayedMenu ? 'header fadeInDown sticky_menu_active' : 'header fadeInDown'}>
         <div id="logo">
           <Link href="index.html">
             <img
@@ -37,17 +44,16 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <div className="hamburger hamburger--spin">
+            <div className={isDisplayedMenu ? 'hamburger hamburger--spin is-active' : 'hamburger hamburger--spin'} onClick={showMenuContent}>
               <div className="hamburger-box">
                 <div className="hamburger-inner" />
               </div>
             </div>
           </li>
         </ul>
-        {/* <!-- /top_menu --> */}
       </header>
-      
-      <Menu />
+
+      <Menu isDisplayedMenu={isDisplayedMenu} />
     </div>
   );
 };

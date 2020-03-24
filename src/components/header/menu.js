@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Menu = () => {
+const Menu = ({ isDisplayedMenu }) => {
   return (
-    <div id="main_menu">
+    <div id="main_menu" className={isDisplayedMenu ? 'show' : ''}>
       <div className="container">
         <nav className="version_2">
           <div className="row">

@@ -4,11 +4,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Category from '../components/categories/categories';
 import Carousel from '../components/courses/carousel';
-import Feature from '../components/features';
-import Introduction from '../components/introduction';
-import News from '../components/news';
-import CallSection from '../components/call-section';
-import PreLoader from '../components/preloader';
+import Feature from '../components/home/features';
+import Introduction from '../components/home/introduction';
+import News from '../components/home/news';
+import CallSection from '../components/home/call-section';
+import PreLoader from '../components/home/preloader';
 import Footer from '../components/footer/footer';
 
 const Home = () => {

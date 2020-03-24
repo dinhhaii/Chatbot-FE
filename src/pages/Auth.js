@@ -12,7 +12,8 @@ const Auth = ({ routes }) => {
       <div className="kt-grid kt-grid--ver kt-grid--root">
         <div
           className="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v6 kt-login--signin"
-          id="kt_login">
+          id="kt_login"
+        >
           <div className="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--desktop kt-grid--ver-desktop kt-grid--hor-tablet-and-mobile">
             <div className="kt-grid__item  kt-grid__item--order-tablet-and-mobile-2  kt-grid kt-grid--hor kt-login__aside">
               <div className="kt-login__wrapper">
@@ -46,7 +47,8 @@ const Auth = ({ routes }) => {
               style={{
                 backgroundImage:
                   'url("https://cdn.pixabay.com/photo/2017/02/01/13/52/analysis-2030261_1280.jpg")',
-              }}>
+              }}
+            >
               <div className="kt-login__section">
                 <div className="kt-login__block">
                   <h3 className="kt-login__title">Join Our Community</h3>
