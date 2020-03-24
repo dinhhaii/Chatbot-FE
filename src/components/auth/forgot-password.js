@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ForgotPassword = (props) => {
+const ForgotPassword = () => {
   return (
     <div className="kt-login__forgot">
       <div className="kt-login__head">

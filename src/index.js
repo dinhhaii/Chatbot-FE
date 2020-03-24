@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import reducer from './reducers/index';
 import './index.css';
-import App from './App';
+import { routes } from './routes/routes';
 import * as serviceWorker from './serviceWorker';
 
 const store = createStore(reducer);
@@ -14,7 +14,18 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router>
-        <App />
+        <Switch>
+          {routes.map((route, index) => {
+            return (
+              <Route
+                key={index.toString()}
+                path={route.path}
+                exact={route.exact}
+                component={route.main}
+              />
+            );
+          })}
+        </Switch>
       </Router>
     </Provider>
   </React.StrictMode>,

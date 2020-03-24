@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Switch, Route } from 'react-router-dom';
-import authRoutes from '../routes/routes';
+import { authRoutes } from '../routes/routes';
 import '../utils/css/Auth.css';
 
 const Auth = () => (

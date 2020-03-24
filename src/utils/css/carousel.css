@@ -1,0 +1,18 @@
+.owl-prev {
+    display: inline-block;
+    float: left;
+    padding: 5px 14px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+}
+
+.owl-next {
+    display: inline-block;
+    float: right;
+    padding: 5px 14px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+}
+
