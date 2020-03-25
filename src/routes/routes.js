@@ -5,6 +5,7 @@ import Register from '../components/auth/register';
 import ForgotPassword from '../components/auth/forgot-password';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
+import Course from '../pages/Course';
 // import App from '../App';
 
 // Main routes
@@ -38,6 +39,11 @@ const routes = [
         ]}
       />
     ),
+  },
+  {
+    path: '/courses',
+    exact: false,
+    component: () => <Course />,
   },
   {
     path: '',

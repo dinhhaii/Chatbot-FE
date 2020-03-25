@@ -9,7 +9,6 @@ import Introduction from '../components/home/introduction';
 import News from '../components/home/news';
 import CallSection from '../components/home/call-section';
 import PreLoader from '../components/home/preloader';
-import Footer from '../components/footer/footer';
 
 const Home = () => {
   return (
@@ -50,8 +49,6 @@ const Home = () => {
 
       </main>
       {/* END MAIN */}
-
-      <Footer />
 
       {/* <!-- Search Menu --> */}
       <div className="search-overlay-menu">

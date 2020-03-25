@@ -14,7 +14,7 @@ const Header = () => {
     <div>
       <header className={isDisplayedMenu ? 'header fadeInDown sticky_menu_active' : 'header fadeInDown'}>
         <div id="logo">
-          <Link href="index.html">
+          <Link to="/">
             <img
               src="img/logo.png"
               width="149"

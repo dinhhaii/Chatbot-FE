@@ -8,6 +8,7 @@ import './index.css';
 import routes from './routes/routes';
 import * as serviceWorker from './serviceWorker';
 import Header from './components/header/header';
+import Footer from './components/footer/footer';
 
 const store = createStore(reducer);
 
@@ -28,6 +29,7 @@ ReactDOM.render(
             );
           })}
         </Switch>
+        <Footer />
       </Router>
     </Provider>
   </React.StrictMode>,

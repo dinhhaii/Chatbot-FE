@@ -1,0 +1,13 @@
+#custom-search-input {
+    margin: 0;
+    height: 34px;
+    width: 100%;
+}
+
+#custom-search-input .search-query {
+    height: 33px;
+}
+
+#custom-search-input input[type="submit"] {
+    height: 33px;
+}
