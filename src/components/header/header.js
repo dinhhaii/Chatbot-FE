@@ -26,8 +26,13 @@ const Header = () => {
         </div>
         <ul id="top_menu">
           <li>
-            <Link href="login.html" class="login">
+            <Link to="/auth/login" class="login">
               Login
+            </Link>
+          </li>
+          <li>
+            <Link to="/auth/register" class="login">
+              Register
             </Link>
           </li>
           <li>
