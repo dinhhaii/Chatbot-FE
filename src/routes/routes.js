@@ -7,6 +7,7 @@ import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
 import Course from '../pages/Course';
 import CourseDetail from '../pages/CourseDetail';
+import LessonDetail from '../components/lessons/lessons-detail';
 // import App from '../App';
 
 // Main routes
@@ -50,6 +51,11 @@ const routes = [
     path: '/course-detail',
     exact: false,
     component: () => <CourseDetail />,
+  },
+  {
+    path: '/lesson-detail',
+    exact: false,
+    component: () => <LessonDetail />,
   },
   {
     path: '',

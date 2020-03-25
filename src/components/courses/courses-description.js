@@ -2,7 +2,7 @@ import React from 'react';
 
 const CourseDescription = () => {
   return (
-    <section id="description">
+    <section id="description" className="bg-white">
       <h2>Description</h2>
       <p>
         Per consequat adolescens ex, cu nibh commune temporibus vim, ad sumo
