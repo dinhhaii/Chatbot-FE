@@ -11,6 +11,7 @@ import LessonDetail from '../components/lessons/lessons-detail';
 import About from '../components/about';
 import Contact from '../pages/Contact';
 import CourseLectureDetail from '../components/courses/courses-lecturer-detail';
+import Cart from '../components/carts/cart';
 // import App from '../App';
 
 // Main routes
@@ -58,7 +59,7 @@ const routes = [
   {
     path: '/course-lecturer',
     exact: false,
-    component: () => <CourseLectureDetail />
+    component: () => <CourseLectureDetail />,
   },
   {
     path: '/lesson-detail',
@@ -69,6 +70,11 @@ const routes = [
     path: '/contact',
     exact: false,
     component: () => <Contact />,
+  },
+  {
+    path: '/cart',
+    exact: false,
+    component: () => <Cart />,
   },
   {
     path: '/about',

@@ -53,7 +53,7 @@ const CourseLectureDetail = () => {
                       <li><strong>December 2012 - Master course in Economics</strong>
                         <p>University of Cambrige - United Kingdom</p>
                       </li>
-                      <li><strong>October 2013 - Master's Degree in Statistic</strong>
+                      <li><strong>October 2013 - Master&apos;s Degree in Statistic</strong>
                         <p>University of Oxford - United Kingdom</p>
                       </li>
                     </ul>
