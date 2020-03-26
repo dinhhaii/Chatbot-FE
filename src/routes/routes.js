@@ -9,6 +9,7 @@ import Course from '../pages/Course';
 import CourseDetail from '../pages/CourseDetail';
 import LessonDetail from '../components/lessons/lessons-detail';
 import About from '../components/about';
+import Contact from '../pages/Contact';
 // import App from '../App';
 
 // Main routes
@@ -57,6 +58,11 @@ const routes = [
     path: '/lesson-detail',
     exact: false,
     component: () => <LessonDetail />,
+  },
+  {
+    path: '/contact',
+    exact: false,
+    component: () => <Contact />,
   },
   {
     path: '/about',
