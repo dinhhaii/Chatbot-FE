@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import PreLoader from '../home/preloader';
 import LessonsList from './lessons-list';
 import LessonComment from './lessons-comments';
+import LessonFile from './lessons-files';
 
 const { TabPane } = Tabs;
 
@@ -39,8 +40,8 @@ const LessonDetail = () => {
                 </div>
                 <div className="col-lg-4">
                   <Tabs defaultActiveKey="2">
-                    <TabPane tab={<span>Documents</span>} key="1">
-                      <div>Files</div>
+                    <TabPane tab={<span>Files</span>} key="1">
+                      <LessonFile />
                     </TabPane>
                     <TabPane tab={<span>Lessons</span>} key="2">
                       <LessonsList />
@@ -52,12 +53,9 @@ const LessonDetail = () => {
                   ,
                 </div>
               </div>
-              {/* /row */}
             </div>
-            {/* /container */}
           </div>
         </div>
-        {/* /bg_color_1 */}
       </main>
     </div>
   );
