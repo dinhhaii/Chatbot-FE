@@ -10,6 +10,7 @@ import CourseDetail from '../pages/CourseDetail';
 import LessonDetail from '../components/lessons/lessons-detail';
 import About from '../components/about';
 import Contact from '../pages/Contact';
+import CourseLectureDetail from '../components/courses/courses-lecturer-detail';
 // import App from '../App';
 
 // Main routes
@@ -53,6 +54,11 @@ const routes = [
     path: '/course-detail',
     exact: false,
     component: () => <CourseDetail />,
+  },
+  {
+    path: '/course-lecturer',
+    exact: false,
+    component: () => <CourseLectureDetail />
   },
   {
     path: '/lesson-detail',
