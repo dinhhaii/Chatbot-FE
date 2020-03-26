@@ -8,6 +8,7 @@ import NotFound from '../pages/NotFound';
 import Course from '../pages/Course';
 import CourseDetail from '../pages/CourseDetail';
 import LessonDetail from '../components/lessons/lessons-detail';
+import About from '../components/about';
 // import App from '../App';
 
 // Main routes
@@ -56,6 +57,11 @@ const routes = [
     path: '/lesson-detail',
     exact: false,
     component: () => <LessonDetail />,
+  },
+  {
+    path: '/about',
+    exact: false,
+    component: () => <About />,
   },
   {
     path: '',
