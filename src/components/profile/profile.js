@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ProfileChangePassword from './profile-changepassword';
 import ProfileInformation from './profile-information';
+import ProfileInvoices from './profile-invoices';
 
 const Profile = () => {
   return (
@@ -545,9 +546,9 @@ const Profile = () => {
           </div>
 
           {/* End:: App Aside */}
-
+          <ProfileInvoices />
           <ProfileChangePassword />
-          {/* <ProfileInformation />  */}
+          <ProfileInformation /> 
         </div>
 
         {/* End::App */}
