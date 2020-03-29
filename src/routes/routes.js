@@ -13,6 +13,7 @@ import Contact from '../pages/Contact';
 import CourseLectureDetail from '../components/courses/courses-lecturer-detail';
 import Cart from '../components/carts/cart';
 import Profile from '../components/profile/profile';
+import LecturerCourseManagement from '../components/lecturer/lecturer-course';
 // import App from '../App';
 
 // Main routes
@@ -51,6 +52,11 @@ const routes = [
         ]}
       />
     ),
+  },
+  {
+    path: '/lecturercourses',
+    exact: false,
+    component: () => <LecturerCourseManagement />,
   },
   {
     path: '/courses',
