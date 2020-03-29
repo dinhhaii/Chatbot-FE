@@ -2,7 +2,7 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import { Tabs } from 'antd';
 import LecturerCourseDetailCourseForm from '../components/lecturer/lecturer-coursedetail-courseform';
-import LecturerCourseDetailLessonForm from '../components/lecturer/lecturer-coursedetail-lessonsform';
+import LecturerCourseDetailLesson from '../components/lecturer/lecturer-coursedetail-lessons';
 
 const { TabPane } = Tabs;
 
@@ -28,7 +28,7 @@ const LecturerCourseDetail = () => {
                 <LecturerCourseDetailCourseForm />
               </TabPane>
               <TabPane tab={<span>Lessons Detail</span>} key="2">
-                <LecturerCourseDetailLessonForm />
+                <LecturerCourseDetailLesson />
               </TabPane>
             </Tabs>
           </div>
