@@ -2,13 +2,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const CourseLectureDetail = () => {
+const UserDetail = () => {
   return ( 
     <main>
       <section id="hero_in" className="general">
         <div className="wrapper">
           <div className="container">
-            <h1 className="fadeInUp"><span />Teacher detail</h1>
+            <h1 className="fadeInUp"><span />User detail</h1>
           </div>
         </div>
       </section>
@@ -138,4 +138,4 @@ const CourseLectureDetail = () => {
   );
 };
 
-export default CourseLectureDetail;
+export default UserDetail;

@@ -1,9 +1,9 @@
 import React from 'react';
-import LecturerCourseList from './lecturer-course-courselist';
-import LecturerCourseFinanceSummary from './lecturer-course-financesummary';
-import LecturerCourseNewUsers from './lecturer-course-newusers';
-import LecturerCourseStatistic from './lecturer-cousre-statistic';
-import LecturerCourseBestSeller from './lecturer-course-bestseller';
+import LecturerCourseList from '../components/lecturer/lecturer-course-courselist';
+import LecturerCourseFinanceSummary from '../components/lecturer/lecturer-course-financesummary';
+import LecturerCourseNewUsers from '../components/lecturer/lecturer-course-newusers';
+import LecturerCourseStatistic from '../components/lecturer/lecturer-cousre-statistic';
+import LecturerCourseBestSeller from '../components/lecturer/lecturer-course-bestseller';
 
 const LecturerCourseManagement = () => {
   return (

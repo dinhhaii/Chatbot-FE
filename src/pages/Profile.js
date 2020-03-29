@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/heading-has-content */
 import React from 'react';
 import { Link } from 'react-router-dom';
-import ProfileChangePassword from './profile-changepassword';
-import ProfileInformation from './profile-information';
-import ProfileInvoices from './profile-invoices';
+import ProfileChangePassword from '../components/profile/profile-changepassword';
+import ProfileInformation from '../components/profile/profile-information';
+import ProfileInvoices from '../components/profile/profile-invoices';
 
 const Profile = () => {
   return (

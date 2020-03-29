@@ -3,17 +3,19 @@ import Auth from '../pages/Auth';
 import Login from '../components/auth/login';
 import Register from '../components/auth/register';
 import ForgotPassword from '../components/auth/forgot-password';
+
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
-import Course from '../pages/Course';
+import Course from '../pages/Courses';
 import CourseDetail from '../pages/CourseDetail';
-import LessonDetail from '../components/lessons/lessons-detail';
-import About from '../components/about';
+import About from '../pages/About';
 import Contact from '../pages/Contact';
-import CourseLectureDetail from '../components/courses/courses-lecturer-detail';
-import Cart from '../components/carts/cart';
-import Profile from '../components/profile/profile';
-import LecturerCourseManagement from '../components/lecturer/lecturer-course';
+import LecturerCourseManagement from '../pages/LecturerCourse';
+import LessonDetail from '../pages/Lesson';
+import Cart from '../pages/Cart';
+import Profile from '../pages/Profile';
+import UserDetail from '../pages/UserProfile';
+import LecturerCourseDetail from '../pages/LecturerCourseDetail';
 // import App from '../App';
 
 // Main routes
@@ -27,6 +29,11 @@ const routes = [
     path: '/profile',
     exact: false,
     component: () => <Profile />,
+  },
+  {
+    path: '/profileuser',
+    exact: false,
+    component: () => <UserDetail />,
   },
   {
     path: '/auth',
@@ -69,14 +76,14 @@ const routes = [
     component: () => <CourseDetail />,
   },
   {
-    path: '/course-lecturer',
-    exact: false,
-    component: () => <CourseLectureDetail />,
-  },
-  {
     path: '/lesson-detail',
     exact: false,
     component: () => <LessonDetail />,
+  },
+  {
+    path: '/course-edit',
+    exact: false,
+    component: () => <LecturerCourseDetail />,
   },
   {
     path: '/contact',

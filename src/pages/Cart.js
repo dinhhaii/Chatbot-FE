@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Link } from 'react-router-dom';
-import CartPayment from './cart-payment';
-import CartItems from './cart-items';
+import CartPayment from '../components/carts/cart-payment';
+import CartItems from '../components/carts/cart-items';
 
 
 const Cart = () => {

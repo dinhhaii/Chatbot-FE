@@ -1,10 +1,10 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Tabs } from 'antd';
-import PreLoader from '../home/preloader';
-import LessonsList from './lessons-list';
-import LessonComment from './lessons-comments';
-import LessonFile from './lessons-files';
+import LessonsList from '../components/lessons/lessons-list';
+import LessonComment from '../components/lessons/lessons-comments';
+import LessonFile from '../components/lessons/lessons-files';
+import PreLoader from '../components/home/preloader';
 
 const { TabPane } = Tabs;
 
