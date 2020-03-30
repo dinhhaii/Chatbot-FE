@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import '../../utils/css/lecturer-coursedetail-lessonform.css';
+import PreviewVideoAntdUpload from '../previewVideo';
 
 const LecturerCourseDetailLessonForm = () => {
   return (
@@ -29,6 +30,9 @@ const LecturerCourseDetailLessonForm = () => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-6">
+                  <PreviewVideoAntdUpload />
+                </div>
+                <div className="col-lg-6">
                   <div className="form-group">
                     <label htmlFor="lessonName">Name</label>
                     <input
@@ -46,9 +50,23 @@ const LecturerCourseDetailLessonForm = () => {
                       placeholder="Enter description"
                     />
                   </div>
-                </div>
-                <div className="col-lg-6">
-                  Upload video & files here
+
+                  <div className="form-group">
+                    <label>Files</label>
+                    <div className="custom-file">
+                      <input
+                        type="file"
+                        className="custom-file-input"
+                        id="customFile"
+                      />
+                      <label
+                        className="custom-file-label"
+                        style={{ textAlign: 'left' }}
+                        htmlFor="customFile">
+                        Choose file
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

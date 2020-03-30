@@ -5,69 +5,145 @@ const LecturerCourseDetailCourseForm = () => {
     <div className="kt-portlet">
       <div className="kt-portlet__head">
         <div className="kt-portlet__head-label">
-          <h3 className="kt-portlet__head-title">Textual HTML5 Inputs</h3>
+          <h3 className="kt-portlet__head-title">Create New Course</h3>
         </div>
       </div>
 
       <form className="kt-form kt-form--label-right">
         <div className="kt-portlet__body">
-          <div className="form-group form-group-last">
-            <div className="alert alert-secondary" role="alert">
-              <div className="alert-icon">
-                <i className="flaticon-warning kt-font-brand" />
+          {/* IMAGE */}
+          <div className="form-group row">
+            <label className="col-lg-2">Course&apos;s Image</label>
+            <div className="col-lg-2">
+              <div
+                className="kt-avatar"
+                style={{ marginLeft: `${20}px` }}
+                id="kt_user_avatar_2">
+                <div
+                  className="kt-avatar__holder"
+                  style={{
+                    backgroundImage:
+                      'url("https://cdn.pixabay.com/photo/2016/09/01/08/24/smiley-1635449_960_720.png")',
+                  }}
+                />
+                <label
+                  className="kt-avatar__upload"
+                  data-toggle="kt-tooltip"
+                  title=""
+                  data-original-title="Change avatar">
+                  <i className="fa fa-pen" />
+                  <input
+                    type="file"
+                    name="profile_avatar"
+                    accept=".png, .jpg, .jpeg"
+                  />
+                </label>
+                <span
+                  className="kt-avatar__cancel"
+                  data-toggle="kt-tooltip"
+                  title=""
+                  data-original-title="Cancel avatar">
+                  <i className="fa fa-times" />
+                </span>
               </div>
-              <div className="alert-text">
-                Here are examples of <code>.form-control</code> applied to each
-                textual HTML5 input type:
+            </div>
+
+            <div className="col-lg-8">
+              {/* NAME */}
+              <div className="form-group row">
+                <label
+                  htmlFor="example-text-input"
+                  className="col-2 col-form-label">
+                  Name
+                </label>
+                <div className="col-10">
+                  <input
+                    className="form-control"
+                    type="text"
+                    id="example-text-input"
+                  />
+                </div>
+              </div>
+
+              {/* SUBJECT */}
+              <div className="form-group row">
+                <label htmlFor="selectSubject" className="col-2 col-form-label">
+                  Subject
+                </label>
+                <div className="col-10">
+                  <select
+                    className="custom-select form-control"
+                    id="selectSubject">
+                    <option selected>None</option>
+                    <option value="1">Programming</option>
+                    <option value="2">Photography</option>
+                    <option value="3">Media</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
+
+          {/* DURATION */}
           <div className="form-group row">
             <label
               htmlFor="example-text-input"
               className="col-2 col-form-label">
-              Text
+              Duration
             </label>
             <div className="col-10">
               <input
                 className="form-control"
                 type="text"
-                value="Artisanal kale"
                 id="example-text-input"
               />
             </div>
           </div>
+
+          {/* PRICE */}
+          <div className="form-group row">
+            <label
+              htmlFor="example-number-input"
+              className="col-2 col-form-label">
+              Price ($)
+            </label>
+            <div className="col-4">
+              <input
+                className="form-control"
+                type="number"
+                value="20"
+                id="example-number-input"
+              />
+            </div>
+            {/* ACCESSIBLE DAYS */}
+            <label
+              htmlFor="example-number-input"
+              className="col-2 col-form-label">
+              Accessible Days (days)
+            </label>
+            <div className="col-4">
+              <input
+                className="form-control"
+                type="number"
+                value="90"
+                id="example-number-input"
+              />
+            </div>
+          </div>
+
+          {/* DESCRIPTION */}
           <div className="form-group row">
             <label
               htmlFor="example-search-input"
               className="col-2 col-form-label">
-              Search
+              Description
             </label>
             <div className="col-10">
-              <input
-                className="form-control"
-                type="search"
-                value="How do I shoot web"
-                id="example-search-input"
-              />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label
-              htmlFor="example-email-input"
-              className="col-2 col-form-label">
-              Email
-            </label>
-            <div className="col-10">
-              <input
-                className="form-control"
-                type="email"
-                value="bootstrap@example.com"
-                id="example-email-input"
-              />
+              <textarea className="form-control" id="example-search-input" />
             </div>
           </div>
         </div>
+
         <div className="kt-portlet__foot">
           <div className="kt-form__actions">
             <div className="row">
