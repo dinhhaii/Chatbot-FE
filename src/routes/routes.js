@@ -16,6 +16,7 @@ import Cart from '../pages/Cart';
 import Profile from '../pages/Profile';
 import UserDetail from '../pages/UserProfile';
 import LecturerCourseDetail from '../pages/LecturerCourseDetail';
+import Chat from '../pages/Chat';
 // import App from '../App';
 
 // Main routes
@@ -84,6 +85,11 @@ const routes = [
     path: '/course-edit',
     exact: false,
     component: () => <LecturerCourseDetail />,
+  },
+  {
+    path: '/chat',
+    exact: false,
+    component: () => <Chat />,
   },
   {
     path: '/contact',
