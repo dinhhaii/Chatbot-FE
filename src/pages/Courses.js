@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import 'icheck/skins/all.css';
 import { Checkbox } from 'react-icheck';
 import CoursesGrid from '../components/courses/courses-grid';
-import PreLoader from '../components/home/preloader';
 import CoursesList from '../components/courses/courses-list';
 import '../utils/css/courses.css';
 
@@ -13,7 +12,6 @@ const Course = () => {
 
   return (
     <div>
-      <PreLoader />
       <main>
         <section id="hero_in" className="courses">
           <div className="wrapper">

@@ -8,13 +8,10 @@ import Feature from '../components/home/features';
 import Introduction from '../components/home/introduction';
 import News from '../components/home/news';
 import CallSection from '../components/home/call-section';
-import PreLoader from '../components/home/preloader';
 
 const Home = () => {
   return (
     <div>
-      <PreLoader />
-
       <main>
         <Introduction />
         <Feature />

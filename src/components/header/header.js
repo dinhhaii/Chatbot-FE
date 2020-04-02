@@ -1,9 +1,13 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchUser } from '../../actions/user';
+
 import Menu from './menu';
 
-const Header = () => {
+const Header = (props) => {
   const [isDisplayedMenu, setIsDisplayedMenu] = useState(false);
 
   const showMenuContent = () => {
@@ -26,12 +30,12 @@ const Header = () => {
         </div>
         <ul id="top_menu">
           <li>
-            <Link to="/auth/login" class="login">
-              Login
-            </Link>
+            <button className="btn btn-danger" onClick={() => props.fetchUserAction('dinhhhaii@gmail.com', '1')}>
+              Test
+            </button>
           </li>
           <li>
-            <Link to="/auth/register" class="login">
+            <Link to="/auth/register" className="login">
               Register
             </Link>
           </li>
@@ -63,4 +67,16 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state) => {
+  return {
+    userState: state.userState,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUserAction: bindActionCreators(fetchUser, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

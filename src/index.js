@@ -1,21 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import createSagaMiddleware from 'redux-saga';
+import thunk from 'redux-thunk';
 import reducer from './reducers/index';
 import './index.css';
 import routes from './routes/routes';
+import rootSaga from './sagas/index';
 import * as serviceWorker from './serviceWorker';
 import Header from './components/header/header';
 import Footer from './components/footer/footer';
+import CustomLoader from './components/loader';
 
-const store = createStore(reducer);
+const sagaMiddleware = createSagaMiddleware();
+
+const store = createStore(
+  reducer,
+  composeWithDevTools(applyMiddleware(thunk, sagaMiddleware)),
+);
+
+sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router>
+        <CustomLoader />
         <Header />
         <Switch>
           {routes.map((route, index) => {

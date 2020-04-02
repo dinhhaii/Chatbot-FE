@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { Link } from 'react-router-dom';
-import PreLoader from '../components/home/preloader';
 import LessonsList from '../components/lessons/lessons-list';
 import CourseReview from '../components/courses/courses-review';
 import CourseDescription from '../components/courses/courses-description';
@@ -10,7 +9,6 @@ import CoursePurchase from '../components/courses/courses-purchase';
 const CourseDetail = () => {
   return (
     <div>
-      <PreLoader />
       <main>
         <section id="hero_in" className="courses">
           <div className="wrapper">

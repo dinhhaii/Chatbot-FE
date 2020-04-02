@@ -4,15 +4,12 @@ import { Tabs } from 'antd';
 import LessonsList from '../components/lessons/lessons-list';
 import LessonComment from '../components/lessons/lessons-comments';
 import LessonFile from '../components/lessons/lessons-files';
-import PreLoader from '../components/home/preloader';
 
 const { TabPane } = Tabs;
 
 const LessonDetail = () => {
   return (
     <div>
-      <PreLoader />
-
       <main>
         <div className="bg-dark">
           <nav className="secondary_nav sticky_horizontal">
