@@ -8,6 +8,7 @@ import Feature from '../components/home/features';
 import Introduction from '../components/home/introduction';
 import News from '../components/home/news';
 import CallSection from '../components/home/call-section';
+import Search from '../components/home/search';
 
 const Home = () => {
   return (
@@ -29,7 +30,6 @@ const Home = () => {
 
           <hr />
         </div>
-        {/* END CAROUSEL */}
 
         <div className="container margin_30_95">
           <div className="main_title_2">
@@ -39,24 +39,14 @@ const Home = () => {
           </div>
           <Category />
         </div>
-        {/* END CATEGORIES */}
 
         <News />
         <CallSection />
 
       </main>
-      {/* END MAIN */}
 
-      {/* <!-- Search Menu --> */}
-      <div className="search-overlay-menu">
-        <span className="search-overlay-close"><span className="closebt"><i className="ti-close" /></span></span>
-        <form role="search" id="searchform" method="get">
-          <input value="" name="q" type="search" placeholder="Search..." />
-          <button type="submit">
-            <i className="icon_search" />
-          </button>
-        </form>
-      </div>
+      <Search />
+      
     </div>
   );
 };

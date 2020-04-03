@@ -16,7 +16,12 @@ const Header = (props) => {
 
   return (
     <div>
-      <header className={isDisplayedMenu ? 'header fadeInDown sticky_menu_active' : 'header fadeInDown'}>
+      <header
+        className={
+          isDisplayedMenu
+            ? 'header fadeInDown sticky_menu_active'
+            : 'header fadeInDown'
+        }>
         <div id="logo">
           <Link to="/">
             <img
@@ -30,9 +35,16 @@ const Header = (props) => {
         </div>
         <ul id="top_menu">
           <li>
-            <button className="btn btn-danger" onClick={() => props.fetchUserAction('dinhhhaii@gmail.com', '1')}>
-              Test
+            <button
+              className="btn btn-info"
+              onClick={() => props.fetchUserAction('dinhhhaii@gmail.com', '1')}>
+              Test Button
             </button>
+          </li>
+          <li>
+            <Link to="/auth/login" className="login">
+              Login
+            </Link>
           </li>
           <li>
             <Link to="/auth/register" className="login">
@@ -40,20 +52,26 @@ const Header = (props) => {
             </Link>
           </li>
           <li>
-            <Link href="#0" class="search-overlay-menu-btn">
-              Search
-            </Link>
-          </li>
-          <li className="hidden_tablet">
-            <Link href="#0">Buy this template</Link>
-          </li>
-          <li className="hidden_tablet">
-            <Link href="admission.html" class="btn_1 rounded">
-              Admission
+            <Link href="/" className="search-overlay-menu-btn">
+              <i className="icon-search" /> Search
             </Link>
           </li>
           <li>
-            <div className={isDisplayedMenu ? 'hamburger hamburger--spin is-active' : 'hamburger hamburger--spin'} onClick={showMenuContent}>
+            <span className="kt-media kt-media--sm" style={{verticalAlign: 'middle'}}>
+              <img
+                src="https://cdn.pixabay.com/photo/2020/03/29/15/35/coronavirus-4981176_1280.png"
+                alt=""
+              />
+            </span>
+          </li>
+          <li>
+            <div
+              className={
+                isDisplayedMenu
+                  ? 'hamburger hamburger--spin is-active'
+                  : 'hamburger hamburger--spin'
+              }
+              onClick={showMenuContent}>
               <div className="hamburger-box">
                 <div className="hamburger-inner" />
               </div>

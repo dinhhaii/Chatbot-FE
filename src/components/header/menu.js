@@ -1,145 +1,85 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchUser } from '../../actions/user';
 
 const Menu = ({ isDisplayedMenu }) => {
   return (
-    <div id="main_menu" className={isDisplayedMenu ? 'show' : ''}>
+    <div
+      id="main_menu"
+      className={isDisplayedMenu ? 'show' : ''}
+      style={{ fontSize: `${15}pt` }}>
       <div className="container">
+        <div className="row">
+          <h2 style={{ color: 'white' }}>Hi, Dinh Hai</h2>
+        </div>
         <nav className="version_2">
           <div className="row">
-            <div className="col-md-3">
-              <h3>Home</h3>
+            <div className="col-md-4">
+              <h3>Profile</h3>
               <ul>
                 <li>
-                  <Link href="index.html">Home version 1</Link>
+                  <Link to="/profile">Information</Link>
                 </li>
                 <li>
-                  <Link href="index-2.html">Home version 2</Link>
+                  <Link to="/profile">Change Password</Link>
                 </li>
                 <li>
-                  <Link href="index-6.html">Home version 3</Link>
+                  <Link to="/profile">My Invoices</Link>
                 </li>
                 <li>
-                  <Link href="index-3.html">Home version 4</Link>
-                </li>
-                <li>
-                  <Link href="index-4.html">Home version 5</Link>
-                </li>
-                <li>
-                  <Link href="index-5.html">With Cookie bar (EU law)</Link>
+                  <Link to="/logout" className="btn btn-danger">
+                    <i className="icon-logout-1" /> Log Out
+                  </Link>
                 </li>
               </ul>
             </div>
-            <div className="col-md-3">
+            <div className="col-md-4">
               <h3>Courses</h3>
               <ul>
                 <li>
-                  <Link href="courses-grid.html">Courses grid</Link>
+                  <Link href="courses-grid.html">My Courses</Link>
                 </li>
                 <li>
-                  <Link href="courses-grid-sidebar.html">
-                    Courses grid sidebar
-                  </Link>
+                  <Link href="courses-grid-sidebar.html">All Courses</Link>
                 </li>
                 <li>
-                  <Link href="courses-list.html">Courses list</Link>
-                </li>
-                <li>
-                  <Link href="courses-list-sidebar.html">
-                    Courses list sidebar
-                  </Link>
-                </li>
-                <li>
-                  <Link href="course-detail.html">Course detail</Link>
-                </li>
-                <li>
-                  <Link href="course-detail-2.html">
-                    Course detail (working form)
-                  </Link>
-                </li>
-                <li>
-                  <Link href="admission.html">Admission wizard</Link>
-                </li>
-                <li>
-                  <Link href="teacher-detail.html">Teacher detail</Link>
+                  <Link href="courses-grid-sidebar.html">All Teachers</Link>
                 </li>
               </ul>
             </div>
-            <div className="col-md-3">
-              <h3>Pages</h3>
+            <div className="col-md-4">
+              <h3>UDEMA</h3>
               <ul>
                 <li>
-                  <Link href="#0">Menu 1</Link>
-                  <span className="badge_info">New</span>
-                </li>
-                <li>
-                  <Link href="about.html">About</Link>
-                </li>
-                <li>
-                  <Link href="blog.html">Blog</Link>
-                </li>
-                <li>
-                  <Link href="login.html">Login</Link>
-                </li>
-                <li>
-                  <Link href="register.html">Register</Link>
-                </li>
-                <li>
-                  <Link href="contacts.html">Contacts</Link>
-                </li>
-                <li>
-                  <Link href="404.html">404 page</Link>
-                </li>
-                <li>
-                  <Link href="agenda-calendar.html">Agenda Calendar</Link>
-                </li>
-                <li>
-                  <Link href="faq.html">Faq</Link>
-                </li>
-                <li>
-                  <Link href="help.html">Help</Link>
-                </li>
-              </ul>
-            </div>
-            <div className="col-md-3">
-              <h3>Extra pages</h3>
-              <ul>
-                <li>
-                  <Link href="media-gallery.html">Media gallery</Link>
-                </li>
-                <li>
-                  <Link href="cart-1.html">Cart page 1</Link>
-                </li>
-                <li>
-                  <Link href="cart-2.html">Cart page 2</Link>
-                </li>
-                <li>
-                  <Link href="cart-3.html">Cart page 3</Link>
-                </li>
-                <li>
-                  <Link href="pricing-tables.html">
-                    Responsive pricing tables
+                  <Link to="/contact">
+                    <i className="icon-contacts" /> Contact
                   </Link>
                 </li>
                 <li>
-                  <Link href="coming_soon/index.html">Coming soon</Link>
+                  <Link to="/">
+                    <i className="icon-newspaper" /> Blog
+                  </Link>
                 </li>
                 <li>
-                  <Link href="icon-pack-1.html">Icon pack 1</Link>
+                  <Link to="/">
+                    <i className="icon-puzzle" /> Setting
+                  </Link>
                 </li>
                 <li>
-                  <Link href="icon-pack-2.html">Icon pack 2</Link>
+                  <Link to="/">
+                    <i className="icon-help" /> FAQ
+                  </Link>
                 </li>
                 <li>
-                  <Link href="icon-pack-3.html">Icon pack 3</Link>
-                </li>
-                <li>
-                  <Link href="icon-pack-4.html">Icon pack 4</Link>
+                  <Link to="/about">
+                    <i className="icon-home" /> About
+                  </Link>
                 </li>
               </ul>
             </div>
           </div>
-          {/* <!-- /row --> */}
         </nav>
         <div className="follow_us">
           <ul>
@@ -151,17 +91,7 @@ const Menu = ({ isDisplayedMenu }) => {
             </li>
             <li>
               <Link href="#0">
-                <i className="ti-twitter-alt" />
-              </Link>
-            </li>
-            <li>
-              <Link href="#0">
                 <i className="ti-google" />
-              </Link>
-            </li>
-            <li>
-              <Link href="#0">
-                <i className="ti-pinterest" />
               </Link>
             </li>
             <li>
@@ -176,4 +106,16 @@ const Menu = ({ isDisplayedMenu }) => {
   );
 };
 
-export default Menu;
+const mapStateToProps = (state) => {
+  return {
+    userState: state.userState,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUserAction: bindActionCreators(fetchUser, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);
