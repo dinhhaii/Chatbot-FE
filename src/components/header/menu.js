@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchUser } from '../../actions/user';
+import { PATH } from '../../utils/constant';
 
 const Menu = ({ isDisplayedMenu }) => {
   return (
@@ -20,16 +21,16 @@ const Menu = ({ isDisplayedMenu }) => {
               <h3>Profile</h3>
               <ul>
                 <li>
-                  <Link to="/profile">Information</Link>
+                  <Link to={PATH.PROFILE}>Information</Link>
                 </li>
                 <li>
-                  <Link to="/profile">Change Password</Link>
+                  <Link to={PATH.PROFILE}>Change Password</Link>
                 </li>
                 <li>
-                  <Link to="/profile">My Invoices</Link>
+                  <Link to={PATH.PROFILE}>My Invoices</Link>
                 </li>
                 <li>
-                  <Link to="/logout" className="btn btn-danger">
+                  <Link to={PATH.LOGOUT} className="btn btn-danger">
                     <i className="icon-logout-1" /> Log Out
                   </Link>
                 </li>
@@ -39,13 +40,13 @@ const Menu = ({ isDisplayedMenu }) => {
               <h3>Courses</h3>
               <ul>
                 <li>
-                  <Link href="courses-grid.html">My Courses</Link>
+                  <Link to={PATH.LECTURER_COURSE}>My Courses</Link>
                 </li>
                 <li>
-                  <Link href="courses-grid-sidebar.html">All Courses</Link>
+                  <Link to={PATH.COURSES}>All Courses</Link>
                 </li>
                 <li>
-                  <Link href="courses-grid-sidebar.html">All Teachers</Link>
+                  <Link to={PATH.LECTURERS}>All Teachers</Link>
                 </li>
               </ul>
             </div>
@@ -53,7 +54,7 @@ const Menu = ({ isDisplayedMenu }) => {
               <h3>UDEMA</h3>
               <ul>
                 <li>
-                  <Link to="/contact">
+                  <Link to={PATH.CONTACT}>
                     <i className="icon-contacts" /> Contact
                   </Link>
                 </li>
@@ -73,7 +74,7 @@ const Menu = ({ isDisplayedMenu }) => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/about">
+                  <Link to={PATH.ABOUT}>
                     <i className="icon-home" /> About
                   </Link>
                 </li>
@@ -85,17 +86,17 @@ const Menu = ({ isDisplayedMenu }) => {
           <ul>
             <li>Follow us</li>
             <li>
-              <Link href="#0">
+              <Link to="https://facebook.com">
                 <i className="ti-facebook" />
               </Link>
             </li>
             <li>
-              <Link href="#0">
+              <Link to="https://www.google.com.vn">
                 <i className="ti-google" />
               </Link>
             </li>
             <li>
-              <Link href="#0">
+              <Link to="https://instagram.com">
                 <i className="ti-instagram" />
               </Link>
             </li>

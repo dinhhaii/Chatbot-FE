@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable import/no-named-as-default-member */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import '../../utils/css/lecturer-coursedetail-lessonform.css';

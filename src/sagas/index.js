@@ -1,4 +1,7 @@
-import { takeLatest, call, put, delay } from 'redux-saga/effects';
+import {
+  takeLatest, call, put, delay, select,
+} from 'redux-saga/effects';
+import { toast } from 'react-toastify';
 import * as actionTypes from '../utils/actionTypes';
 import { showLoading, hideLoading } from '../actions/general';
 import { getUser } from '../api/user';
@@ -8,14 +11,18 @@ function* rootSaga() {
   yield takeLatest(actionTypes.FETCH_USER, fetchUserSaga);
 }
 
-function* fetchUserSaga({ username, password }) {
+function* fetchUserSaga({ email, password }) {
   yield put(showLoading());
-  const { data } = yield call(getUser, username, password);
+  const { data } = yield call(getUser, email, password);
   if (data) {
     yield put(fetchUserSuccess(data));
-  }
-  else {
+    yield select(state => {
+      const { firstName, lastName } = state.userState.user;
+      toast.success(`Hi ${firstName} ${lastName},`);
+    });
+  } else {
     yield put(fetchUserFailed());
+    toast.error('Sorry, something wrong!');
   }
   yield delay(1000);
   yield put(hideLoading());

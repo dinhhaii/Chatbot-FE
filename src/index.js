@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
+import { ToastContainer, toast } from 'react-toastify';
 import reducer from './reducers/index';
 import './index.css';
 import routes from './routes/routes';
@@ -14,6 +15,7 @@ import * as serviceWorker from './serviceWorker';
 import Header from './components/header/header';
 import Footer from './components/footer/footer';
 import CustomLoader from './components/loader';
+import 'react-toastify/dist/ReactToastify.css';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -30,6 +32,7 @@ ReactDOM.render(
       <Router>
         <CustomLoader />
         <Header />
+        <ToastContainer position={toast.POSITION.BOTTOM_CENTER} />
         <Switch>
           {routes.map((route, index) => {
             return (

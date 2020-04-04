@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchUser } from '../../actions/user';
+import { toast } from 'react-toastify';
 
 import Menu from './menu';
 
@@ -35,11 +36,12 @@ const Header = (props) => {
         </div>
         <ul id="top_menu">
           <li>
-            <button
+            <Link
+              to="/auth/abc"
               className="btn btn-info"
-              onClick={() => props.fetchUserAction('dinhhhaii@gmail.com', '1')}>
+              onClick={() => toast("hello")}>
               Test Button
-            </button>
+            </Link>
           </li>
           <li>
             <Link to="/auth/login" className="login">
@@ -52,12 +54,14 @@ const Header = (props) => {
             </Link>
           </li>
           <li>
-            <Link href="/" className="search-overlay-menu-btn">
+            <Link to="/" className="search-overlay-menu-btn">
               <i className="icon-search" /> Search
             </Link>
           </li>
           <li>
-            <span className="kt-media kt-media--sm" style={{verticalAlign: 'middle'}}>
+            <span
+              className="kt-media kt-media--sm"
+              style={{ verticalAlign: 'middle' }}>
               <img
                 src="https://cdn.pixabay.com/photo/2020/03/29/15/35/coronavirus-4981176_1280.png"
                 alt=""

@@ -26,27 +26,27 @@ const Footer = () => {
               <ul>
                 <li>Follow us</li>
                 <li>
-                  <Link href="#0">
+                  <Link to="/">
                     <i className="ti-facebook" />
                   </Link>
                 </li>
                 <li>
-                  <Link href="#0">
+                  <Link to="/">
                     <i className="ti-twitter-alt" />
                   </Link>
                 </li>
                 <li>
-                  <Link href="#0">
+                  <Link to="/">
                     <i className="ti-google" />
                   </Link>
                 </li>
                 <li>
-                  <Link href="#0">
+                  <Link to="/">
                     <i className="ti-pinterest" />
                   </Link>
                 </li>
                 <li>
-                  <Link href="#0">
+                  <Link to="/">
                     <i className="ti-instagram" />
                   </Link>
                 </li>
@@ -57,22 +57,22 @@ const Footer = () => {
             <h5>Useful links</h5>
             <ul className="links">
               <li>
-                <Link href="#0">Admission</Link>
+                <Link to="/">Admission</Link>
               </li>
               <li>
-                <Link href="#0">About</Link>
+                <Link to="/">About</Link>
               </li>
               <li>
-                <Link href="#0">Login</Link>
+                <Link to="/">Login</Link>
               </li>
               <li>
-                <Link href="#0">Register</Link>
+                <Link to="/">Register</Link>
               </li>
               <li>
-                <Link href="#0">News &amp; Events</Link>
+                <Link to="/">News &amp; Events</Link>
               </li>
               <li>
-                <Link href="#0">Contacts</Link>
+                <Link to="/">Contacts</Link>
               </li>
             </ul>
           </div>
@@ -80,13 +80,13 @@ const Footer = () => {
             <h5>Contact with Us</h5>
             <ul className="contacts">
               <li>
-                <Link href="tel://61280932400">
+                <Link to="/">
                   <i className="ti-mobile" />
                   + 61 23 8093 3400
                 </Link>
               </li>
               <li>
-                <Link href="mailto:info@udema.com">
+                <Link to="/">
                   <i className="ti-email" />
                   info@udema.com
                 </Link>
@@ -121,10 +121,10 @@ const Footer = () => {
           <div className="col-md-8">
             <ul id="additional_links">
               <li>
-                <Link href="#0">Terms and conditions</Link>
+                <Link to="/">Terms and conditions</Link>
               </li>
               <li>
-                <Link href="#0">Privacy</Link>
+                <Link to="/">Privacy</Link>
               </li>
             </ul>
           </div>

@@ -9,6 +9,7 @@ const CustomLoader = ({ generalState }) => {
   return (
     <div
       style={{
+        backgroundImage: 'url(\'img/bg-black70.png\')',
         display: `${generalState.isLoading ? 'block' : 'none'}`,
         position: 'fixed',
         zIndex: 100000,
@@ -19,7 +20,7 @@ const CustomLoader = ({ generalState }) => {
         style={{
           display: 'flex',
           justifyContent: 'center',
-          marginTop: `${50}px`,
+          marginTop: `${80}px`,
         }}>
         <Loader
           visible="true"

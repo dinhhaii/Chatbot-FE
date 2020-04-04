@@ -3,7 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Category from '../components/categories/categories';
-import Carousel from '../components/courses/carousel';
+import CourseCarousel from '../components/courses/carousel';
 import Feature from '../components/home/features';
 import Introduction from '../components/home/introduction';
 import News from '../components/home/news';
@@ -23,9 +23,9 @@ const Home = () => {
             <h2>Udema Popular Courses</h2>
             <p>Cum doctus civibus efficiantur in imperdiet deterruisset.</p>
           </div>
-          <Carousel />
+          <CourseCarousel />
           <div className="container">
-            <p className="btn_home_align"><Link to="/auth/login" class="btn_1 rounded">View all courses</Link></p>
+            <p className="btn_home_align"><Link to="/auth/login" className="btn_1 rounded">View all courses</Link></p>
           </div>
 
           <hr />

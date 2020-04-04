@@ -1,9 +1,12 @@
 import React from 'react';
-import Auth from '../pages/Auth';
+import { Redirect } from 'react-router-dom';
+import { PATH } from '../utils/constant';
+
 import Login from '../components/auth/login';
 import Register from '../components/auth/register';
 import ForgotPassword from '../components/auth/forgot-password';
 
+import Auth from '../pages/Auth';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
 import Course from '../pages/Courses';
@@ -27,33 +30,33 @@ const routes = [
     component: () => <Home />,
   },
   {
-    path: '/profile',
+    path: PATH.PROFILE,
     exact: false,
     component: () => <Profile />,
   },
   {
-    path: '/profileuser',
+    path: PATH.PROFILE_USER,
     exact: false,
     component: () => <UserDetail />,
   },
   {
-    path: '/auth',
+    path: PATH.AUTH,
     exact: false,
     component: () => (
       <Auth
         routes={[
           {
-            path: '/auth/login',
+            path: PATH.AUTH_LOGIN,
             exact: false,
             component: () => <Login />,
           },
           {
-            path: '/auth/register',
+            path: PATH.AUTH_REGISTER,
             exact: false,
             component: () => <Register />,
           },
           {
-            path: '/auth/forgot-password',
+            path: PATH.AUTH_FORGOT_PASSWORD,
             exact: false,
             component: () => <ForgotPassword />,
           },
@@ -62,47 +65,62 @@ const routes = [
     ),
   },
   {
-    path: '/lecturercourses',
+    path: PATH.LOGIN,
+    exact: false,
+    component: () => <Redirect to={PATH.AUTH_LOGIN} />,
+  },
+  {
+    path: PATH.REGISTER,
+    exact: false,
+    component: () => <Redirect to={PATH.AUTH_REGISTER} />,
+  },
+  {
+    path: PATH.FORGOT_PASSWORD,
+    exact: false,
+    component: () => <Redirect to={PATH.AUTH_FORGOT_PASSWORD} />,
+  },
+  {
+    path: PATH.LECTURER_COURSE,
     exact: false,
     component: () => <LecturerCourseManagement />,
   },
   {
-    path: '/courses',
+    path: PATH.COURSES,
     exact: false,
     component: () => <Course />,
   },
   {
-    path: '/course-detail',
+    path: PATH.COURSE_DETAIL,
     exact: false,
     component: () => <CourseDetail />,
   },
   {
-    path: '/lesson-detail',
+    path: PATH.LESSON_DETAIL,
     exact: false,
     component: () => <LessonDetail />,
   },
   {
-    path: '/course-edit',
+    path: PATH.COURSE_EDIT,
     exact: false,
     component: () => <LecturerCourseDetail />,
   },
   {
-    path: '/chat',
+    path: PATH.CHAT,
     exact: false,
     component: () => <Chat />,
   },
   {
-    path: '/contact',
+    path: PATH.CONTACT,
     exact: false,
     component: () => <Contact />,
   },
   {
-    path: '/cart',
+    path: PATH.CART,
     exact: false,
     component: () => <Cart />,
   },
   {
-    path: '/about',
+    path: PATH.ABOUT,
     exact: false,
     component: () => <About />,
   },

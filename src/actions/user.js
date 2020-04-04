@@ -1,9 +1,10 @@
+/* eslint-disable object-curly-newline */
 import * as actionTypes from '../utils/actionTypes';
 
-export const fetchUser = (username, password) => {
+export const fetchUser = (email, password) => {
   return {
     type: actionTypes.FETCH_USER,
-    username,
+    email,
     password,
   };
 };

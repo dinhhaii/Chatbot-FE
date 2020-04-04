@@ -9,7 +9,7 @@ const Search = () => {
         </span>
       </span>
       <form role="search" id="searchform" method="get">
-        <input value="" name="q" type="search" placeholder="Search..." />
+        <input name="search" type="search" placeholder="Search..." />
         <button type="submit">
           <i className="icon_search" />
         </button>

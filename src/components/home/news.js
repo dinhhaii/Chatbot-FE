@@ -14,7 +14,7 @@ const News = () => {
         </div>
         <div className="row">
           <div className="col-lg-6">
-            <Link class="box_news" href="#0">
+            <Link className="box_news" to="/">
               <figure>
                 <img
                   src="http://via.placeholder.com/500x333/ccc/fff/news_home_1.jpg"
@@ -38,7 +38,7 @@ const News = () => {
           </div>
           {/* <!-- /box_news --> */}
           <div className="col-lg-6">
-            <Link class="box_news" href="#0">
+            <Link className="box_news" to="/">
               <figure>
                 <img
                   src="http://via.placeholder.com/500x333/ccc/fff/news_home_2.jpg"
@@ -62,7 +62,7 @@ const News = () => {
           </div>
           {/* <!-- /box_news --> */}
           <div className="col-lg-6">
-            <Link class="box_news" href="#0">
+            <Link className="box_news" to="/">
               <figure>
                 <img
                   src="http://via.placeholder.com/500x333/ccc/fff/news_home_3.jpg"
@@ -86,7 +86,7 @@ const News = () => {
           </div>
           {/* <!-- /box_news --> */}
           <div className="col-lg-6">
-            <Link class="box_news" href="#0">
+            <Link className="box_news" to="/">
               <figure>
                 <img
                   src="http://via.placeholder.com/500x333/ccc/fff/news_home_4.jpg"
@@ -112,7 +112,7 @@ const News = () => {
         </div>
         {/* <!-- /row --> */}
         <p className="btn_home_align">
-          <Link href="blog.html" class="btn_1 rounded">
+          <Link to="/" className="btn_1 rounded">
             View all news
           </Link>
         </p>
