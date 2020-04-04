@@ -3,60 +3,35 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import { Link } from 'react-router-dom';
-import OwlCarousel from 'react-owl-carousel';
-import { PATH } from '../../utils/constant';
-import 'owl.carousel/dist/assets/owl.carousel.css';
-import 'owl.carousel/dist/assets/owl.theme.default.css';
-
-const carouselOptions = {
-  margin: 30,
-  pullDrag: true,
-  responsiveClass: true,
-  autoplay: true,
-  smartSpeed: 1000,
-  responsive: {
-    0: {
-      items: 1,
-    },
-    400: {
-      items: 2,
-    },
-    700: {
-      items: 3,
-    },
-    1000: {
-      items: 3,
-    },
-  },
-};
+import Carousel from 'nuka-carousel';
+import { PATH, IMAGE_URL } from '../../utils/constant';
 
 const CourseCarousel = ({ courseList }) => {
   return (
-    <OwlCarousel className="owl-stage-outer owl-drag" {...carouselOptions}>
+    <Carousel withoutControls={false} slidesToShow={3} slidesToScroll="auto" wrapAround autoplay transitionMode="scroll3d">
       {courseList.map((course, index) => {
         return course.isDelete ? null : (
           <div className="item" key={index.toString()}>
             <div className="box_grid">
               <figure>
-                <Link to={`${PATH.COURSE_DETAIL}`} className="wish_bt" />
-                <Link to={`${PATH.COURSE_DETAIL}`}>
+                <Link to={`${PATH.COURSE_DETAIL}/${course._id}`} className="wish_bt" />
+                <Link to={`${PATH.COURSE_DETAIL}/${course._id}`}>
                   <div className="preview">
                     <span>Preview course</span>
                   </div>
                   <img
-                    src="http://via.placeholder.com/800x533/ccc/fff/course__list_1.jpg"
+                    src={IMAGE_URL.BACKGROUND_1}
                     className="img-fluid"
                     alt=""
                   />
                 </Link>
-                <div className="price">$39</div>
+                <div className="price">${course.price}</div>
               </figure>
               <div className="wrapper">
-                <small>Category</small>
-                <h3>Name</h3>
+                <small>{course._idSubject}</small>
+                <h3>{course.name}</h3>
                 <p>
-                  Id placerat tacimates definitionem sea, prima quidam vim no.
-                  Duo nobis persecuti cu.
+                  {course.description}
                 </p>
                 <div className="rating">
                   <i className="icon_star voted" />
@@ -82,7 +57,7 @@ const CourseCarousel = ({ courseList }) => {
           </div>
         );
       })}
-    </OwlCarousel>
+    </Carousel>
   );
 };
 
