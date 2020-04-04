@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, Switch, Route } from 'react-router-dom';
+import { IMAGE_URL } from '../utils/constant';
 import '../utils/css/Auth.css';
 
 const Auth = ({ routes }) => {
@@ -41,8 +42,7 @@ const Auth = ({ routes }) => {
               className="kt-grid__item kt-grid__item--fluid kt-grid__item--center kt-grid kt-grid--ver kt-login__content"
               style={{
                 backgroundImage:
-                  'url("https://cdn.pixabay.com/photo/2017/06/23/11/49/laptop-2434393_1280.jpg")',
-                // 'url("https://cdn.pixabay.com/photo/2016/03/27/22/04/camera-1284459_1280.jpg")',
+                  `url("${IMAGE_URL.BACKGROUND_1}")`,
               }}>
               <div className="kt-login__section">
                 <div className="kt-login__block" style={{ color: 'red' }}>

@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchUser } from '../../actions/user';
 import { toast } from 'react-toastify';
+import { fetchUser } from '../../actions/user';
 
 import Menu from './menu';
 
@@ -39,7 +39,7 @@ const Header = (props) => {
             <Link
               to="/auth/abc"
               className="btn btn-info"
-              onClick={() => toast("hello")}>
+              onClick={() => toast('test')}>
               Test Button
             </Link>
           </li>

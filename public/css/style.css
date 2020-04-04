@@ -662,7 +662,7 @@ ul#top_menu li a.btn_1:hover {
   border-bottom: 5px solid #FFC107;
 }
 #hero_in.general:before {
-  background: url(http://via.placeholder.com/1600x1067/ccc/fff/bg_general.jpg) center center no-repeat;
+  background: url(https://cdn.pixabay.com/photo/2016/03/27/22/04/camera-1284459_1280.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -673,7 +673,7 @@ ul#top_menu li a.btn_1:hover {
   background-color: rgba(57, 39, 121, 0.8);
 }
 #hero_in.courses:before {
-  background: url(http://via.placeholder.com/1600x1067/ccc/fff/bg_courses.jpg) center center no-repeat;
+  background: url(https://cdn.pixabay.com/photo/2016/03/27/22/04/camera-1284459_1280.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -684,7 +684,7 @@ ul#top_menu li a.btn_1:hover {
   background-color: rgba(57, 39, 121, 0.8);
 }
 #hero_in.contacts:before {
-  background: url(http://via.placeholder.com/1600x1067/ccc/fff/bg_contacts.jpg) center center no-repeat;
+  background: url(https://cdn.pixabay.com/photo/2016/03/27/22/04/camera-1284459_1280.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1517,7 +1517,7 @@ video {
   }
 }
 .hero_single.version_2:before {
-  background: url(http://via.placeholder.com/1600x1067/ccc/fff/home_section_1.jpg) center center no-repeat fixed;
+  background: url('https://cdn.pixabay.com/photo/2016/03/27/22/04/camera-1284459_1280.jpg') center center no-repeat fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1529,7 +1529,7 @@ video {
 }
 .hero_single.version_2 .wrapper h3 {
   font-size: 42px;
-  font-size: 2.625rem;
+  font-size: 3rem;
 }
 @media (max-width: 767px) {
   .hero_single.version_2 .wrapper h3 {
@@ -5251,7 +5251,7 @@ ul.list_3 li:before {
 }
 
 .call_section {
-  background: url(http://via.placeholder.com/1600x1067/ccc/fff/bg_call_section.jpg) center center no-repeat fixed;
+  background: url('https://cdn.pixabay.com/photo/2017/06/23/11/49/laptop-2434393_1280.jpg') center center no-repeat fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
