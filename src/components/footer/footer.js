@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PATH } from '../../utils/constant';
 
 const Footer = () => {
   return (
@@ -17,36 +18,23 @@ const Footer = () => {
               />
             </p>
             <p>
-              Mea nibh meis philosophia eu. Duis legimus efficiantur ea sea. Id
-              placerat tacimates definitionem sea, prima quidam vim no. Duo
-              nobis persecuti cu. Nihil facilisi indoctum an vix, ut delectus
-              expetendis vis.
+              Description here
             </p>
             <div className="follow_us">
               <ul>
                 <li>Follow us</li>
                 <li>
-                  <Link to="/">
+                  <Link to="facebook.com">
                     <i className="ti-facebook" />
                   </Link>
                 </li>
                 <li>
-                  <Link to="/">
-                    <i className="ti-twitter-alt" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/">
+                  <Link to="google.com.vn">
                     <i className="ti-google" />
                   </Link>
                 </li>
                 <li>
-                  <Link to="/">
-                    <i className="ti-pinterest" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/">
+                  <Link to="instagram.com">
                     <i className="ti-instagram" />
                   </Link>
                 </li>
@@ -57,22 +45,16 @@ const Footer = () => {
             <h5>Useful links</h5>
             <ul className="links">
               <li>
-                <Link to="/">Admission</Link>
+                <Link to={PATH.LOGIN}>Login</Link>
               </li>
               <li>
-                <Link to="/">About</Link>
+                <Link to={PATH.REGISTER}>Register</Link>
               </li>
               <li>
-                <Link to="/">Login</Link>
+                <Link to={PATH.ABOUT}>About</Link>
               </li>
               <li>
-                <Link to="/">Register</Link>
-              </li>
-              <li>
-                <Link to="/">News &amp; Events</Link>
-              </li>
-              <li>
-                <Link to="/">Contacts</Link>
+                <Link to={PATH.CONTACT}>Contacts</Link>
               </li>
             </ul>
           </div>
@@ -82,13 +64,13 @@ const Footer = () => {
               <li>
                 <Link to="/">
                   <i className="ti-mobile" />
-                  + 61 23 8093 3400
+                  +84 987 654 321
                 </Link>
               </li>
               <li>
                 <Link to="/">
                   <i className="ti-email" />
-                  info@udema.com
+                  dhtc.kltn@gmail.com
                 </Link>
               </li>
             </ul>
@@ -129,7 +111,7 @@ const Footer = () => {
             </ul>
           </div>
           <div className="col-md-4">
-            <div id="copy">© 2017 Udema</div>
+            <div id="copy">© 2020 DHTC</div>
           </div>
         </div>
       </div>

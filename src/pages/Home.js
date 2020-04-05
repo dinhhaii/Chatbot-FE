@@ -1,5 +1,4 @@
 /* eslint-disable react/destructuring-assignment */
-// eslint-disable-next-line react-hooks/exhaustive-deps
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable import/no-extraneous-dependencies */
@@ -7,19 +6,21 @@ import React, { useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Category from '../components/categories/categories';
+import Subject from '../components/subject/subjects';
 import CourseCarousel from '../components/home/carousel';
 import Feature from '../components/home/features';
 import Introduction from '../components/home/introduction';
-import News from '../components/home/news';
+import Feedback from '../components/home/feedback';
 import CallSection from '../components/home/call-section';
 import Search from '../components/home/search';
 import { fetchCourseList } from '../actions/course';
+import { fetchSubjectList } from '../actions/subject';
+import { PATH } from '../utils/constant';
 
 const Home = (props) => {
-
   useEffect(() => {
     props.fetchCourseListAction();
+    props.fetchSubjectListAction();
   }, []);
 
   return (
@@ -34,12 +35,12 @@ const Home = (props) => {
               <em />
             </span>
             <h2>Popular Courses</h2>
-            <p />
+            <p>Choose many online video courses with new additions published every month</p>
           </div>
           <CourseCarousel courseList={props.courseState.courseList} />
           <div className="container">
             <p className="btn_home_align">
-              <Link to="/auth/login" className="btn_1 rounded">
+              <Link to={PATH.COURSES} className="btn_1 rounded">
                 View all courses
               </Link>
             </p>
@@ -53,14 +54,14 @@ const Home = (props) => {
             <span>
               <em />
             </span>
-            <h2>Udema Categories Courses</h2>
-            <p>Cum doctus civibus efficiantur in imperdiet deterruisset.</p>
+            <h2>Top Subjects</h2>
+            <p />
           </div>
-          <Category />
+          <Subject subjectList={props.subjectState.subjectList} />
         </div>
 
-        <News />
         <CallSection />
+        <Feedback />
       </main>
 
       <Search />
@@ -71,12 +72,14 @@ const Home = (props) => {
 const mapStateToProps = (state) => {
   return {
     courseState: state.courseState,
+    subjectState: state.subjectState,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchCourseListAction: bindActionCreators(fetchCourseList, dispatch),
+    fetchSubjectListAction: bindActionCreators(fetchSubjectList, dispatch),
   };
 };
 

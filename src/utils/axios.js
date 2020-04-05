@@ -16,8 +16,8 @@ class AxiosService {
     return Promise.reject(error);
   }
 
-  get(url) {
-    return this.instance.get(url);
+  get(url, params) {
+    return this.instance.get(url, { ...params });
   }
 
   post(url, params) {

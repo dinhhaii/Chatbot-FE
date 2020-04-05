@@ -1,4 +1,6 @@
 export const SERVER_URL = 'http://localhost:3000';
+export const AUTH_TOKEN = 'AUTH_TOKEN';
+
 export const IMAGE_URL = {
   BACKGROUND_1:
     'https://cdn.pixabay.com/photo/2017/06/23/11/49/laptop-2434393_1280.jpg',

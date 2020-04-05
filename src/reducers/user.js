@@ -4,6 +4,7 @@ import * as actionTypes from '../utils/actionTypes';
 const initialState = {
   user: null,
   token: null,
+  isLogin: false,
 };
 
 const userState = (state = initialState, action) => {
@@ -26,6 +27,16 @@ const userState = (state = initialState, action) => {
         ...state,
         user: null,
         token: null,
+      };
+    case actionTypes.SET_ISLOGIN:
+      return {
+        ...state,
+        isLogin: true,
+      };
+    case actionTypes.SET_ISNOTLOGIN:
+      return {
+        ...state,
+        isLogin: false,
       };
     default:
       return state;

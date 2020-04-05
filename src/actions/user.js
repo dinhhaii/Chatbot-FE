@@ -21,3 +21,15 @@ export const fetchUserFailed = () => {
     type: actionTypes.FETCH_USER_FAILED,
   };
 };
+
+export const setIsLogin = () => {
+  return {
+    type: actionTypes.SET_ISLOGIN,
+  };
+};
+
+export const setIsNotLogin = () => {
+  return {
+    type: actionTypes.SET_ISNOTLOGIN,
+  };
+};

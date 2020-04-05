@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PATH } from '../../utils/constant';
 
 const CallSection = () => {
   return (
@@ -9,9 +10,9 @@ const CallSection = () => {
           <div className="block-reveal">
             <div className="block-vertical" />
             <div className="box_1">
-              <h3>Enjoy a great students community</h3>
-              <p>Ius cu tamquam persequeris, eu veniam apeirian platonem qui, id aliquip voluptatibus pri. Ei mea primis ornatus disputationi. Menandri erroribus cu per, duo solet congue ut. </p>
-              <Link to="/" className="btn_1 rounded">Read more</Link>
+              <h3>Interact With Chatbot Now</h3>
+              <p>Study any topic, choose from thousands of courses now, receive online consulting of courses through AI Chatbot</p>
+              <Link to={PATH.ABOUT} className="btn_1 rounded">Get Started</Link>
             </div>
           </div>
         </div>

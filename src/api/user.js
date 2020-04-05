@@ -18,3 +18,11 @@ export const registerUser = (firstName, lastName, email, password, role) => {
 export const forgotPasswordUser = (email) => {
   return AxiosService.post(`${SERVER_URL}/user/forgotpassword`, { email });
 };
+
+export const authorizeUser = (token) => {
+  return AxiosService.get(`${SERVER_URL}/profile`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
