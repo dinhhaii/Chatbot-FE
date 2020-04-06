@@ -8,28 +8,28 @@ const feedback = [
     name: 'Tran Vi Hung',
     title: '1st Prize MasterChef Junior Vietnam',
     content:
-      'All courses here are extremely diverse with many genres. In addition, the integration of Chatbot to serve the customer support system is also really good and convenient.',
+      'All courses here are extremely diverse with many genres. In addition, the integration of Chatbot to serve the customer support system is really good and convenient, as well.',
   },
   {
     imageURL: '',
     name: 'Nguyen Duy Hau',
     title: 'Developer',
     content:
-      'The courses here are very rewarding and quality. I have signed up for a Java programming course, the instructors and supporters are very enthusiastic. In the future I will continue to register a few more courses and always support Udema.',
+      'The courses here are very rewarding and quality. I have signed up for a Java programming course, the instructors and the supporters are very enthusiastic. In the future I would continue to register for a few more courses and always support Udema.',
   },
   {
     imageURL: '',
     name: 'Ngo Minh Hoa',
     title: 'IT Engineer',
     content:
-      "As an office worker, the time to go to the teaching center is unavailable. So I chose to study online at Udema and the course here didn't disappoint me. An interesting thing here is that we can get online advice about the learning route from Chatbot.",
+      "As an employee, I dont have extra time to go to the teaching center/institution. Therefore I chose to study online on Udema and they didn't disappoint me. An interesting thing here is that we can get online advice about the learning paths from Chatbot.",
   },
   {
     imageURL: '',
     name: 'Lam Tae Hoon',
     title: 'Professor of Linguistics',
     content:
-      'I rate the courses here 9/10 with extremely enthusiastic and dedicated teachers, the lessons are invested a lot. Integrated Chatbot system will save a lot of costs. However, Chatbot still needs to be improved more.',
+      'I rate the courses here 9/10 with extremely enthusiastic and dedicated teachers and the lessons are also well-prepared. Integrated Chatbot system has saved a lot of costs. However, Chatbot still needs to be improved more.',
   },
 ];
 

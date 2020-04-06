@@ -4,7 +4,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Carousel from 'nuka-carousel';
-import { PATH, IMAGE_URL } from '../../utils/constant';
+import { PATH } from '../../utils/constant';
 
 const CourseCarousel = ({ courseList }) => {
   return (
@@ -20,7 +20,7 @@ const CourseCarousel = ({ courseList }) => {
                     <span>Preview course</span>
                   </div>
                   <img
-                    src={IMAGE_URL.BACKGROUND_1}
+                    src={course.imageURL}
                     className="img-fluid"
                     alt=""
                   />

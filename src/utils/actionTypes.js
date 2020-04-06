@@ -1,6 +1,9 @@
 export const SHOW_LOADING = 'SHOW_LOADING';
 export const HIDE_LOADING = 'HIDE_LOADING';
 
+export const SHOW_SEARCHBAR = 'SHOW_SEARCHBAR';
+export const HIDE_SEARCHBAR = 'HIDE_SEARCHBAR';
+
 export const SET_ISLOGIN = 'SET_ISLOGIN';
 export const SET_ISNOTLOGIN = 'SET_ISNOTLOGIN';
 

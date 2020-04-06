@@ -2,6 +2,7 @@ import * as actionTypes from '../utils/actionTypes';
 
 const initialState = {
   isLoading: false,
+  isSearching: false,
 };
 
 const generalState = (state = initialState, action) => {
@@ -15,6 +16,16 @@ const generalState = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+      };
+    case actionTypes.SHOW_SEARCHBAR:
+      return {
+        ...state,
+        isSearching: true,
+      };
+    case actionTypes.HIDE_SEARCHBAR:
+      return {
+        ...state,
+        isSearching: false,
       };
     default:
       return state;

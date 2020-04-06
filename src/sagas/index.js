@@ -1,5 +1,5 @@
 import {
-  takeLatest, call, put, delay, select,
+  takeLatest, call, put, delay, select, takeEvery,
 } from 'redux-saga/effects';
 import { toast } from 'react-toastify';
 import * as actionTypes from '../utils/actionTypes';
@@ -13,7 +13,7 @@ import { fetchSubjectListSuccess, fetchSubjectListFailed } from '../actions/subj
 import { AUTH_TOKEN } from '../utils/constant';
 
 function* rootSaga() {
-  yield takeLatest(actionTypes.FETCH_USER, fetchUserSaga);
+  yield takeEvery(actionTypes.FETCH_USER, fetchUserSaga);
   yield takeLatest(actionTypes.FETCH_COURSE_LIST, fetchCourseListSaga);
   yield takeLatest(actionTypes.FETCH_SUBJECT_LIST, fetchSubjectListSaga);
 }

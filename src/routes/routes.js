@@ -20,6 +20,7 @@ import Profile from '../pages/Profile';
 import UserDetail from '../pages/UserProfile';
 import LecturerCourseDetail from '../pages/LecturerCourseDetail';
 import Chat from '../pages/Chat';
+import Logout from '../components/auth/logout';
 // import App from '../App';
 
 // Main routes
@@ -123,6 +124,11 @@ const routes = [
     path: PATH.ABOUT,
     exact: false,
     component: () => <About />,
+  },
+  {
+    path: PATH.LOGOUT,
+    exact: false,
+    component: () => <Logout />,
   },
   {
     path: '',

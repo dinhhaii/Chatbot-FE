@@ -1,6 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PATH } from '../../utils/constant';
@@ -10,6 +10,12 @@ const Login = (props) => {
   const [state, setState] = useState({
     email: '',
     password: '',
+  });
+
+  useEffect(() => {
+    if (props.userState.isLogin) {
+      props.history.push('/');
+    }
   });
 
   const handleSubmit = (e) => {
@@ -124,4 +130,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));

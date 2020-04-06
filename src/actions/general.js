@@ -11,3 +11,15 @@ export const hideLoading = () => {
     type: actionTypes.HIDE_LOADING,
   };
 };
+
+export const showSearchBar = () => {
+  return {
+    type: actionTypes.SHOW_SEARCHBAR,
+  };
+};
+
+export const hideSearchBar = () => {
+  return {
+    type: actionTypes.HIDE_SEARCHBAR,
+  };
+};

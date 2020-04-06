@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { PATH, IMAGE_URL } from '../../utils/constant';
+import { PATH} from '../../utils/constant';
 
 const Subject = ({ subjectList }) => {
   return (
@@ -12,7 +12,7 @@ const Subject = ({ subjectList }) => {
               <figure className="block-reveal">
                 <div className="block-horizzontal" />
                 <img
-                  src={IMAGE_URL.BACKGROUND_2}
+                  src={subject.imageURL}
                   className="img-fluid"
                   alt=""
                 />

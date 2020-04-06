@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { fetchUser } from '../../actions/user';
 import { PATH } from '../../utils/constant';
 
-const Menu = ({ isDisplayedMenu }) => {
+const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
   return (
     <div
       id="main_menu"
@@ -13,7 +13,7 @@ const Menu = ({ isDisplayedMenu }) => {
       style={{ fontSize: `${15}pt` }}>
       <div className="container">
         <div className="row">
-          <h2 style={{ color: 'white' }}>Hi, Dinh Hai</h2>
+          <h2 style={{ color: 'white' }}>{userState.user ? `Hi ${userState.user.firstName} ${userState.user.lastName},` : ''}</h2>
         </div>
         <nav className="version_2">
           <div className="row">
@@ -30,7 +30,7 @@ const Menu = ({ isDisplayedMenu }) => {
                   <Link to={PATH.PROFILE}>My Invoices</Link>
                 </li>
                 <li>
-                  <Link to={PATH.LOGOUT} className="btn btn-danger">
+                  <Link to={PATH.LOGOUT} className="btn btn-danger" onClick={showMenuContent}>
                     <i className="icon-logout-1" /> Log Out
                   </Link>
                 </li>

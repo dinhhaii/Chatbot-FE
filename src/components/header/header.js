@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -11,6 +12,7 @@ import { fetchUser, setIsLogin, fetchUserSuccess } from '../../actions/user';
 import Menu from './menu';
 import { AUTH_TOKEN, PATH } from '../../utils/constant';
 import { authorizeUser } from '../../api/user';
+import { showSearchBar } from '../../actions/general';
 
 const Header = (props) => {
   const { userState } = props;
@@ -29,12 +31,12 @@ const Header = (props) => {
         if (data) {
           const { firstName, lastName } = data;
           props.setIsLoginAction();
-          props.fetchUserSuccessAction(data);
+          props.fetchUserSuccessAction({ user: data });
           toast.success(`Hi, ${firstName} ${lastName}!`);
         }
       })
       .catch((error) => {
-        toast.error(error.message);
+        console.log(error);
       });
   }, []);
 
@@ -67,17 +69,36 @@ const Header = (props) => {
             </Link>
           </li>
 
+          {/* SEARCH  */}
+          <li>
+            <Link
+              className="search-overlay-menu-btn"
+              style={{ fontSize: `${17}pt`, marginRight: `${20}px` }}
+              onClick={props.showSearchBarAction}>
+              <i className="icon-search" />
+            </Link>
+          </li>
+
           {userState.isLogin ? (
-            <li>
-              <span
-                className="kt-media kt-media--sm"
-                style={{ verticalAlign: 'middle' }}>
-                <img
-                  src="https://cdn.pixabay.com/photo/2020/03/29/15/35/coronavirus-4981176_1280.png"
-                  alt=""
-                />
-              </span>
-            </li>
+            <>
+              <li>
+                <Link to={PATH.PROFILE} style={{ fontSize: `${15}pt` }}>
+                  {userState.user
+                    ? `${userState.user.firstName} ${userState.user.lastName}`
+                    : ''}
+                </Link>
+              </li>
+              <li>
+                <span
+                  className="kt-media kt-media--sm"
+                  style={{ verticalAlign: 'middle' }}>
+                  <img
+                    src={userState.user ? userState.user.imageURL : ''}
+                    alt=""
+                  />
+                </span>
+              </li>
+            </>
           ) : (
             <>
               <li>
@@ -92,12 +113,6 @@ const Header = (props) => {
               </li>
             </>
           )}
-          {/* SEARCH  */}
-          <li>
-            <Link to="/" className="search-overlay-menu-btn">
-              <i className="icon-search" /> Search
-            </Link>
-          </li>
 
           <li>
             <div
@@ -115,7 +130,11 @@ const Header = (props) => {
         </ul>
       </header>
 
-      <Menu userState={props.userState} isDisplayedMenu={isDisplayedMenu} />
+      <Menu
+        userState={props.userState}
+        isDisplayedMenu={isDisplayedMenu}
+        showMenuContent={showMenuContent}
+      />
     </div>
   );
 };
@@ -131,6 +150,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchUserAction: bindActionCreators(fetchUser, dispatch),
     fetchUserSuccessAction: bindActionCreators(fetchUserSuccess, dispatch),
     setIsLoginAction: bindActionCreators(setIsLogin, dispatch),
+    showSearchBarAction: bindActionCreators(showSearchBar, dispatch),
   };
 };
 
