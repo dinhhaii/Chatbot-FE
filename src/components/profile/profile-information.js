@@ -1,254 +1,248 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toast } from 'react-toastify';
+import { requestVerificationEmail } from '../../api/user';
+import { showLoading, hideLoading } from '../../actions/general';
+import { updateUser } from '../../actions/user';
 
-const ProfileInformation = () => {
+const ProfileInformation = (props) => {
+  const { userState } = props;
+  const [isVerified, setIsVerified] = useState(false);
+  const [state, setState] = useState({
+    imageURL: userState.user.imageURL,
+    _id: userState.user._id,
+    firstName: userState.user.firstName,
+    lastName: userState.user.lastName,
+    bio: userState.user.bio,
+  });
+
+  const requestVerification = () => {
+    props.showLoadingAction();
+    requestVerificationEmail(userState.user._id, userState.user.email)
+      .then((response) => {
+        const { data } = response;
+        if (data) {
+          toast.success(data.message);
+          setIsVerified(true);
+        }
+      })
+      .catch((error) => {
+        toast.error(error.message);
+        props.hideLoadingAction();
+      });
+    props.hideLoadingAction();
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    props.updateUserAction(state);
+  };
+
+  const handleChangle = (e) => {
+    const { name, value } = e.target;
+    setState({
+      ...state,
+      [name]: value,
+    });
+  };
+
   return (
     <div className="kt-grid__item kt-grid__item--fluid kt-app__content">
-      <div className="row">
-        <div className="col-xl-12">
-          <div className="kt-portlet">
-            <div className="kt-portlet__head">
-              <div className="kt-portlet__head-label">
-                <h3 className="kt-portlet__head-title">
-                  Personal Information{' '}
-                  <small>update your personal informaiton</small>
-                </h3>
-              </div>
-              <div className="kt-portlet__head-toolbar">
-                <div className="kt-portlet__head-wrapper">
-                  <div className="dropdown dropdown-inline">
-                    <button
-                      type="button"
-                      className="btn btn-label-brand btn-sm btn-icon btn-icon-md"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false">
-                      <i className="flaticon2-gear" />
-                    </button>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <ul className="kt-nav">
-                        <li className="kt-nav__section kt-nav__section--first">
-                          <span className="kt-nav__section-text">
-                            Export Tools
-                          </span>
-                        </li>
-                        <li className="kt-nav__item">
-                          <Link to="/" class="kt-nav__link">
-                            <i className="kt-nav__link-icon la la-print" />
-                            <span className="kt-nav__link-text">Print</span>
-                          </Link>
-                        </li>
-                        <li className="kt-nav__item">
-                          <Link to="/" class="kt-nav__link">
-                            <i className="kt-nav__link-icon la la-copy" />
-                            <span className="kt-nav__link-text">Copy</span>
-                          </Link>
-                        </li>
-                        <li className="kt-nav__item">
-                          <Link to="/" class="kt-nav__link">
-                            <i className="kt-nav__link-icon la la-file-excel-o" />
-                            <span className="kt-nav__link-text">Excel</span>
-                          </Link>
-                        </li>
-                        <li className="kt-nav__item">
-                          <Link to="/" class="kt-nav__link">
-                            <i className="kt-nav__link-icon la la-file-text-o" />
-                            <span className="kt-nav__link-text">CSV</span>
-                          </Link>
-                        </li>
-                        <li className="kt-nav__item">
-                          <Link to="/" class="kt-nav__link">
-                            <i className="kt-nav__link-icon la la-file-pdf-o" />
-                            <span className="kt-nav__link-text">PDF</span>
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+      {userState.user ? (
+        <div className="row">
+          <div className="col-xl-12">
+            <div className="kt-portlet">
+              <div className="kt-portlet__head">
+                <div className="kt-portlet__head-label">
+                  <h3 className="kt-portlet__head-title">
+                    Personal Information
+                    <small>update your personal informaiton</small>
+                  </h3>
                 </div>
               </div>
-            </div>
-            <form className="kt-form kt-form--label-right">
-              <div className="kt-portlet__body">
-                <div className="kt-section kt-section--first">
-                  <div className="kt-section__body">
-                    <div className="row">
-                      <label className="col-xl-3" />
-                      <div className="col-lg-9 col-xl-6">
-                        <h3 className="kt-section__title kt-section__title-sm">
-                          Customer Info:
-                        </h3>
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-xl-3 col-lg-3 col-form-label">
-                        Avatar
-                      </label>
-                      <div className="col-lg-9 col-xl-6">
+              <form
+                className="kt-form kt-form--label-right"
+                onSubmit={handleSubmit}>
+                <div className="kt-portlet__body">
+                  <div className="kt-section kt-section--first">
+                    <div className="kt-section__body">
+                      {userState.user.status === 'unverified' ? (
                         <div
-                          className="kt-avatar kt-avatar--outline"
-                          id="kt_user_avatar">
+                          className="alert alert-solid-danger alert-bold fade show kt-margin-t-20 kt-margin-b-40"
+                          role="alert">
+                          <div className="alert-icon">
+                            <i className="icon-warning" />
+                          </div>
+                          <div className="alert-text">
+                            Your account is not verified!
+                          </div>
+                          <div className="alert-close">
+                            <button
+                              type="button"
+                              className={`btn btn-warning ${
+                                isVerified ? 'disabled' : ''
+                              }`}
+                              onClick={requestVerification}>
+                              VERIFY NOW{' '}
+                              {isVerified ? (
+                                <i className="icon-check-1" />
+                              ) : null}
+                            </button>
+                          </div>
+                        </div>
+                      ) : null}
+
+                      <div className="row">
+                        <label className="col-xl-3" />
+                        <div className="col-lg-9 col-xl-6">
+                          <h3 className="kt-section__title kt-section__title-sm">
+                            My Info:
+                          </h3>
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                        <label className="col-xl-3 col-lg-3 col-form-label">
+                          Avatar
+                        </label>
+                        <div className="col-lg-9 col-xl-6">
                           <div
-                            className="kt-avatar__holder"
-                            style={{
-                              backgroundImage:
-                                'url("assets/media/users/100_13.jpg"',
-                            }}
-                          />
-                          <label
-                            className="kt-avatar__upload"
-                            data-toggle="kt-tooltip"
-                            title=""
-                            data-original-title="Change avatar">
-                            <i className="fa fa-pen" />
-                            <input
-                              type="file"
-                              name="profile_avatar"
-                              accept=".png, .jpg, .jpeg"
+                            className="kt-avatar kt-avatar--outline"
+                            id="kt_user_avatar">
+                            <div
+                              className="kt-avatar__holder"
+                              style={{
+                                backgroundImage: `url(${state.imageURL})`,
+                              }}
                             />
-                          </label>
-                          <span
-                            className="kt-avatar__cancel"
-                            data-toggle="kt-tooltip"
-                            title=""
-                            data-original-title="Cancel avatar">
-                            <i className="fa fa-times" />
-                          </span>
+                            <label
+                              className="kt-avatar__upload"
+                              data-toggle="kt-tooltip"
+                              title=""
+                              data-original-title="Change avatar">
+                              <i className="icon-pen" />
+                              <input
+                                type="file"
+                                name="profile_avatar"
+                                accept=".png, .jpg, .jpeg"
+                              />
+                            </label>
+                            <span
+                              className="kt-avatar__cancel"
+                              data-toggle="kt-tooltip"
+                              title=""
+                              data-original-title="Cancel avatar">
+                              <i className="fa fa-times" />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                        <label className="col-xl-3 col-lg-3 col-form-label">
+                          ID
+                        </label>
+                        <div className="col-lg-9 col-xl-6">
+                          <input
+                            className="form-control disabled"
+                            name="_id"
+                            type="text"
+                            value={state._id}
+                            readOnly
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                        <label className="col-xl-3 col-lg-3 col-form-label">
+                          First Name
+                        </label>
+                        <div className="col-lg-9 col-xl-6">
+                          <input
+                            className="form-control"
+                            type="text"
+                            name="firstName"
+                            value={state.firstName}
+                            onChange={handleChangle}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                        <label className="col-xl-3 col-lg-3 col-form-label">
+                          Last Name
+                        </label>
+                        <div className="col-lg-9 col-xl-6">
+                          <input
+                            className="form-control"
+                            type="text"
+                            name="lastName"
+                            value={state.lastName}
+                            onChange={handleChangle}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                        <label className="col-xl-3 col-lg-3 col-form-label">
+                          Bio
+                        </label>
+                        <div className="col-lg-9 col-xl-6">
+                          <textarea
+                            className="form-control"
+                            name="bio"
+                            value={state.bio}
+                            onChange={handleChangle}
+                          />
+                          {/* <span className="form-text text-muted">
+                            If you want your invoices addressed to a company.
+                            Leave blank to use your full name.
+                          </span> */}
                         </div>
                       </div>
                     </div>
-                    <div className="form-group row">
-                      <label className="col-xl-3 col-lg-3 col-form-label">
-                        First Name
-                      </label>
-                      <div className="col-lg-9 col-xl-6">
-                        <input className="form-control" type="text" />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-xl-3 col-lg-3 col-form-label">
-                        Last Name
-                      </label>
-                      <div className="col-lg-9 col-xl-6">
-                        <input
-                          className="form-control"
-                          type="text"
-                          value="Bold"
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-xl-3 col-lg-3 col-form-label">
-                        Company Name
-                      </label>
-                      <div className="col-lg-9 col-xl-6">
-                        <input
-                          className="form-control"
-                          type="text"
-                          value="Loop Inc."
-                        />
-                        <span className="form-text text-muted">
-                          If you want your invoices addressed to a company.
-                          Leave blank to use your full name.
-                        </span>
-                      </div>
-                    </div>
+                  </div>
+                </div>
+                <div className="kt-portlet__foot">
+                  <div className="kt-form__actions">
                     <div className="row">
-                      <label className="col-xl-3" />
-                      <div className="col-lg-9 col-xl-6">
-                        <h3 className="kt-section__title kt-section__title-sm">
-                          Contact Info:
-                        </h3>
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-xl-3 col-lg-3 col-form-label">
-                        Contact Phone
-                      </label>
-                      <div className="col-lg-9 col-xl-6">
-                        <div className="input-group">
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">
-                              <i className="la la-phone" />
-                            </span>
-                          </div>
-                          <input
-                            type="text"
-                            className="form-control"
-                            value="+35278953712"
-                            placeholder="Phone"
-                            aria-describedby="basic-addon1"
-                          />
-                        </div>
-                        <span className="form-text text-muted">
-                          We&apos;ll never share your email with anyone else.
-                        </span>
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-xl-3 col-lg-3 col-form-label">
-                        Email Address
-                      </label>
-                      <div className="col-lg-9 col-xl-6">
-                        <div className="input-group">
-                          <div className="input-group-prepend">
-                            <span className="input-group-text">
-                              <i className="la la-at" />
-                            </span>
-                          </div>
-                          <input
-                            type="text"
-                            className="form-control"
-                            value="nick.bold@loop.com"
-                            placeholder="Email"
-                            aria-describedby="basic-addon1"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="form-group form-group-last row">
-                      <label className="col-xl-3 col-lg-3 col-form-label">
-                        Company Site
-                      </label>
-                      <div className="col-lg-9 col-xl-6">
-                        <div className="input-group">
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Username"
-                            value="loop"
-                          />
-                          <div className="input-group-append">
-                            <span className="input-group-text">.com</span>
-                          </div>
-                        </div>
+                      <div className="col-lg-3 col-xl-3" />
+                      <div className="col-lg-9 col-xl-9">
+                        <button
+                          type="submit"
+                          className="btn btn-success w-25 mr-5">
+                          Save
+                        </button>
+                        <button type="reset" className="btn btn-secondary w-25">
+                          Cancel
+                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="kt-portlet__foot">
-                <div className="kt-form__actions">
-                  <div className="row">
-                    <div className="col-lg-3 col-xl-3" />
-                    <div className="col-lg-9 col-xl-9">
-                      <button type="reset" className="btn btn-success">
-                        Submit
-                      </button>
-                      &nbsp;
-                      <button type="reset" className="btn btn-secondary">
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
     </div>
   );
 };
 
-export default ProfileInformation;
+const mapStateToProps = (state) => {
+  return {
+    userState: state.userState,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoadingAction: bindActionCreators(showLoading, dispatch),
+    hideLoadingAction: bindActionCreators(hideLoading, dispatch),
+    updateUserAction: bindActionCreators(updateUser, dispatch),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withRouter(ProfileInformation));

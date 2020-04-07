@@ -26,3 +26,15 @@ export const authorizeUser = (token) => {
     },
   });
 };
+
+export const requestVerificationEmail = (_id, email) => {
+  return AxiosService.post(`${SERVER_URL}/user/verify`, { _id, email });
+};
+
+export const getHashedPassword = (password) => {
+  return AxiosService.post(`${SERVER_URL}/hashed-password`, { password });
+};
+
+export const updateUser = (props) => {
+  return AxiosService.post(`${SERVER_URL}/user/update`, { ...props });
+};

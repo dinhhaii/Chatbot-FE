@@ -33,3 +33,19 @@ export const setIsNotLogin = () => {
     type: actionTypes.SET_ISNOTLOGIN,
   };
 };
+
+export const changePassword = (currentPassword, password, rpassword) => {
+  return {
+    type: actionTypes.CHANGE_PASSWORD,
+    currentPassword,
+    password,
+    rpassword,
+  };
+};
+
+export const updateUser = (user) => {
+  return {
+    type: actionTypes.UPDATE_USER,
+    user,
+  };
+};

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -16,6 +17,7 @@ import Search from '../components/home/search';
 import { fetchCourseList } from '../actions/course';
 import { fetchSubjectList } from '../actions/subject';
 import { PATH } from '../utils/constant';
+import { fetchInvoiceLearnerList } from '../actions/invoice';
 
 const Home = (props) => {
   useEffect(() => {
@@ -73,6 +75,7 @@ const mapStateToProps = (state) => {
   return {
     courseState: state.courseState,
     subjectState: state.subjectState,
+    userState: state.userState,
   };
 };
 
@@ -80,6 +83,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchCourseListAction: bindActionCreators(fetchCourseList, dispatch),
     fetchSubjectListAction: bindActionCreators(fetchSubjectList, dispatch),
+    fetchInvoiceLearnerListAction: bindActionCreators(fetchInvoiceLearnerList, dispatch),
   };
 };
 

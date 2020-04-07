@@ -11,7 +11,7 @@ export const IMAGE_URL = {
 export const PATH = {
   LOGIN: '/login',
   REGISTER: '/register',
-  FORGOT_PASSWORD: 'forgot-password',
+  FORGOT_PASSWORD: '/forgot-password',
   AUTH: '/auth',
   AUTH_LOGIN: '/auth/login',
   AUTH_REGISTER: '/auth/register',
