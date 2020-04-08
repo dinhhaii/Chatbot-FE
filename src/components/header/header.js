@@ -60,14 +60,6 @@ const Header = (props) => {
           </Link>
         </div>
         <ul id="top_menu">
-          <li>
-            <Link
-              to="/auth/abc"
-              className="btn btn-info"
-              onClick={() => toast('test')}>
-              Test Button
-            </Link>
-          </li>
 
           {/* SEARCH  */}
           <li>
@@ -82,21 +74,22 @@ const Header = (props) => {
           {userState.isLogin ? (
             <>
               <li>
-                <Link to={PATH.PROFILE} style={{ fontSize: `${15}pt` }}>
+                <Link to={PATH.PROFILE} style={{ fontSize: `${14}pt` }}>
                   {userState.user
                     ? `${userState.user.firstName} ${userState.user.lastName}`
                     : ''}
                 </Link>
               </li>
               <li>
-                <span
+                <Link
+                  to={PATH.PROFILE}
                   className="kt-media kt-media--sm"
                   style={{ verticalAlign: 'middle' }}>
                   <img
                     src={userState.user ? userState.user.imageURL : ''}
                     alt=""
                   />
-                </span>
+                </Link>
               </li>
             </>
           ) : (

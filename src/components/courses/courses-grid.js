@@ -1,320 +1,62 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Rate } from 'antd';
+import 'antd/dist/antd.css';
+import { PATH } from '../../utils/constant';
 
-const CoursesGrid = () => {
+const CoursesGrid = (props) => {
+  const { data } = props;
   return (
     <div className="row">
-      <div className="col-md-6">
-        <div className="box_grid wow">
-          <figure className="block-reveal">
-            <div className="block-horizzontal" />
-            <Link href="#0" class="wish_bt" />
-            <Link href="course-detail.html">
-              <img
-                src="http://via.placeholder.com/800x533/ccc/fff/course__list_1.jpg"
-                className="img-fluid"
-                alt=""
-              />
-            </Link>
-            <div className="price">$54</div>
-            <div className="preview">
-              <span>Preview course</span>
+      {data.map((value, index) => {
+        const rateAverage = value.feedback.reduce((total, num) => total + num.rate, 0) / (value.feedback.length * 2);
+        if (!value.isDelete) {
+          return (
+            <div className="col-md-6" key={index.toString()}>
+              <div className="box_grid wow">
+                <figure className="block-reveal">
+                  <div className="block-horizzontal" />
+                  <Link href="#0" class="wish_bt" />
+                  <Link href="course-detail.html">
+                    <img src={value.imageURL} className="img-fluid" alt="" />
+                  </Link>
+                  <div className="price">${value.price}</div>
+                  <div className="preview">
+                    <span>Preview course</span>
+                  </div>
+                </figure>
+                <div className="wrapper">
+                  <small>{value.subject.name}</small>
+                  <h3>{value.name}</h3>{' '}
+                  <Link
+                    to={`${PATH.PROFILE_USER}/${value.lecturer._id}`}
+                    className="mb-2 badge badge-success">
+                    {`${value.lecturer.firstName.toUpperCase()} ${value.lecturer.lastName.toUpperCase()}`}
+                  </Link>
+                  <p>{value.description}</p>
+                  <div className="rating">
+                    <Rate
+                      defaultValue={rateAverage}
+                      style={{ padding: 0 }}
+                      disabled
+                    />
+                  </div>
+                </div>
+                <ul>
+                  <li>
+                    <i className="icon_clock_alt" /> {value.duration}
+                  </li>
+                  <li>
+                    <Link href="course-detail.html">Enroll now</Link>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </figure>
-          <div className="wrapper">
-            <small>Category</small>
-            <h3>Persius delenit has cu</h3>
-            <p>
-              Id placerat tacimates definitionem sea, prima quidam vim no. Duo
-              nobis persecuti cu.
-            </p>
-            <div className="rating">
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star" />
-              <i className="icon_star" /> 
-              {' '}
-              <small>(145)</small>
-            </div>
-          </div>
-          <ul>
-            <li>
-              <i className="icon_clock_alt" />
-              {' '}
-              1h 30min
-            </li>
-            <li>
-              <i className="icon_like" />
-              {' '}
-              890
-            </li>
-            <li>
-              <Link href="course-detail.html">Enroll now</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-      {/* <!-- /box_grid --> */}
-      <div className="col-md-6">
-        <div className="box_grid wow">
-          <figure className="block-reveal">
-            <div className="block-horizzontal" />
-            <Link href="#0" class="wish_bt" />
-            <Link href="course-detail.html">
-              <img
-                src="http://via.placeholder.com/800x533/ccc/fff/course__list_2.jpg"
-                className="img-fluid"
-                alt=""
-              />
-            </Link>
-            <div className="price">$39</div>
-            <div className="preview">
-              <span>Preview course</span>
-            </div>
-          </figure>
-          <div className="wrapper">
-            <small>Category</small>
-            <h3>At deseruisse scriptorem</h3>
-            <p>
-              Id placerat tacimates definitionem sea, prima quidam vim no. Duo
-              nobis persecuti cu.
-            </p>
-            <div className="rating">
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star" />
-              <i className="icon_star" /> 
-              {' '}
-              <small>(145)</small>
-            </div>
-          </div>
-          <ul>
-            <li>
-              <i className="icon_clock_alt" />
-              {' '}
-              1h 30min
-            </li>
-            <li>
-              <i className="icon_like" />
-              {' '}
-              890
-            </li>
-            <li>
-              <Link href="course-detail.html">Enroll now</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-      {/* <!-- /box_grid --> */}
-      <div className="col-md-6">
-        <div className="box_grid wow">
-          <figure className="block-reveal">
-            <div className="block-horizzontal" />
-            <Link href="#0" class="wish_bt" />
-            <Link href="course-detail.html">
-              <img
-                src="http://via.placeholder.com/800x533/ccc/fff/course__list_3.jpg"
-                className="img-fluid"
-                alt=""
-              />
-            </Link>
-            <div className="price">$40</div>
-            <div className="preview">
-              <span>Preview course</span>
-            </div>
-          </figure>
-          <div className="wrapper">
-            <small>Category</small>
-            <h3>Ea vel semper quaerendum</h3>
-            <p>
-              Id placerat tacimates definitionem sea, prima quidam vim no. Duo
-              nobis persecuti cu.
-            </p>
-            <div className="rating">
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star" />
-              <i className="icon_star" /> 
-              {' '}
-              <small>(145)</small>
-            </div>
-          </div>
-          <ul>
-            <li>
-              <i className="icon_clock_alt" />
-              {' '}
-              1h 30min
-            </li>
-            <li>
-              <i className="icon_like" />
-              {' '}
-              890
-            </li>
-            <li>
-              <Link href="course-detail.html">Enroll now</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-      {/* <!-- /box_grid --> */}
-      <div className="col-md-6">
-        <div className="box_grid wow">
-          <figure className="block-reveal">
-            <div className="block-horizzontal" />
-            <Link href="#0" class="wish_bt" />
-            <Link href="course-detail.html">
-              <img
-                src="http://via.placeholder.com/800x533/ccc/fff/course__list_4.jpg"
-                className="img-fluid"
-                alt=""
-              />
-            </Link>
-            <div className="price">$65</div>
-            <div className="preview">
-              <span>Preview course</span>
-            </div>
-          </figure>
-          <div className="wrapper">
-            <small>Category</small>
-            <h3>Ei has exerci graecis</h3>
-            <p>
-              Id placerat tacimates definitionem sea, prima quidam vim no. Duo
-              nobis persecuti cu.
-            </p>
-            <div className="rating">
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star" />
-              <i className="icon_star" /> 
-              {' '}
-              <small>(145)</small>
-            </div>
-          </div>
-          <ul>
-            <li>
-              <i className="icon_clock_alt" />
-              {' '}
-              1h 30min
-            </li>
-            <li>
-              <i className="icon_like" />
-              {' '}
-              890
-            </li>
-            <li>
-              <Link href="course-detail.html">Enroll now</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-      {/* <!-- /box_grid --> */}
-      <div className="col-md-6">
-        <div className="box_grid wow">
-          <figure className="block-reveal">
-            <div className="block-horizzontal" />
-            <Link href="#0" class="wish_bt" />
-            <Link href="course-detail.html">
-              <img
-                src="http://via.placeholder.com/800x533/ccc/fff/course__list_5.jpg"
-                className="img-fluid"
-                alt=""
-              />
-            </Link>
-            <div className="price">$35</div>
-            <div className="preview">
-              <span>Preview course</span>
-            </div>
-          </figure>
-          <div className="wrapper">
-            <small>Category</small>
-            <h3>Decore tractatos</h3>
-            <p>
-              Id placerat tacimates definitionem sea, prima quidam vim no. Duo
-              nobis persecuti cu.
-            </p>
-            <div className="rating">
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star" />
-              <i className="icon_star" /> 
-              {' '}
-              <small>(145)</small>
-            </div>
-          </div>
-          <ul>
-            <li>
-              <i className="icon_clock_alt" />
-              {' '}
-              1h 30min
-            </li>
-            <li>
-              <i className="icon_like" />
-              {' '}
-              890
-            </li>
-            <li>
-              <Link href="course-detail.html">Enroll now</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-      {/* <!-- /box_grid --> */}
-      <div className="col-md-6">
-        <div className="box_grid wow">
-          <figure className="block-reveal">
-            <div className="block-horizzontal" />
-            <Link href="#0" class="wish_bt" />
-            <Link href="course-detail.html">
-              <img
-                src="http://via.placeholder.com/800x533/ccc/fff/course__list_6.jpg"
-                className="img-fluid"
-                alt=""
-              />
-            </Link>
-            <div className="price">$47</div>
-            <div className="preview">
-              <span>Preview course</span>
-            </div>
-          </figure>
-          <div className="wrapper">
-            <small>Category</small>
-            <h3>Eam id legimus torquatos</h3>
-            <p>
-              Id placerat tacimates definitionem sea, prima quidam vim no. Duo
-              nobis persecuti cu.
-            </p>
-            <div className="rating">
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star" />
-              <i className="icon_star" /> 
-              {' '}
-              <small>(145)</small>
-            </div>
-          </div>
-          <ul>
-            <li>
-              <i className="icon_clock_alt" />
-              {' '}
-              1h 30min
-            </li>
-            <li>
-              <i className="icon_like" />
-              {' '}
-              890
-            </li>
-            <li>
-              <Link href="course-detail.html">Enroll now</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
+          );
+        }
+        return null;
+      })}
     </div>
   );
 };

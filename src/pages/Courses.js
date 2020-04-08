@@ -1,15 +1,103 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import 'icheck/skins/all.css';
-import { Checkbox } from 'react-icheck';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import CoursesGrid from '../components/courses/courses-grid';
 import CoursesList from '../components/courses/courses-list';
 import '../utils/css/courses.css';
+import CourseHelp from '../components/courses/courses-help';
+import CourseToolBar from '../components/courses/courses-toolbar';
+import CourseFilter from '../components/courses/courses-filter';
+import { usePrevious } from '../utils/helper';
+import { fetchCourseList } from '../actions/course';
 
-const Course = () => {
-  const [state, setState] = useState({ viewMode: 'grid' });
+const Course = (props) => {
+  const [viewMode, setViewMode] = useState('grid');
+  const prevProps = usePrevious(props);
+  const { courseState } = props;
+  const dataPerPage = 4;
 
+  const [filter, setFilter] = useState({
+    search: '',
+    subject: [],
+    rate: 0,
+  });
+
+  const [pagination, setPagination] = useState({
+    indexFirst: 0,
+    indexLast: 0,
+    currentPage: 1,
+    totalPage: 1,
+    data: [],
+  });
+
+  // DID MOUNT
+  useEffect(() => {
+    props.fetchCourseListAction();
+  }, []);
+
+  // DID UPDATE
+  useEffect(() => {
+    if (
+      prevProps
+      && prevProps.courseState.courseList !== props.courseState.courseList
+    ) {
+      setPagination({
+        indexFirst: 0,
+        indexLast: dataPerPage,
+        currentPage: 1,
+        totalPage: Math.ceil(courseState.courseList.length / dataPerPage),
+        data: handleFilter(courseState.courseList).slice(0, dataPerPage),
+      });
+    }
+  });
+
+  const choosePage = (page) => {
+    const { indexFirst } = pagination.indexFirst;
+    const indexLast = page * dataPerPage;
+    const currentPage = page;
+    const data = handleFilter(courseState.courseList).slice(indexFirst, indexLast);
+
+    setPagination({
+      ...pagination,
+      indexLast,
+      currentPage,
+      data,
+    });
+  };
+
+  const handleChangeFilter = () => {
+    const data = handleFilter(courseState.courseList).slice(0, dataPerPage);
+    
+    setPagination({
+      ...pagination,
+      data,
+    });
+  };
+
+  const handleFilter = list => {
+    return list.filter((e) => {
+      return filter.subject.length !== 0 ? filter.subject.some(name => name === e.subject.name) : true;
+    }).filter((e) => {
+      const search = filter.search.toLowerCase();
+      // console.log(`${e.description.toLowerCase().includes(search)} - ${e.lecturer.firstName.toLowerCase().includes(search)} - ${e.subject.name.toLowerCase().includes(search)} - ${e.name.toLowerCase().includes(search)}`)
+      if (
+        filter.search === ''
+        || e.name.toLowerCase().includes(search)
+        || e.subject.name.toLowerCase().includes(search)
+        || e.lecturer.firstName.toLowerCase().includes(search)
+        || e.lecturer.lastName.toLowerCase().includes(search)
+        || e.description.toLowerCase().includes(search)
+      ) {
+        return true;
+      }
+      return false;
+    });
+  };
+
+  
   return (
     <div>
       <main>
@@ -23,238 +111,57 @@ const Course = () => {
             </div>
           </div>
         </section>
-        {/* <!--/hero_in--> */}
 
-        <div className="filters_listing sticky_horizontal">
-          <div className="container">
-            <ul className="clearfix">
-              <li>
-                <div className="switch-field">
-                  <input
-                    type="radio"
-                    id="all"
-                    name="listing_filter"
-                    value="all"
-                    checked
-                  />
-                  <label htmlFor="all">All</label>
-                  <input
-                    type="radio"
-                    id="popular"
-                    name="listing_filter"
-                    value="popular"
-                  />
-                  <label htmlFor="popular">Popular</label>
-                  <input
-                    type="radio"
-                    id="latest"
-                    name="listing_filter"
-                    value="latest"
-                  />
-                  <label htmlFor="latest">Latest</label>
-                </div>
-              </li>
-              <li>
-                <div className="layout_view">
-                  <Link
-                    onClick={() => setState({ viewMode: 'grid' })}
-                    className={state.viewMode === 'grid' ? 'active' : ''}>
-                    <i className="icon-th" />
-                  </Link>
-                  <Link
-                    onClick={() => setState({ viewMode: 'list' })}
-                    className={state.viewMode === 'list' ? 'active' : ''}>
-                    <i className="icon-th-list" />
-                  </Link>
-                </div>
-              </li>
-              <li>
-                <form>
-                  <div id="custom-search-input">
-                    <div className="input-group">
-                      <input type="text" className="search-query" placeholder="Courses, lecturer, ..." />
-                      <input type="submit" className="btn_search" value="Search" />
-                    </div>
-                  </div>
-                </form>
-              </li>
-            </ul>
-          </div>
-          {/* <!-- /container --> */}
-        </div>
-        {/* <!-- /filters --> */}
+        <CourseToolBar
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+          filter={filter}
+          setFilter={setFilter}
+          handleChangeFilter={handleChangeFilter}
+        />
 
         <div className="container margin_60_35">
           <div className="row">
             <aside className="col-lg-3" id="sidebar">
-              <div id="filters_col">
-                <Link
-                  data-toggle="collapse"
-                  href="#collapseFilters"
-                  aria-expanded="false"
-                  aria-controls="collapseFilters"
-                  id="filters_col_bt">
-                  Filters
-                </Link>
-                <div className="collapse show" id="collapseFilters">
-                  <div className="filter_type">
-                    <h6>Category</h6>
-                    <ul>
-                      <li>
-                        <Checkbox
-                          checkboxClass="icheckbox_square-green"
-                          increaseArea="20%"
-                          label=" all"
-                        />
-                      </li>
-                      <li>
-                        <Checkbox
-                          checkboxClass="icheckbox_square-green"
-                          increaseArea="20%"
-                          label=" all"
-                        />
-                      </li>
-                      <li>
-                        <Checkbox
-                          checkboxClass="icheckbox_square-green"
-                          increaseArea="20%"
-                          label=" all"
-                        />
-                      </li>
-                      <li>
-                        <Checkbox
-                          checkboxClass="icheckbox_square-green"
-                          increaseArea="20%"
-                          label=" all"
-                        />
-                      </li>
-                      <li>
-                        <Checkbox
-                          checkboxClass="icheckbox_square-green"
-                          increaseArea="20%"
-                          label=" all"
-                        />
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="filter_type">
-                    <h6>Rating</h6>
-                    <ul>
-                      <li>
-                        <label>
-                          <input type="checkbox" className="icheck" />
-                          <span className="rating">
-                            <i className="icon_star voted" />
-                            <i className="icon_star voted" />
-                            <i className="icon_star voted" />
-                            <i className="icon_star voted" />
-                            <i className="icon_star voted" />{' '}
-                            <small>(145)</small>
-                          </span>
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="checkbox" className="icheck" />
-                          <span className="rating">
-                            <i className="icon_star voted" />
-                            <i className="icon_star voted" />
-                            <i className="icon_star voted" />
-                            <i className="icon_star voted" />
-                            <i className="icon_star" /> <small>(25)</small>
-                          </span>
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="checkbox" className="icheck" />
-                          <span className="rating">
-                            <i className="icon_star voted" />
-                            <i className="icon_star voted" />
-                            <i className="icon_star voted" />
-                            <i className="icon_star" />
-                            <i className="icon_star" /> <small>(68)</small>
-                          </span>
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="checkbox" className="icheck" />
-                          <span className="rating">
-                            <i className="icon_star voted" />
-                            <i className="icon_star voted" />
-                            <i className="icon_star" />
-                            <i className="icon_star" />
-                            <i className="icon_star" /> <small>(34)</small>
-                          </span>
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="checkbox" className="icheck" />
-                          <span className="rating">
-                            <i className="icon_star voted" />
-                            <i className="icon_star" />
-                            <i className="icon_star" />
-                            <i className="icon_star" />
-                            <i className="icon_star" /> <small>(10)</small>
-                          </span>
-                        </label>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                {/* <!--/collapse --> */}
-              </div>
-              {/* <!--/filters col--> */}
+              <CourseFilter
+                filter={filter}
+                setFilter={setFilter}
+                handleChangeFilter={handleChangeFilter}
+              />
             </aside>
-            {/* <!-- /aside --> */}
 
             <div className="col-lg-9">
-              {state.viewMode === 'grid' ? <CoursesGrid /> : <CoursesList />}
+              {viewMode === 'grid' ? (
+                <CoursesGrid data={pagination.data} />
+              ) : (
+                <CoursesList data={pagination.data} />
+              )}
               <p className="text-center">
-                <Link href="#0" class="btn_1 rounded add_top_30">
+                <Link
+                  onClick={() => choosePage(pagination.currentPage + 1)}
+                  className="btn_1 rounded add_top_30">
                   Load more
                 </Link>
               </p>
             </div>
-            {/* <!-- /col --> */}
           </div>
-          {/* <!-- /row --> */}
         </div>
-        {/* <!-- /container --> */}
-        <div className="bg_color_1">
-          <div className="container margin_60_35">
-            <div className="row">
-              <div className="col-md-4">
-                <Link href="#0" class="boxed_list">
-                  <i className="pe-7s-help2" />
-                  <h4>Need Help? Contact us</h4>
-                  <p>Cum appareat maiestatis interpretaris et, et sit.</p>
-                </Link>
-              </div>
-              <div className="col-md-4">
-                <Link href="#0" class="boxed_list">
-                  <i className="pe-7s-wallet" />
-                  <h4>Payments and Refunds</h4>
-                  <p>Qui ea nemore eruditi, magna prima possit eu mei.</p>
-                </Link>
-              </div>
-              <div className="col-md-4">
-                <Link href="#0" class="boxed_list">
-                  <i className="pe-7s-note2" />
-                  <h4>Quality Standards</h4>
-                  <p>Hinc vituperata sed ut, pro laudem nonumes ex.</p>
-                </Link>
-              </div>
-            </div>
-            {/* <!-- /row --> */}
-          </div>
-          {/* <!-- /container --> */}
-        </div>
+        <CourseHelp />
       </main>
     </div>
   );
 };
 
-export default Course;
+const mapStateToProps = (state) => {
+  return {
+    courseState: state.courseState,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchCourseListAction: bindActionCreators(fetchCourseList, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Course));

@@ -14,9 +14,9 @@ import Introduction from '../components/home/introduction';
 import Feedback from '../components/home/feedback';
 import CallSection from '../components/home/call-section';
 import Search from '../components/home/search';
+import { PATH } from '../utils/constant';
 import { fetchCourseList } from '../actions/course';
 import { fetchSubjectList } from '../actions/subject';
-import { PATH } from '../utils/constant';
 import { fetchInvoiceLearnerList } from '../actions/invoice';
 
 const Home = (props) => {

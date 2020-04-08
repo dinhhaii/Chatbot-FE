@@ -17,3 +17,7 @@ export function usePrevious(value) {
 export function formatDateToString(date) {
   return moment(date).format('MMMM Do YYYY');
 }
+
+export function getRandom(items) {
+  return items[Math.floor(Math.random() * items.length)];
+}

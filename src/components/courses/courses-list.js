@@ -1,266 +1,73 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Rate } from 'antd';
+import 'antd/dist/antd.css';
+import { getRandom } from '../../utils/helper';
+import { PATH } from '../../utils/constant';
 
-const CoursesList = () => {
+const CoursesList = (props) => {
+  const { data } = props;
   return (
     <div>
-      <div className="box_list wow">
-        <div className="row no-gutters">
-          <div className="col-lg-5">
-            <figure className="block-reveal">
-              <div className="block-horizzontal" />
-              <Link href="course-detail.html">
-                <img
-                  src="http://via.placeholder.com/800x533/ccc/fff/course__list_1.jpg"
-                  alt=""
-                />
-              </Link>
-              <div className="preview">
-                <span>Preview course</span>
-              </div>
-            </figure>
-          </div>
-          <div className="col-lg-7">
-            <div className="wrapper">
-              <Link href="#0" class="wish_bt" />
-              <div className="price">$39</div>
-              <small>Category</small>
-              <h3>Persius delenit has cu</h3>
-              <p>
-                Dicam diceret ut ius, no epicuri dissentiet philosophia vix. Eam
-                id legimus torquatos cotidieque, usu decore percipitur
-                definitiones ex, nihil utinam recusabo mel no.{' '}
-              </p>
-              <div className="rating">
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star" />
-                <i className="icon_star" /> <small>(145)</small>
-              </div>
-            </div>
-            <ul>
-              <li>
-                <i className="icon_clock_alt" /> 1h 30min
-              </li>
-              <li>
-                <i className="icon_like" /> 890
-              </li>
-              <li>
-                <Link href="course-detail.html">Enroll now</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      {data.map((value, index) => {
+        const rateAverage = value.feedback.reduce((total, num) => {
+          return total.rate + num.rate;
+        }) / (2 * value.feedback.length);
 
-      <div className="box_list wow">
-        <div className="row no-gutters">
-          <div className="col-lg-5">
-            <figure className="block-reveal">
-              <div className="block-horizzontal" />
-              <Link href="course-detail.html">
-                <img
-                  src="http://via.placeholder.com/800x533/ccc/fff/course__list_2.jpg"
-                  className="img-fluid"
-                  alt=""
-                />
-              </Link>
-              <div className="preview">
-                <span>Preview course</span>
-              </div>
-            </figure>
-          </div>
-          <div className="col-lg-7">
-            <div className="wrapper">
-              <Link href="#0" class="wish_bt" />
-              <div className="price">$25</div>
-              <small>Category</small>
-              <h3>At deseruisse scriptorem</h3>
-              <p>
-                Dicam diceret ut ius, no epicuri dissentiet philosophia vix. Id
-                usu zril tacimates neglegentur. Eam id legimus torquatos
-                cotidieque, usu decore percipitur definitiones ex, nihil utinam
-                recusabo mel no.{' '}
-              </p>
-              <div className="rating">
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star" />
-                <i className="icon_star" /> <small>(145)</small>
-              </div>
-            </div>
-            <ul>
-              <li>
-                <i className="icon_clock_alt" /> 1h 30min
-              </li>
-              <li>
-                <i className="icon_like" /> 890
-              </li>
-              <li>
-                <Link href="course-detail.html">Enroll now</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div className="box_list wow">
-        <div className="row no-gutters">
-          <div className="col-lg-5">
-            <figure className="block-reveal">
-              <div className="block-horizzontal" />
-              <Link href="course-detail.html">
-                <img
-                  src="http://via.placeholder.com/800x533/ccc/fff/course__list_3.jpg"
-                  className="img-fluid"
-                  alt=""
-                />
-              </Link>
-              <div className="preview">
-                <span>Preview course</span>
-              </div>
-            </figure>
-          </div>
-          <div className="col-lg-7">
-            <div className="wrapper">
-              <Link href="#0" class="wish_bt" />
-              <div className="price">$120</div>
-              <small>Category</small>
-              <h3>Ea vel semper quaerendum</h3>
-              <p>
-                Dicam diceret ut ius, no epicuri dissentiet philosophia vix. Id
-                usu zril tacimates neglegentur. Eam id legimus torquatos
-                cotidieque, usu decore percipitur definitiones ex, nihil utinam
-                recusabo mel no.{' '}
-              </p>
-              <div className="rating">
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star" />
-                <i className="icon_star" /> <small>(145)</small>
+        if (!value.isDelete) {
+          return (
+            <div className="box_list wow" key={index.toString()}>
+              <div className="row no-gutters">
+                <div className="col-lg-5">
+                  <figure className="block-reveal">
+                    <div className="block-horizzontal" />
+                    <Link href="course-detail.html">
+                      <img src={value.imageURL} alt="" />
+                    </Link>
+                    <div className="preview">
+                      <span>Preview course</span>
+                    </div>
+                  </figure>
+                </div>
+                <div className="col-lg-7">
+                  <div className="wrapper">
+                    <Link href="#0" class="wish_bt" />
+                    <div className="price">${value.price}</div>
+                    <small>{value.subject.name}</small>
+                    <h3>{value.name}</h3>
+                    <Link
+                      to={`${PATH.PROFILE_USER}/${value.lecturer._id}`}
+                      className={`mb-2 badge ${getRandom([
+                        'badge-success',
+                        'badge-danger',
+                        'badge-warning',
+                        'badge-info',
+                      ])}`}>
+                      {`${value.lecturer.firstName.toUpperCase()} ${value.lecturer.lastName.toUpperCase()}`}
+                    </Link>
+                    <p>{value.description}</p>
+                    <Rate
+                      defaultValue={rateAverage}
+                      style={{ padding: 0 }}
+                      disabled
+                    />
+                  </div>
+                  <ul>
+                    <li>
+                      <i className="icon_clock_alt" /> {value.duration}
+                    </li>
+                    <li>
+                      <Link href="course-detail.html">Enroll now</Link>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-            <ul>
-              <li>
-                <i className="icon_clock_alt" /> 1h 30min
-              </li>
-              <li>
-                <i className="icon_like" /> 890
-              </li>
-              <li>
-                <Link href="course-detail.html">Enroll now</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div className="box_list wow">
-        <div className="row no-gutters">
-          <div className="col-lg-5">
-            <figure className="block-reveal">
-              <div className="block-horizzontal" />
-              <Link href="course-detail.html">
-                <img
-                  src="http://via.placeholder.com/800x533/ccc/fff/course__list_4.jpg"
-                  className="img-fluid"
-                  alt=""
-                />
-              </Link>
-              <div className="preview">
-                <span>Preview course</span>
-              </div>
-            </figure>
-          </div>
-          <div className="col-lg-7">
-            <div className="wrapper">
-              <Link href="#0" class="wish_bt" />
-              <div className="price">$54</div>
-              <small>Category</small>
-              <h3>Ei has exerci graecis</h3>
-              <p>
-                Dicam diceret ut ius, no epicuri dissentiet philosophia vix. Id
-                usu zril tacimates neglegentur. Eam id legimus torquatos
-                cotidieque, usu decore percipitur definitiones ex, nihil utinam
-                recusabo mel no.{' '}
-              </p>
-              <div className="rating">
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star" />
-                <i className="icon_star" /> <small>(145)</small>
-              </div>
-            </div>
-            <ul>
-              <li>
-                <i className="icon_clock_alt" /> 1h 30min
-              </li>
-              <li>
-                <i className="icon_like" /> 890
-              </li>
-              <li>
-                <Link href="course-detail.html">Enroll now</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div className="box_list wow">
-        <div className="row no-gutters">
-          <div className="col-lg-5">
-            <figure className="block-reveal">
-              <div className="block-horizzontal" />
-              <Link href="course-detail.html">
-                <img
-                  src="http://via.placeholder.com/800x533/ccc/fff/course__list_5.jpg"
-                  className="img-fluid"
-                  alt=""
-                />
-              </Link>
-              <div className="preview">
-                <span>Preview course</span>
-              </div>
-            </figure>
-          </div>
-          <div className="col-lg-7">
-            <div className="wrapper">
-              <Link href="#0" class="wish_bt" />
-              <div className="price">$60</div>
-              <small>Category</small>
-              <h3>Decore tractatos</h3>
-              <p>
-                Dicam diceret ut ius, no epicuri dissentiet philosophia vix. Id
-                usu zril tacimates neglegentur. Eam id legimus torquatos
-                cotidieque, usu decore percipitur definitiones ex, nihil utinam
-                recusabo mel no.{' '}
-              </p>
-              <div className="rating">
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star" />
-                <i className="icon_star" /> <small>(145)</small>
-              </div>
-            </div>
-            <ul>
-              <li>
-                <i className="icon_clock_alt" /> 1h 30min
-              </li>
-              <li>
-                <i className="icon_like" /> 890
-              </li>
-              <li>
-                <Link href="course-detail.html">Enroll now</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
+          );
+        }
+        return null;
+      })}
     </div>
   );
 };
