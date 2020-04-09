@@ -19,7 +19,7 @@ const CourseCarousel = ({ courseList }) => {
       autoplay
       transitionMode="scroll3d">
       {courseList.map((course, index) => {
-        const rateAverage = course.feedback.reduce((total, num) => total + num.rate, 0) / (course.feedback.length * 2);
+        const rateAverage = course.feedback.reduce((total, num) => total + num.rate, 0) / course.feedback.length;
         return course.isDelete ? null : (
           <div className="item" key={index.toString()}>
             <div className="box_grid">

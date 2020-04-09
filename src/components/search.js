@@ -3,7 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { hideSearchBar } from '../../actions/general';
+import { hideSearchBar } from '../actions/general';
 
 const Search = (props) => {
   return (

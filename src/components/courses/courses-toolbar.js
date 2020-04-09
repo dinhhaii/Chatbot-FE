@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -6,7 +7,9 @@ import 'antd/dist/antd.css';
 
 const { Search } = Input;
 
-const CourseToolBar = ({ viewMode, setViewMode, filter, setFilter, handleChangeFilter }) => {
+const CourseToolBar = ({
+  viewMode, setViewMode, filter, setFilter, handleChangeFilter, 
+}) => {
   return (
     <div className="filters_listing sticky_horizontal">
       <div className="container">
@@ -56,6 +59,19 @@ const CourseToolBar = ({ viewMode, setViewMode, filter, setFilter, handleChangeF
                 className={viewMode === 'list' ? 'active' : ''}>
                 <i className="icon-th-list" />
               </Link>
+            </div>
+          </li>
+          <li>
+            <div
+              className="layout_view"
+              onClick={() => {
+                setFilter({
+                  search: '',
+                  subject: [],
+                });
+
+                handleChangeFilter();
+              }}><i className="icon-arrows-cw" />
             </div>
           </li>
         </ul>

@@ -4,17 +4,18 @@ import { createStore, applyMiddleware } from 'redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { ToastContainer, toast } from 'react-toastify';
 import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
-import { ToastContainer, toast } from 'react-toastify';
 import reducer from './reducers/index';
-import './index.css';
 import routes from './routes/routes';
 import rootSaga from './sagas/index';
-import * as serviceWorker from './serviceWorker';
 import Header from './components/header/header';
 import Footer from './components/footer/footer';
+import Search from './components/search';
+import * as serviceWorker from './serviceWorker';
 import CustomLoader from './components/loader';
+import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -31,6 +32,7 @@ ReactDOM.render(
     <Provider store={store}>
       <Router>
         <CustomLoader />
+        <Search />
         <Header />
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} />
         <Switch>

@@ -1,6 +1,49 @@
-import React from 'react';
+/* eslint-disable no-plusplus */
+import React, { useEffect } from 'react';
+import { Rate } from 'antd';
+import 'antd/dist/antd.css';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchUserList } from '../../actions/user';
+import { IMAGE_URL } from '../../utils/constant';
+import moment from 'moment';
 
-const CourseReview = () => {
+const CourseReview = ({ feedback, userState, fetchUserListAction }) => {
+  feedback = feedback.filter((e) => !e.isDelete);
+  const rateAverage = feedback.reduce((total, num) => total + num.rate, 0) / feedback.length;
+
+  useEffect(() => {
+    fetchUserListAction();
+  }, []);
+
+  const rates = () => {
+    const result = [];
+    for (let i = 5; i >= 1; i--) {
+      const totalRate = feedback.filter((e) => e.rate === i).length;
+      const percentRate = (totalRate * 100) / feedback.length;
+      result.push(
+        <div className="row">
+          <div className="col-lg-10 col-9">
+            <div className="progress">
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{ width: `${percentRate}%` }}
+              />
+            </div>
+          </div>
+          <div className="col-lg-2 col-3">
+            <small>
+              <strong>{i} stars</strong>
+            </small>
+          </div>
+        </div>,
+      );
+    }
+    return result;
+  };
+
   return (
     <section id="reviews">
       <h2>Reviews</h2>
@@ -8,205 +51,68 @@ const CourseReview = () => {
         <div className="row">
           <div className="col-lg-3">
             <div id="review_summary">
-              <strong>4.7</strong>
-              <div className="rating">
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star voted" />
-                <i className="icon_star" />
-              </div>
-              <small>Based on 4 reviews</small>
+              <h2 style={{ color: 'white' }}>{rateAverage}</h2>
+              <Rate
+                defaultValue={rateAverage}
+                style={{ paddingLeft: 5, fontSize: `${9}pt` }}
+                disabled
+              />
+              <small>Based on {feedback.length} reviews</small>
             </div>
           </div>
-          <div className="col-lg-9">
-            <div className="row">
-              <div className="col-lg-10 col-9">
-                <div className="progress">
-                  <div
-                    className="progress-bar"
-                    role="progressbar"
-                    style={{ width: `${90}%` }}
-                    aria-valuenow="90"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  />
-                </div>
-              </div>
-              <div className="col-lg-2 col-3">
-                <small>
-                  <strong>5 stars</strong>
-                </small>
-              </div>
-            </div>
-            {/* /row */}
-            <div className="row">
-              <div className="col-lg-10 col-9">
-                <div className="progress">
-                  <div
-                    className="progress-bar"
-                    role="progressbar"
-                    style={{ width: `${95}%` }}
-                    aria-valuenow="95"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  />
-                </div>
-              </div>
-              <div className="col-lg-2 col-3">
-                <small>
-                  <strong>4 stars</strong>
-                </small>
-              </div>
-            </div>
-            {/* /row */}
-            <div className="row">
-              <div className="col-lg-10 col-9">
-                <div className="progress">
-                  <div
-                    className="progress-bar"
-                    role="progressbar"
-                    style={{ width: `${60}%` }}
-                    aria-valuenow="60"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  />
-                </div>
-              </div>
-              <div className="col-lg-2 col-3">
-                <small>
-                  <strong>3 stars</strong>
-                </small>
-              </div>
-            </div>
-            {/* /row */}
-            <div className="row">
-              <div className="col-lg-10 col-9">
-                <div className="progress">
-                  <div
-                    className="progress-bar"
-                    role="progressbar"
-                    style={{ width: `${20}%` }}
-                    aria-valuenow="20"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  />
-                </div>
-              </div>
-              <div className="col-lg-2 col-3">
-                <small>
-                  <strong>2 stars</strong>
-                </small>
-              </div>
-            </div>
-            {/* /row */}
-            <div className="row">
-              <div className="col-lg-10 col-9">
-                <div className="progress">
-                  <div
-                    className="progress-bar"
-                    role="progressbar"
-                    style={{ width: 0 }}
-                    aria-valuenow="0"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  />
-                </div>
-              </div>
-              <div className="col-lg-2 col-3">
-                <small>
-                  <strong>1 stars</strong>
-                </small>
-              </div>
-            </div>
-            {/* /row */}
-          </div>
+          <div className="col-lg-9">{rates().map((value) => value)}</div>
         </div>
-        {/* /row */}
       </div>
 
       <hr />
 
       <div className="reviews-container">
-        <div className="review-box clearfix">
-          <figure className="rev-thumb">
-            <img
-              src="http://via.placeholder.com/150x150/ccc/fff/avatar1.jpg"
-              alt=""
-            />
-          </figure>
-          <div className="rev-content">
-            <div className="rating">
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star" />
+        {feedback.map((value, index) => {
+          const user = userState.userList.find((e) => e._id === value._idUser);
+          return (
+            <div className="review-box clearfix" key={index.toString()}>
+              <figure className="rev-thumb">
+                <img
+                  src={user ? user.imageURL : IMAGE_URL.BACKGROUND_1}
+                  alt=""
+                />
+              </figure>
+              <div className="rev-content">
+                <Rate
+                  defaultValue={value.rate}
+                  style={{ paddingBottom: 5, fontSize: `${11}pt` }}
+                  disabled
+                />
+                <div className="rev-info">
+                  {user
+                    ? `${user.firstName.toUpperCase()} ${user.lastName.toUpperCase()} - ${moment(value.createdAt).format('LLLL')}`
+                    : ''}
+                </div>
+                <div className="rev-text">
+                  <p>{value.content}</p>
+                </div>
+              </div>
             </div>
-            <div className="rev-info">Admin – April 03, 2016:</div>
-            <div className="rev-text">
-              <p>
-                Sed eget turpis a pede tempor malesuada. Vivamus quis mi at leo
-                pulvinar hendrerit. Cum sociis natoque penatibus et magnis dis
-              </p>
-            </div>
-          </div>
-        </div>
-        {/* /review-box */}
-        <div className="review-box clearfix">
-          <figure className="rev-thumb">
-            <img
-              src="http://via.placeholder.com/150x150/ccc/fff/avatar2.jpg"
-              alt=""
-            />
-          </figure>
-          <div className="rev-content">
-            <div className="rating">
-              <i className="icon-star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star" />
-            </div>
-            <div className="rev-info">Ahsan – April 01, 2016:</div>
-            <div className="rev-text">
-              <p>
-                Sed eget turpis a pede tempor malesuada. Vivamus quis mi at leo
-                pulvinar hendrerit. Cum sociis natoque penatibus et magnis dis
-              </p>
-            </div>
-          </div>
-        </div>
-        {/* /review-box */}
-        <div className="review-box clearfix">
-          <figure className="rev-thumb">
-            <img
-              src="http://via.placeholder.com/150x150/ccc/fff/avatar3.jpg"
-              alt=""
-            />
-          </figure>
-          <div className="rev-content">
-            <div className="rating">
-              <i className="icon-star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star voted" />
-              <i className="icon_star" />
-            </div>
-            <div className="rev-info">Sara – March 31, 2016:</div>
-            <div className="rev-text">
-              <p>
-                Sed eget turpis a pede tempor malesuada. Vivamus quis mi at leo
-                pulvinar hendrerit. Cum sociis natoque penatibus et magnis dis
-              </p>
-            </div>
-          </div>
-        </div>
-        {/* /review-box */}
+          );
+        })}
       </div>
-      {/* /review-container */}
     </section>
   );
 };
 
-export default CourseReview;
+const mapStateToProps = (state) => {
+  return {
+    userState: state.userState,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUserListAction: bindActionCreators(fetchUserList, dispatch),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withRouter(CourseReview));

@@ -1,62 +1,71 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import LessonsList from '../components/lessons/lessons-list';
 import CourseReview from '../components/courses/courses-review';
 import CourseDescription from '../components/courses/courses-description';
 import CoursePurchase from '../components/courses/courses-purchase';
+import { PATH } from '../utils/constant';
+import { capitalize } from '../utils/helper';
 
-const CourseDetail = () => {
+const CourseDetail = (props) => {
+  const { match, courseState } = props;
+  const course = courseState.courseList.find((e) => e._id === match.params.id);
   return (
     <div>
-      <main>
-        <section id="hero_in" className="courses">
-          <div className="wrapper">
-            <div className="container">
-              <h1 className="fadeInUp">
-                <span />
-                Online course detail
-              </h1>
-            </div>
-          </div>
-        </section>
-        {/* /hero_in */}
-
-        <div className="bg_color_1">
-          <nav className="secondary_nav sticky_horizontal">
-            <div className="container">
-              <ul className="clearfix">
-                <li>
-                  <Link href="#description" class="active">
-                    Description
+      {course ? (
+        <main>
+          <section id="hero_in" className="courses">
+            <div className="wrapper">
+              <div className="container">
+                <button onClick={() => console.log(props.userState.userList)}>TESTTTT</button>
+                <h1 className="fadeInUp">
+                  <span />
+                  {course.name}
+                </h1>
+                <p>
+                  Created by{' '}
+                  <Link to={`${PATH.PROFILE_USER}/${course.lecturer._id}`} className="font-weight-bold">
+                    {`${capitalize(course.lecturer.firstName)} ${capitalize(course.lecturer.lastName)}`}
                   </Link>
-                </li>
-                <li>
-                  <Link href="#lessons">Lessons</Link>
-                </li>
-                <li>
-                  <Link href="#reviews">Reviews</Link>
-                </li>
-              </ul>
-            </div>
-          </nav>
-          <div className="container margin_60_35">
-            <div className="row">
-              <div className="col-lg-8">
-                <CourseDescription />
-                <LessonsList />
-                <CourseReview />
+                </p>
               </div>
-              <CoursePurchase />
             </div>
-            {/* /row */}
+          </section>
+
+          <div className="bg_color_1">
+            <nav className="secondary_nav sticky_horizontal" />
+            <div className="container margin_60_35">
+              <div className="row">
+                <div className="col-lg-8">
+                  <CourseDescription description={course.description} />
+                  <LessonsList lessons={course.lessons} />
+                  <CourseReview feedback={course.feedback} />
+                </div>
+                <CoursePurchase />
+              </div>
+            </div>
           </div>
-          {/* /container */}
-        </div>
-        {/* /bg_color_1 */}
-      </main>
+        </main>
+      ) : null}
     </div>
   );
 };
 
-export default CourseDetail;
+const mapStateToProps = (state) => {
+  return {
+    userState: state.userState,
+    courseState: state.courseState,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withRouter(CourseDetail));

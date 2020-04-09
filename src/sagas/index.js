@@ -31,6 +31,8 @@ import {
 import {
   fetchInvoiceLearnerListSuccess,
   fetchInvoiceLearnerListFailed,
+  fetchInvoiceLecturerListSuccess,
+  fetchInvoiceLecturerListFailed,
 } from '../actions/invoice';
 
 function* rootSaga() {
@@ -133,7 +135,7 @@ function* fetchCourseListSaga() {
   yield put(showLoading());
   const { data } = yield call(getCourseList);
   if (data) {
-    yield put(fetchCourseListSuccess(data));
+    yield put(fetchCourseListSuccess(data.filter(e => !e.isDelete)));
   } else {
     yield put(fetchCourseListFailed());
     toast.error('Cannot fetch courses list!');
@@ -145,7 +147,7 @@ function* fetchSubjectListSaga() {
   yield put(showLoading());
   const { data } = yield call(getSubjectList);
   if (data) {
-    yield put(fetchSubjectListSuccess(data));
+    yield put(fetchSubjectListSuccess(data.filter(e => !e.isDelete)));
   } else {
     yield put(fetchSubjectListFailed());
     toast.error('Cannot fetch subject list!');
@@ -157,7 +159,7 @@ function* fetchInvoiceLearnerListSaga({ _id }) {
   yield put(showLoading());
   const { data } = yield call(getInvoiceLearnerList, _id);
   if (data) {
-    yield put(fetchInvoiceLearnerListSuccess(data));
+    yield put(fetchInvoiceLearnerListSuccess(data.filter(e => !e.isDelete)));
   } else {
     yield put(fetchInvoiceLearnerListFailed());
     toast.error('Cannot fetch invoice learner list!');
@@ -169,9 +171,9 @@ function* fetchInvoiceLecturerListSaga({ _id }) {
   yield put(showLoading());
   const { data } = yield call(getInvoiceLecturerList, _id);
   if (data) {
-    yield put(fetchInvoiceLearnerListSuccess(data));
+    yield put(fetchInvoiceLecturerListSuccess(data.filter(e => !e.isDelete)));
   } else {
-    yield put(fetchInvoiceLearnerListFailed());
+    yield put(fetchInvoiceLecturerListFailed());
     toast.error('Cannot fetch invoice lecturer list!');
   }
   yield put(hideLoading());
@@ -181,8 +183,7 @@ function* fetchCourseLecturerListSaga({ _id }) {
   yield put(showLoading());
   const { data } = yield call(getCourseLecturerList, _id);
   if (data) {
-    console.log(data);
-    yield put(fetchCourseLecturerListSuccess(data));
+    yield put(fetchCourseLecturerListSuccess(data.filter(e => !e.isDelete)));
   } else {
     yield put(fetchCourseLecturerListFailed());
     toast.error('Cannot fetch course lecturer list!');

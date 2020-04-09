@@ -60,15 +60,24 @@ const Header = (props) => {
           </Link>
         </div>
         <ul id="top_menu">
+          <li>
+            <Link
+              to={`${PATH.COURSE_DETAIL}/5e89e7383d0842056c73a8be`}
+              className="search-overlay-menu-btn mr-2"
+              style={{ fontSize: `${17}pt` }}>
+              TESTTTT
+            </Link>
+          </li>
           {/* SEARCH  */}
           <li>
             <Link
               className="search-overlay-menu-btn mr-2"
-              style={{ fontSize: `${17}pt`}}
+              style={{ fontSize: `${17}pt` }}
               onClick={props.showSearchBarAction}>
               <i className="icon-search" />
             </Link>
           </li>
+          {/* CART  */}
           <li>
             <Link
               className="search-overlay-menu-btn"

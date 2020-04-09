@@ -58,7 +58,7 @@ const LecturerCourseTable = ({ courseState, fetchCourseLecturerListAction, user 
           className="kt-datatable__body ps ps--active-y"
           style={{ maxHeight: `${447}px` }}>
           {data.map((element, index) => {
-            const rateAverage = element.feedback.reduce((total, num) => total + num.rate, 0) / (element.feedback.length * 2);
+            const rateAverage = element.feedback.reduce((total, num) => total + num.rate, 0) / element.feedback.length;
             if (element.isDelete) {
               return null;
             }

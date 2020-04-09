@@ -91,9 +91,9 @@ const routes = [
     component: () => <Course />,
   },
   {
-    path: PATH.COURSE_DETAIL,
+    path: `${PATH.COURSE_DETAIL}/:id`,
     exact: false,
-    component: () => <CourseDetail />,
+    component: ({ match }) => <CourseDetail match={match} />,
   },
   {
     path: PATH.LESSON_DETAIL,

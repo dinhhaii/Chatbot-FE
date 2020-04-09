@@ -1,6 +1,7 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Rate } from 'antd';
 import 'antd/dist/antd.css';
 import { PATH } from '../../utils/constant';
@@ -10,7 +11,7 @@ const CoursesGrid = (props) => {
   return (
     <div className="row">
       {data.map((value, index) => {
-        const rateAverage = value.feedback.reduce((total, num) => total + num.rate, 0) / (value.feedback.length * 2);
+        const rateAverage = value.feedback.reduce((total, num) => total + num.rate, 0) / value.feedback.length;
         if (!value.isDelete) {
           return (
             <div className="col-md-6" key={index.toString()}>
@@ -18,17 +19,17 @@ const CoursesGrid = (props) => {
                 <figure className="block-reveal">
                   <div className="block-horizzontal" />
                   <Link href="#0" class="wish_bt" />
-                  <Link href="course-detail.html">
+                  <Link to={`${PATH.COURSE_DETAIL}/${value._id}`}>
                     <img src={value.imageURL} className="img-fluid" alt="" />
                   </Link>
                   <div className="price">${value.price}</div>
-                  <div className="preview">
+                  <div className="preview" onClick={() => props.history.push(`${PATH.COURSE_DETAIL}/${value._id}`)}>
                     <span>Preview course</span>
                   </div>
                 </figure>
                 <div className="wrapper">
                   <small>{value.subject.name}</small>
-                  <h3>{value.name}</h3>{' '}
+                  <h3>{value.name}</h3>
                   <Link
                     to={`${PATH.PROFILE_USER}/${value.lecturer._id}`}
                     className="mb-2 badge badge-success">
@@ -61,4 +62,4 @@ const CoursesGrid = (props) => {
   );
 };
 
-export default CoursesGrid;
+export default withRouter(CoursesGrid);
