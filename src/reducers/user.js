@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   token: null,
   isLogin: false,
+  userList: [],
 };
 
 const userState = (state = initialState, action) => {
@@ -37,6 +38,22 @@ const userState = (state = initialState, action) => {
       return {
         ...state,
         isLogin: false,
+      };
+    case actionTypes.FETCH_USER_LIST:
+      return {
+        ...state,
+        userList: [],
+      };
+    case actionTypes.FETCH_USER_LIST_SUCCESS:
+      const { data } = action;
+      return {
+        ...state,
+        userList: [...data],
+      };
+    case actionTypes.FETCH_USER_LIST_FAILED:
+      return {
+        ...state,
+        userList: [],
       };
     default:
       return state;

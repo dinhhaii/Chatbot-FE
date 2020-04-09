@@ -49,3 +49,22 @@ export const updateUser = (user) => {
     user,
   };
 };
+
+export const fetchUserList = () => {
+  return {
+    type: actionTypes.FETCH_USER_LIST,
+  };
+};
+
+export const fetchUserListSuccess = (data) => {
+  return {
+    type: actionTypes.FETCH_USER_LIST_SUCCESS,
+    data,
+  };
+};
+
+export const fetchUserListFailed = () => {
+  return {
+    type: actionTypes.FETCH_USER_LIST_FAILED,
+  };
+};

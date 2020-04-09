@@ -36,9 +36,9 @@ const routes = [
     component: () => <Profile />,
   },
   {
-    path: PATH.PROFILE_USER,
+    path: `${PATH.PROFILE_USER}/:id`,
     exact: false,
-    component: () => <UserDetail />,
+    component: ({ match }) => <UserDetail match={match} />,
   },
   {
     path: PATH.AUTH,

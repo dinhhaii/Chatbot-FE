@@ -24,8 +24,8 @@ const CustomLoader = ({ generalState }) => {
         }}>
         <Loader
           visible="true"
-          type="BallTriangle"
-          color="#00BFFF"
+          type="Watch"
+          color="red"
           height={100}
           width={100}
         />

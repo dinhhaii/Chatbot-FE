@@ -38,3 +38,7 @@ export const getHashedPassword = (password) => {
 export const updateUser = (props) => {
   return AxiosService.post(`${SERVER_URL}/user/update`, { ...props });
 };
+
+export const getUserList = () => {
+  return AxiosService.get(`${SERVER_URL}/user`);
+};

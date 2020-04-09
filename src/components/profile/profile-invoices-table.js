@@ -30,7 +30,8 @@ const InvoiceTable = (props) => {
               return (
                 <th
                   key={index.toString()}
-                  className="kt-datatable__cell kt-datatable__cell--sort" style={{ width }}>
+                  className="kt-datatable__cell kt-datatable__cell--sort"
+                  style={{ width }}>
                   <span>{name}</span>
                 </th>
               );

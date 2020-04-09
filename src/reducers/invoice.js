@@ -4,6 +4,7 @@ import * as actionTypes from '../utils/actionTypes';
 const initialState = {
   invoiceList: [],
   invoiceLearnerList: [],
+  invoiceLecturerList: [],
 };
 
 const invoiceState = (state = initialState, action) => {
@@ -27,14 +28,29 @@ const invoiceState = (state = initialState, action) => {
     case actionTypes.FETCH_INVOICE_LEARNER_LIST:
       return {
         ...state,
-        invoiceLearnerList: [],
+        invoiceLecturerList: [],
       };
     case actionTypes.FETCH_INVOICE_LEARNER_LIST_SUCCESS:
       return {
         ...state,
-        invoiceLearnerList: [...data],
+        invoiceLecturerList: [...data],
       };
     case actionTypes.FETCH_INVOICE_LEARNER_LIST_FAILED:
+      return {
+        ...state,
+        invoiceLecturerList: [],
+      };
+    case actionTypes.FETCH_INVOICE_LECTURER_LIST:
+      return {
+        ...state,
+        invoiceLearnerList: [],
+      };
+    case actionTypes.FETCH_INVOICE_LECTURER_LIST_SUCCESS:
+      return {
+        ...state,
+        invoiceLearnerList: [...data],
+      };
+    case actionTypes.FETCH_INVOICE_LECTURER_LIST_FAILED:
       return {
         ...state,
         invoiceLearnerList: [],

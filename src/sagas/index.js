@@ -11,12 +11,12 @@ import { toast } from 'react-toastify';
 import bcrypt from 'bcryptjs';
 import * as actionTypes from '../utils/actionTypes';
 import { AUTH_TOKEN } from '../utils/constant';
-import { getUser, updateUser } from '../api/user';
+import { getUser, updateUser, getUserList } from '../api/user';
 import { getCourseList } from '../api/course';
-import { getInvoiceLearnerList } from '../api/invoice';
+import { getInvoiceLearnerList, getInvoiceLecturerList } from '../api/invoice';
 import { getSubjectList } from '../api/subject';
 import { showLoading, hideLoading } from '../actions/general';
-import { fetchUserSuccess, fetchUserFailed, setIsLogin } from '../actions/user';
+import { fetchUserSuccess, fetchUserFailed, setIsLogin, fetchUserListSuccess, fetchUserListFailed } from '../actions/user';
 import {
   fetchCourseListSuccess,
   fetchCourseListFailed,
@@ -33,6 +33,7 @@ import {
 
 function* rootSaga() {
   yield takeEvery(actionTypes.FETCH_USER, fetchUserSaga);
+  yield takeLatest(actionTypes.FETCH_USER_LIST, fetchUserListSaga);
   yield takeLatest(actionTypes.UPDATE_USER, updateUserSaga);
   yield takeLatest(actionTypes.CHANGE_PASSWORD, changePasswordSaga);
   yield takeLatest(actionTypes.FETCH_COURSE_LIST, fetchCourseListSaga);
@@ -41,6 +42,22 @@ function* rootSaga() {
     actionTypes.FETCH_INVOICE_LEARNER_LIST,
     fetchInvoiceLearnerListSaga,
   );
+  yield takeLatest(
+    actionTypes.FETCH_INVOICE_LECTURER_LIST,
+    fetchInvoiceLecturerListSaga,
+  );
+}
+
+function* fetchUserListSaga() {
+  yield put(showLoading());
+  const { data } = yield call(getUserList);
+  if (data) {
+    yield put(fetchUserListSuccess(data));
+  } else {
+    yield put(fetchUserListFailed());
+    toast.error('Cannot fetch user list!');
+  }
+  yield put(hideLoading());
 }
 
 function* updateUserSaga({ user }) {
@@ -138,6 +155,19 @@ function* fetchInvoiceLearnerListSaga({ _id }) {
   } else {
     yield put(fetchInvoiceLearnerListFailed());
     toast.error('Cannot fetch invoice learner list!');
+  }
+  yield put(hideLoading());
+}
+
+function* fetchInvoiceLecturerListSaga({ _id }) {
+  yield put(showLoading());
+  const { data } = yield call(getInvoiceLecturerList, _id);
+  if (data) {
+    console.log(data);
+    yield put(fetchInvoiceLearnerListSuccess(data));
+  } else {
+    yield put(fetchInvoiceLearnerListFailed());
+    toast.error('Cannot fetch invoice lecturer list!');
   }
   yield put(hideLoading());
 }

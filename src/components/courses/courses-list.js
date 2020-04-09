@@ -11,9 +11,7 @@ const CoursesList = (props) => {
   return (
     <div>
       {data.map((value, index) => {
-        const rateAverage = value.feedback.reduce((total, num) => {
-          return total.rate + num.rate;
-        }) / (2 * value.feedback.length);
+        const rateAverage = value.feedback.reduce((total, num) => total + num.rate, 0) / (value.feedback.length * 2);
 
         if (!value.isDelete) {
           return (

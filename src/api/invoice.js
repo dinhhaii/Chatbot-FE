@@ -8,3 +8,7 @@ export const getInvoiceList = () => {
 export const getInvoiceLearnerList = (_id) => {
   return AxiosService.get(`${SERVER_URL}/course/${_id}/enrolled`);
 };
+
+export const getInvoiceLecturerList = (_id) => {
+  return AxiosService.post(`${SERVER_URL}/invoice/lecturer`, { _id });
+};

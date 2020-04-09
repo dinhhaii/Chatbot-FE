@@ -39,3 +39,23 @@ export const fetchInvoiceLearnerListFailed = () => {
     type: actionTypes.FETCH_INVOICE_LEARNER_LIST_FAILED,
   };
 };
+
+export const fetchInvoiceLecturerList = (_id) => {
+  return {
+    type: actionTypes.FETCH_INVOICE_LECTURER_LIST,
+    _id,
+  };
+};
+
+export const fetchInvoiceLecturerListSuccess = (data) => {
+  return {
+    type: actionTypes.FETCH_INVOICE_LECTURER_LIST_SUCCESS,
+    data,
+  };
+};
+
+export const fetchInvoiceLecturerListFailed = () => {
+  return {
+    type: actionTypes.FETCH_INVOICE_LECTURER_LIST_FAILED,
+  };
+};
