@@ -19,3 +19,23 @@ export const fetchCourseListFailed = () => {
     type: actionTypes.FETCH_COURSE_LIST_FAILED,
   };
 };
+
+export const fetchCourseLecturerList = (_id) => {
+  return {
+    type: actionTypes.FETCH_COURSE_LECTURER_LIST,
+    _id,
+  };
+};
+
+export const fetchCourseLecturerListSuccess = (data) => {
+  return {
+    type: actionTypes.FETCH_COURSE_LECTURER_LIST_SUCCESS,
+    data,
+  };
+};
+
+export const fetchCourseLecturerListFailed = () => {
+  return {
+    type: actionTypes.FETCH_COURSE_LECTURER_LIST_FAILED,
+  };
+};

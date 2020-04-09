@@ -1,27 +1,28 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Rate } from 'antd';
 import { PATH } from '../../utils/constant';
-import { fetchInvoiceLecturerList } from '../../actions/invoice';
+import { fetchCourseLecturerList } from '../../actions/course';
 
-const LecturerCourseTable = (props) => {
-  useEffect(() => {}, []);
+const LecturerCourseTable = ({ courseState, fetchCourseLecturerListAction, user }) => {
+  useEffect(() => {
+    fetchCourseLecturerListAction(user._id);
+  }, []);
 
   const headers = [
     { name: 'Name', width: `${200}px` },
     { name: 'Price', width: `${80}px` },
-    { name: 'Discount', width: `${80}px` },
     { name: 'Duration', width: `${80}px` },
     { name: 'Accessible Days', width: `${150}px` },
-    { name: 'Rate', width: `${300}px` },
+    { name: 'Rate', width: `${200}px` },
     { name: '', width: `${100}px` },
   ];
-  const data = props.courseState.courseList;
-  console.log(data);
+  const data = courseState.courseLecturerList;
   return (
     <div style={{ position: 'relative', height: 550 }}>
       <table
@@ -57,6 +58,10 @@ const LecturerCourseTable = (props) => {
           className="kt-datatable__body ps ps--active-y"
           style={{ maxHeight: `${447}px` }}>
           {data.map((element, index) => {
+            const rateAverage = element.feedback.reduce((total, num) => total + num.rate, 0) / (element.feedback.length * 2);
+            if (element.isDelete) {
+              return null;
+            }
             return (
               <tr
                 className="kt-datatable__row"
@@ -80,41 +85,42 @@ const LecturerCourseTable = (props) => {
                 </td>
 
                 <td
-                  className="kt-datatable__cell"
+                  className="kt-datatable__cell text-center"
                   style={{ width: headers[1].width }}>
-                  <span className="kt-font-bold">{element.price}</span>
+                  <span className="kt-font-bold">${element.price}</span>
                 </td>
 
                 <td
                   className="kt-datatable__cell"
                   style={{ width: headers[2].width }}>
-                  <span className="kt-font-bold">discount</span>
-                </td>
-
-                <td
-                  className="kt-datatable__cell"
-                  style={{ width: headers[3].width }}>
                   <span className="kt-font-bold">{element.duration}</span>
                 </td>
 
                 <td
-                  className="kt-datatable__cell"
-                  style={{ width: headers[4].width }}>
+                  className="kt-datatable__cell text-center"
+                  style={{ width: headers[3].width }}>
                   <span className="kt-font-bold">{element.accessibleDays}</span>
                 </td>
 
                 <td
                   className="kt-datatable__cell"
-                  style={{ width: headers[5].width }}>
+                  style={{ width: headers[4].width }}>
                   <span style={{ width: `${100}px` }}>
-                    <Rate defaultValue={5} disabled style={{ fontSize: `${10}pt` }} />
+                    <Rate
+                      defaultValue={rateAverage}
+                      disabled
+                      style={{ fontSize: `${10}pt` }}
+                    />
                   </span>
                 </td>
 
                 <td
                   className="kt-datatable__cell"
-                  style={{ width: headers[6].width }}>
-                  <button className="btn btn-outline-dark"> <i className="icon-cart" />Enroll</button>
+                  style={{ width: headers[5].width }}>
+                  <button className="btn btn-outline-dark">
+                    <i className="icon-cart" />
+                    Enroll
+                  </button>
                 </td>
               </tr>
             );
@@ -133,8 +139,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchInvoiceLecturerListAction: bindActionCreators(
-      fetchInvoiceLecturerList,
+    fetchCourseLecturerListAction: bindActionCreators(
+      fetchCourseLecturerList,
       dispatch,
     ),
   };

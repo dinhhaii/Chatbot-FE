@@ -3,9 +3,11 @@ import * as actionTypes from '../utils/actionTypes';
 
 const initialState = {
   courseList: [],
+  courseLecturerList: [],
 };
 
 const courseState = (state = initialState, action) => {
+  const { data } = action;
   switch (action.type) {
     case actionTypes.FETCH_COURSE_LIST:
       return {
@@ -13,7 +15,6 @@ const courseState = (state = initialState, action) => {
         courseList: [],
       };
     case actionTypes.FETCH_COURSE_LIST_SUCCESS:
-      const { data } = action;
       return {
         ...state,
         courseList: [...data],
@@ -22,6 +23,21 @@ const courseState = (state = initialState, action) => {
       return {
         ...state,
         courseList: [],
+      };
+    case actionTypes.FETCH_COURSE_LECTURER_LIST:
+      return {
+        ...state,
+        courseLecturerList: [],
+      };
+    case actionTypes.FETCH_COURSE_LECTURER_LIST_SUCCESS:
+      return {
+        ...state,
+        courseLecturerList: [...data],
+      };
+    case actionTypes.FETCH_COURSE_LECTURER_LIST_FAILED:
+      return {
+        ...state,
+        courseLecturerList: [],
       };
     default:
       return state;

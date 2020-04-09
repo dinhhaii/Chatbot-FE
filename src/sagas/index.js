@@ -12,7 +12,7 @@ import bcrypt from 'bcryptjs';
 import * as actionTypes from '../utils/actionTypes';
 import { AUTH_TOKEN } from '../utils/constant';
 import { getUser, updateUser, getUserList } from '../api/user';
-import { getCourseList } from '../api/course';
+import { getCourseList, getCourseLecturerList } from '../api/course';
 import { getInvoiceLearnerList, getInvoiceLecturerList } from '../api/invoice';
 import { getSubjectList } from '../api/subject';
 import { showLoading, hideLoading } from '../actions/general';
@@ -20,6 +20,8 @@ import { fetchUserSuccess, fetchUserFailed, setIsLogin, fetchUserListSuccess, fe
 import {
   fetchCourseListSuccess,
   fetchCourseListFailed,
+  fetchCourseLecturerListSuccess,
+  fetchCourseLecturerListFailed,
 } from '../actions/course';
 import {
   fetchSubjectListSuccess,
@@ -45,6 +47,10 @@ function* rootSaga() {
   yield takeLatest(
     actionTypes.FETCH_INVOICE_LECTURER_LIST,
     fetchInvoiceLecturerListSaga,
+  );
+  yield takeLatest(
+    actionTypes.FETCH_COURSE_LECTURER_LIST,
+    fetchCourseLecturerListSaga,
   );
 }
 
@@ -163,11 +169,23 @@ function* fetchInvoiceLecturerListSaga({ _id }) {
   yield put(showLoading());
   const { data } = yield call(getInvoiceLecturerList, _id);
   if (data) {
-    console.log(data);
     yield put(fetchInvoiceLearnerListSuccess(data));
   } else {
     yield put(fetchInvoiceLearnerListFailed());
     toast.error('Cannot fetch invoice lecturer list!');
+  }
+  yield put(hideLoading());
+}
+
+function* fetchCourseLecturerListSaga({ _id }) {
+  yield put(showLoading());
+  const { data } = yield call(getCourseLecturerList, _id);
+  if (data) {
+    console.log(data);
+    yield put(fetchCourseLecturerListSuccess(data));
+  } else {
+    yield put(fetchCourseLecturerListFailed());
+    toast.error('Cannot fetch course lecturer list!');
   }
   yield put(hideLoading());
 }
