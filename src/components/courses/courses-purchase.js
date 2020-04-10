@@ -1,34 +1,53 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PATH } from '../../utils/constant';
+import { getRandom } from '../../utils/helper';
 
-const CoursePurchase = () => {
+const CoursePurchase = (props) => {
+  const { course } = props;
   return (
     <aside className="col-lg-4" id="sidebar">
       <div className="box_detail">
         <figure>
-          <Link
-            href="https://www.youtube.com/watch?v=LDgd_gUcqCw"
-            class="video">
+          <Link to={PATH.LESSON_DETAIL}>
             <i className="arrow_triangle-right" />
-            <img
-              src="http://via.placeholder.com/800x533/ccc/fff/course_1.jpg"
-              alt=""
-              className="img-fluid"
-            />
+            <img src={course.imageURL} className="img-fluid" alt="" />
             <span>View course preview</span>
           </Link>
         </figure>
         <div className="price">
-          $29
-          <span className="original_price">
-            <em>$49</em>60% discount price
-          </span>
+          <h4 className="d-inline">Price: </h4>${course.price}
         </div>
-        <Link href="cart-1.html" class="btn_1 full-width">
+        <div className="price">
+          <h4>Coupon</h4>
+          {course.discount.map((value, index) => {
+            if (value.isDelete || value.status === 'expired') {
+              return null;
+            }
+            return (
+              <div key={index.toString()}>
+                <span
+                  className={`badge ${getRandom([
+                    'badge-danger',
+                    'badge-success',
+                    'badge-primary',
+                    'badge-warning',
+                  ])}`}
+                  style={{ fontSize: `${10}pt` }}>
+                  {value.code}
+                </span>
+                <span className="original_price ml-2">
+                  {value.percentage}% discount price
+                </span>
+              </div>
+            );
+          })}
+        </div>
+        <Link to={PATH.CART} class="btn_1 full-width">
           Purchase
         </Link>
-        <Link href="#0" class="btn_1 full-width outline">
-          <i className="icon_heart" /> Add to wishlist
+        <Link href={PATH.CHAT} class="btn_1 full-width outline">
+          <i className="icon-chat-empty" /> Contact to Lecturer
         </Link>
         <div id="list_feat">
           <h3>What&apos;s includes</h3>
@@ -42,16 +61,8 @@ const CoursePurchase = () => {
               Lesson archive
             </li>
             <li>
-              <i className="icon_mobile" />
-              Mobile support
-            </li>
-            <li>
               <i className="icon_chat_alt" />
               Tutor chat
-            </li>
-            <li>
-              <i className="icon_document_alt" />
-              Course certificate
             </li>
           </ul>
         </div>

@@ -141,18 +141,20 @@ const Profile = (props) => {
                             </span>
                           </span>
                         </Link>
-                        <Link
-                          className={`kt-widget__item ${
-                            tabName === TAB.INVOICES
-                              ? 'kt-widget__item--active'
-                              : ''
-                          }`}
-                          onClick={() => setTabName(TAB.INVOICES)}>
-                          <span className="kt-widget__section">
-                            <span className="icon-doc-text-inv" />
-                            <span className="kt-widget__desc">Invoices</span>
-                          </span>
-                        </Link>
+                        {userState.user.role === 'learner' ? (
+                          <Link
+                            className={`kt-widget__item ${
+                              tabName === TAB.INVOICES
+                                ? 'kt-widget__item--active'
+                                : ''
+                            }`}
+                            onClick={() => setTabName(TAB.INVOICES)}>
+                            <span className="kt-widget__section">
+                              <span className="icon-doc-text-inv" />
+                              <span className="kt-widget__desc">Invoices</span>
+                            </span>
+                          </Link>
+                        ) : null}
                       </div>
                     </div>
                   </div>

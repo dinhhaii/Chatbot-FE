@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
+// import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import LessonsList from '../components/lessons/lessons-list';
 import CourseReview from '../components/courses/courses-review';
@@ -20,7 +20,6 @@ const CourseDetail = (props) => {
           <section id="hero_in" className="courses">
             <div className="wrapper">
               <div className="container">
-                <button onClick={() => console.log(props.userState.userList)}>TESTTTT</button>
                 <h1 className="fadeInUp">
                   <span />
                   {course.name}
@@ -44,7 +43,7 @@ const CourseDetail = (props) => {
                   <LessonsList lessons={course.lessons} />
                   <CourseReview feedback={course.feedback} />
                 </div>
-                <CoursePurchase />
+                <CoursePurchase course={course} />
               </div>
             </div>
           </div>

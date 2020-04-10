@@ -1,20 +1,22 @@
 /* eslint-disable no-plusplus */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { Rate } from 'antd';
 import 'antd/dist/antd.css';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import { fetchUserList } from '../../actions/user';
 import { IMAGE_URL } from '../../utils/constant';
-import moment from 'moment';
 
-const CourseReview = ({ feedback, userState, fetchUserListAction }) => {
+const CourseReview = (props) => {
+  let { feedback } = props;
   feedback = feedback.filter((e) => !e.isDelete);
   const rateAverage = feedback.reduce((total, num) => total + num.rate, 0) / feedback.length;
 
   useEffect(() => {
-    fetchUserListAction();
+    props.fetchUserListAction();
   }, []);
 
   const rates = () => {
@@ -52,11 +54,13 @@ const CourseReview = ({ feedback, userState, fetchUserListAction }) => {
           <div className="col-lg-3">
             <div id="review_summary">
               <h2 style={{ color: 'white' }}>{rateAverage}</h2>
-              <Rate
-                defaultValue={rateAverage}
-                style={{ paddingLeft: 5, fontSize: `${9}pt` }}
-                disabled
-              />
+              <div>
+                <Rate
+                  defaultValue={rateAverage}
+                  style={{ paddingLeft: 5, marginBottom: 0, fontSize: `${30}pt` }}
+                  disabled
+                />
+              </div>
               <small>Based on {feedback.length} reviews</small>
             </div>
           </div>
@@ -68,7 +72,7 @@ const CourseReview = ({ feedback, userState, fetchUserListAction }) => {
 
       <div className="reviews-container">
         {feedback.map((value, index) => {
-          const user = userState.userList.find((e) => e._id === value._idUser);
+          const user = props.userState.userList.find((e) => e._id === value._idUser);
           return (
             <div className="review-box clearfix" key={index.toString()}>
               <figure className="rev-thumb">
@@ -85,7 +89,9 @@ const CourseReview = ({ feedback, userState, fetchUserListAction }) => {
                 />
                 <div className="rev-info">
                   {user
-                    ? `${user.firstName.toUpperCase()} ${user.lastName.toUpperCase()} - ${moment(value.createdAt).format('LLLL')}`
+                    ? `${user.firstName.toUpperCase()} ${user.lastName.toUpperCase()} - ${moment(
+                      value.createdAt,
+                    ).format('LLLL')}`
                     : ''}
                 </div>
                 <div className="rev-text">

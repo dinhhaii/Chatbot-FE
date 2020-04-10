@@ -63,9 +63,9 @@ const Header = (props) => {
           <li>
             <Link
               to={`${PATH.COURSE_DETAIL}/5e89e7383d0842056c73a8be`}
-              className="search-overlay-menu-btn mr-2"
+              className="btn btn-dark"
               style={{ fontSize: `${17}pt` }}>
-              TESTTTT
+              BUTTON TEST NHA
             </Link>
           </li>
           {/* SEARCH  */}
