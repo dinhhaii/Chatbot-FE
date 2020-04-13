@@ -12,7 +12,7 @@ import bcrypt from 'bcryptjs';
 import * as actionTypes from '../utils/actionTypes';
 import { AUTH_TOKEN } from '../utils/constant';
 import { getUser, updateUser, getUserList } from '../api/user';
-import { getCourseList, getCourseLecturerList } from '../api/course';
+import { getCourseList, getCourseLecturerList, getCourse } from '../api/course';
 import { getInvoiceLearnerList, getInvoiceLecturerList } from '../api/invoice';
 import { getSubjectList } from '../api/subject';
 import { showLoading, hideLoading } from '../actions/general';
@@ -22,6 +22,8 @@ import {
   fetchCourseListFailed,
   fetchCourseLecturerListSuccess,
   fetchCourseLecturerListFailed,
+  fetchCourseSuccess,
+  fetchCourseFailed,
 } from '../actions/course';
 import {
   fetchSubjectListSuccess,
@@ -34,12 +36,16 @@ import {
   fetchInvoiceLecturerListSuccess,
   fetchInvoiceLecturerListFailed,
 } from '../actions/invoice';
+import { getLesson } from '../api/lesson';
+import { fetchLessonSuccess, fetchLessonFailed } from '../actions/lesson';
 
 function* rootSaga() {
   yield takeEvery(actionTypes.FETCH_USER, fetchUserSaga);
+  yield takeLatest(actionTypes.FETCH_LESSON, fetchLessonSaga);
   yield takeLatest(actionTypes.FETCH_USER_LIST, fetchUserListSaga);
   yield takeLatest(actionTypes.UPDATE_USER, updateUserSaga);
   yield takeLatest(actionTypes.CHANGE_PASSWORD, changePasswordSaga);
+  yield takeLatest(actionTypes.FETCH_COURSE, fetchCourseSaga);
   yield takeLatest(actionTypes.FETCH_COURSE_LIST, fetchCourseListSaga);
   yield takeLatest(actionTypes.FETCH_SUBJECT_LIST, fetchSubjectListSaga);
   yield takeLatest(
@@ -190,5 +196,32 @@ function* fetchCourseLecturerListSaga({ _id }) {
   }
   yield put(hideLoading());
 }
+
+function* fetchCourseSaga({ _id }) {
+  yield put(showLoading());
+  const { data } = yield call(getCourse, _id);
+  if (data) {
+    yield put(fetchCourseSuccess(data));
+  } else {
+    yield put(fetchCourseFailed());
+    toast.error('Sorry, fetch course failed!');
+  }
+  yield delay(1000);
+  yield put(hideLoading());
+}
+
+function* fetchLessonSaga({ _id }) {
+  yield put(showLoading());
+  const { data } = yield call(getLesson, _id);
+  if (data) {
+    yield put(fetchLessonSuccess(data));
+  } else {
+    yield put(fetchLessonFailed());
+    toast.error('Sorry, fetch lesson failed!');
+  }
+  yield delay(1000);
+  yield put(hideLoading());
+}
+
 
 export default rootSaga;

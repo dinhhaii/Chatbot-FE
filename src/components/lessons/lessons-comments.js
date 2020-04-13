@@ -1,67 +1,39 @@
 import React from 'react';
+import moment from 'moment';
+import { capitalize } from '../../utils/helper';
 
-const LessonComment = () => {
-  return (
-    <section id="reviews">
-      <div className="reviews-container">
-        <div className="review-box clearfix">
-          <figure className="rev-thumb">
-            <img
-              src="http://via.placeholder.com/150x150/ccc/fff/avatar1.jpg"
-              alt=""
-            />
-          </figure>
-          <div className="rev-content">
-            <div className="rev-info">Admin – April 03, 2016:</div>
-            <div className="rev-text">
-              <p>
-                Sed eget turpis a pede tempor malesuada. Vivamus quis mi at leo
-                pulvinar hendrerit. Cum sociis natoque penatibus et magnis dis
-              </p>
-            </div>
-          </div>
+const LessonComment = (props) => {
+  const { comments } = props;
+  if (comments) {
+    return (
+      <section id="reviews">
+        <div className="reviews-container">
+          {comments.map((comment, index) => {
+            if (comment.isDelete) {
+              return false;
+            }
+            return (
+              <div className="review-box clearfix" key={index.toString()}>
+                <figure className="rev-thumb">
+                  <img src={comment.user.imageURL} alt="" />
+                </figure>
+                <div className="rev-content">
+                  <div className="rev-info">
+                    {`${capitalize(comment.user.firstName)} ${capitalize(
+                      comment.user.lastName,
+                    )} - ${moment(comment.createdAt).format('LLLL')}`}
+                  </div>
+                  <div className="rev-text">
+                    <p>{comment.content}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
-        {/* /review-box */}
-        <div className="review-box clearfix">
-          <figure className="rev-thumb">
-            <img
-              src="http://via.placeholder.com/150x150/ccc/fff/avatar2.jpg"
-              alt=""
-            />
-          </figure>
-          <div className="rev-content">
-            <div className="rev-info">Ahsan – April 01, 2016:</div>
-            <div className="rev-text">
-              <p>
-                Sed eget turpis a pede tempor malesuada. Vivamus quis mi at leo
-                pulvinar hendrerit. Cum sociis natoque penatibus et magnis dis
-              </p>
-            </div>
-          </div>
-        </div>
-        {/* /review-box */}
-        <div className="review-box clearfix">
-          <figure className="rev-thumb">
-            <img
-              src="http://via.placeholder.com/150x150/ccc/fff/avatar3.jpg"
-              alt=""
-            />
-          </figure>
-          <div className="rev-content">
-            <div className="rev-info">Sara – March 31, 2016:</div>
-            <div className="rev-text">
-              <p>
-                Sed eget turpis a pede tempor malesuada. Vivamus quis mi at leo
-                pulvinar hendrerit. Cum sociis natoque penatibus et magnis dis
-              </p>
-            </div>
-          </div>
-        </div>
-        {/* /review-box */}
-      </div>
-      {/* /review-container */}
-    </section>
-  );
+      </section>
+    );
+  }
 };
 
 export default LessonComment;

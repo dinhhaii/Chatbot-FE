@@ -1,8 +1,8 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Tabs } from 'antd';
-import LecturerCourseDetailCourseForm from '../components/lecturer/lecturer-coursedetail-courseform';
-import LecturerCourseDetailLesson from '../components/lecturer/lecturer-coursedetail-lessons';
+import LecturerCourseDetailCourseCreateForm from '../components/lecturer/lecturer-coursedetail-courseCreate';
+import LecturerCourseDetailCourseEdit from '../components/lecturer/lecturer-coursedetail-courseEdit';
 
 const { TabPane } = Tabs;
 
@@ -25,10 +25,10 @@ const LecturerCourseDetail = () => {
           <div className="col-lg-12">
             <Tabs defaultActiveKey="1">
               <TabPane tab={<span>Add New Course</span>} key="1">
-                <LecturerCourseDetailCourseForm />
+                <LecturerCourseDetailCourseCreateForm />
               </TabPane>
-              <TabPane tab={<span>Lessons Detail</span>} key="2">
-                <LecturerCourseDetailLesson />
+              <TabPane tab={<span>Course Detail</span>} key="2">
+                <LecturerCourseDetailCourseEdit />
               </TabPane>
             </Tabs>
           </div>

@@ -39,3 +39,23 @@ export const fetchCourseLecturerListFailed = () => {
     type: actionTypes.FETCH_COURSE_LECTURER_LIST_FAILED,
   };
 };
+
+export const fetchCourse = (_id) => {
+  return {
+    type: actionTypes.FETCH_COURSE,
+    _id,
+  };
+};
+
+export const fetchCourseSuccess = (data) => {
+  return {
+    type: actionTypes.FETCH_COURSE_SUCCESS,
+    data,
+  };
+};
+
+export const fetchCourseFailed = () => {
+  return {
+    type: actionTypes.FETCH_COURSE_FAILED,
+  };
+};

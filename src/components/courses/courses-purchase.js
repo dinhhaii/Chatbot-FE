@@ -9,7 +9,7 @@ const CoursePurchase = (props) => {
     <aside className="col-lg-4" id="sidebar">
       <div className="box_detail">
         <figure>
-          <Link to={PATH.LESSON_DETAIL}>
+          <Link to={PATH.LESSON_DETAIL} className="video" >
             <i className="arrow_triangle-right" />
             <img src={course.imageURL} className="img-fluid" alt="" />
             <span>View course preview</span>

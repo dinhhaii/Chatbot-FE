@@ -8,3 +8,7 @@ export const getCourseList = () => {
 export const getCourseLecturerList = (_id) => {
   return AxiosService.get(`${SERVER_URL}/course/${_id}/teaching`);
 };
+
+export const getCourse = (_id) => {
+  return AxiosService.get(`${SERVER_URL}/course/${_id}`);
+};

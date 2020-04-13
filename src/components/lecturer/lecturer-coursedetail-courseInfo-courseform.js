@@ -1,15 +1,45 @@
-import React from 'react';
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { IMAGE_URL } from '../../utils/constant';
+import { fetchSubjectList } from '../../actions/subject';
 
-const LecturerCourseDetailCourseForm = () => {
+const LecturerCourseDetailCourseForm = (props) => {
+  const [course, setCourse] = useState({
+    name: '',
+    description: '',
+    price: '',
+    accessibleDays: '',
+    duration: '',
+    _idSubject: '',
+    imageURL: '',
+  });
+
+  useEffect(() => {
+    props.fetchSubjectListAction();
+  }, []);
+
+  const subjects = props.subjectState.subjectList.filter((e) => !e.isDelete);
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    console.log(course);
+  };
+
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    setCourse({
+      ...course,
+      [name]: value,
+    });
+  };
+
   return (
     <div className="kt-portlet">
-      <div className="kt-portlet__head">
-        <div className="kt-portlet__head-label">
-          <h3 className="kt-portlet__head-title">Create New Course</h3>
-        </div>
-      </div>
-
-      <form className="kt-form kt-form--label-right">
+      <form className="kt-form kt-form--label-right" onSubmit={handleSubmit}>
         <div className="kt-portlet__body">
           {/* IMAGE */}
           <div className="form-group row">
@@ -22,8 +52,7 @@ const LecturerCourseDetailCourseForm = () => {
                 <div
                   className="kt-avatar__holder"
                   style={{
-                    backgroundImage:
-                      'url("https://cdn.pixabay.com/photo/2016/09/01/08/24/smiley-1635449_960_720.png")',
+                    backgroundImage: `url(${IMAGE_URL.BACKGROUND_3})`,
                   }}
                 />
                 <label
@@ -31,10 +60,11 @@ const LecturerCourseDetailCourseForm = () => {
                   data-toggle="kt-tooltip"
                   title=""
                   data-original-title="Change avatar">
-                  <i className="fa fa-pen" />
+                  <i className="icon-pen" />
                   <input
                     type="file"
-                    name="profile_avatar"
+                    name="imageURL"
+                    onChange={handleChange}
                     accept=".png, .jpg, .jpeg"
                   />
                 </label>
@@ -51,16 +81,17 @@ const LecturerCourseDetailCourseForm = () => {
             <div className="col-lg-8">
               {/* NAME */}
               <div className="form-group row">
-                <label
-                  htmlFor="example-text-input"
-                  className="col-2 col-form-label">
+                <label htmlFor="nameCourse" className="col-2 col-form-label">
                   Name
                 </label>
                 <div className="col-10">
                   <input
                     className="form-control"
                     type="text"
-                    id="example-text-input"
+                    id="nameCourse"
+                    name="name"
+                    value={course.name}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -73,11 +104,18 @@ const LecturerCourseDetailCourseForm = () => {
                 <div className="col-10">
                   <select
                     className="custom-select form-control"
-                    id="selectSubject">
-                    <option selected>None</option>
-                    <option value="1">Programming</option>
-                    <option value="2">Photography</option>
-                    <option value="3">Media</option>
+                    id="selectSubject"
+                    name="_idSubject"
+                    value={course._idSubject}
+                    onChange={handleChange}>
+                    <option value="" selected> None </option>;
+                    {subjects.map((subject, index) => {
+                      return (
+                        <option key={index.toString()} value={subject._id}>
+                          {subject.name}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
               </div>
@@ -86,38 +124,39 @@ const LecturerCourseDetailCourseForm = () => {
 
           {/* DURATION */}
           <div className="form-group row">
-            <label
-              htmlFor="example-text-input"
-              className="col-2 col-form-label">
+            <label htmlFor="durationCourse" className="col-2 col-form-label">
               Duration
             </label>
             <div className="col-10">
               <input
                 className="form-control"
                 type="text"
-                id="example-text-input"
+                id="durationCourse"
+                name="duration"
+                value={course.duration}
+                onChange={handleChange}
               />
             </div>
           </div>
 
           {/* PRICE */}
           <div className="form-group row">
-            <label
-              htmlFor="example-number-input"
-              className="col-2 col-form-label">
+            <label htmlFor="priceCourse" className="col-2 col-form-label">
               Price ($)
             </label>
             <div className="col-4">
               <input
                 className="form-control"
                 type="number"
-                value="20"
-                id="example-number-input"
+                id="priceCourse"
+                name="price"
+                value={course.price}
+                onChange={handleChange}
               />
             </div>
             {/* ACCESSIBLE DAYS */}
             <label
-              htmlFor="example-number-input"
+              htmlFor="accessibleDaysCourse"
               className="col-2 col-form-label">
               Accessible Days (days)
             </label>
@@ -125,21 +164,27 @@ const LecturerCourseDetailCourseForm = () => {
               <input
                 className="form-control"
                 type="number"
-                value="90"
-                id="example-number-input"
+                id="accessibleDaysCourse"
+                name="accessibleDays"
+                value={course.accessibleDays}
+                onChange={handleChange}
               />
             </div>
           </div>
 
           {/* DESCRIPTION */}
           <div className="form-group row">
-            <label
-              htmlFor="example-search-input"
-              className="col-2 col-form-label">
+            <label htmlFor="descriptionCourse" className="col-2 col-form-label">
               Description
             </label>
             <div className="col-10">
-              <textarea className="form-control" id="example-search-input" />
+              <textarea
+                className="form-control"
+                id="descriptionCourse"
+                name="description"
+                value={course.description}
+                onChange={handleChange}
+              />
             </div>
           </div>
         </div>
@@ -149,10 +194,10 @@ const LecturerCourseDetailCourseForm = () => {
             <div className="row">
               <div className="col-2" />
               <div className="col-10">
-                <button type="reset" className="btn btn-success">
+                <button type="submit" className="btn btn-success w-25 mr-5">
                   Submit
                 </button>
-                <button type="reset" className="btn btn-secondary">
+                <button type="reset" className="btn btn-secondary w-25">
                   Cancel
                 </button>
               </div>
@@ -164,4 +209,19 @@ const LecturerCourseDetailCourseForm = () => {
   );
 };
 
-export default LecturerCourseDetailCourseForm;
+const mapStateToProps = (state) => {
+  return {
+    subjectState: state.subjectState,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchSubjectListAction: bindActionCreators(fetchSubjectList, dispatch),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withRouter(LecturerCourseDetailCourseForm));

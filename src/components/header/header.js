@@ -62,7 +62,7 @@ const Header = (props) => {
         <ul id="top_menu">
           <li>
             <Link
-              to={`${PATH.COURSE_DETAIL}/5e89e7383d0842056c73a8be`}
+              to="lesson-detail/5e89eab46590a805cee005f6?idCourse=5e89e7383d0842056c73a8be"
               className="btn btn-dark"
               style={{ fontSize: `${17}pt` }}>
               BUTTON TEST NHA

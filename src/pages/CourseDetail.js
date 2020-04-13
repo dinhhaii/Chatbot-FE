@@ -26,8 +26,12 @@ const CourseDetail = (props) => {
                 </h1>
                 <p>
                   Created by{' '}
-                  <Link to={`${PATH.PROFILE_USER}/${course.lecturer._id}`} className="font-weight-bold">
-                    {`${capitalize(course.lecturer.firstName)} ${capitalize(course.lecturer.lastName)}`}
+                  <Link
+                    to={`${PATH.PROFILE_USER}/${course.lecturer._id}`}
+                    className="font-weight-bold">
+                    {`${capitalize(course.lecturer.firstName)} ${capitalize(
+                      course.lecturer.lastName,
+                    )}`}
                   </Link>
                 </p>
               </div>
@@ -40,7 +44,7 @@ const CourseDetail = (props) => {
               <div className="row">
                 <div className="col-lg-8">
                   <CourseDescription description={course.description} />
-                  <LessonsList lessons={course.lessons} />
+                  <LessonsList lessons={course.lessons} idCourse={course._id} />
                   <CourseReview feedback={course.feedback} />
                 </div>
                 <CoursePurchase course={course} />

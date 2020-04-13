@@ -2,6 +2,7 @@
 import * as actionTypes from '../utils/actionTypes';
 
 const initialState = {
+  course: null,
   courseList: [],
   courseLecturerList: [],
 };
@@ -38,6 +39,21 @@ const courseState = (state = initialState, action) => {
       return {
         ...state,
         courseLecturerList: [],
+      };
+    case actionTypes.FETCH_COURSE:
+      return {
+        ...state,
+        course: null,
+      };
+    case actionTypes.FETCH_COURSE_SUCCESS:
+      return {
+        ...state,
+        course: { ...data },
+      };
+    case actionTypes.FETCH_COURSE_FAILED:
+      return {
+        ...state,
+        course: null,
       };
     default:
       return state;

@@ -6,6 +6,8 @@ export const IMAGE_URL = {
     'https://cdn.pixabay.com/photo/2017/06/23/11/49/laptop-2434393_1280.jpg',
   BACKGROUND_2:
     'https://cdn.pixabay.com/photo/2016/03/27/22/04/camera-1284459_1280.jpg',
+  BACKGROUND_3: 
+    'https://cdn.pixabay.com/photo/2015/05/31/15/07/business-792113_1280.jpg',
 };
 
 export const PATH = {

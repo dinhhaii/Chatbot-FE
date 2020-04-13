@@ -2,11 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Collapse } from 'antd';
 import 'antd/dist/antd.css';
+import { PATH } from '../../utils/constant';
 
 const { Panel } = Collapse;
 
 const LessonsList = (props) => {
-  const { lessons } = props;
+  const { lessons, idCourse } = props;
 
   return (
     <section id="lessons">
@@ -23,11 +24,11 @@ const LessonsList = (props) => {
               <Panel
                 key={index.toString()}
                 header={(
-                  <Link to="/">
+                  <Link to={`${PATH.LESSON_DETAIL}/${value._id}?idCourse=${idCourse}`}>
                     <strong>LESSON {index + 1}: </strong> {value.name}
                   </Link>
                 )}>
-                {value.fileURLs.length === 0 ? null : (
+                {value.files.length === 0 ? null : (
                   <div className="card-body p-0">
                     <div className="list_lessons">
                       <ul>
