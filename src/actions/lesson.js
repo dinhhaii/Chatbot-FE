@@ -20,3 +20,17 @@ export const fetchLessonFailed = () => {
     type: actionTypes.FETCH_LESSON_FAILED,
   };
 };
+
+export const createLesson = (lesson) => {
+  return {
+    type: actionTypes.CREATE_LESSON,
+    lesson,
+  };
+};
+
+export const updateLesson = (lesson) => {
+  return {
+    type: actionTypes.UPDATE_LESSON,
+    lesson,
+  };
+};

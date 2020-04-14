@@ -4,37 +4,99 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { IMAGE_URL } from '../../utils/constant';
+import { Progress } from 'antd';
+import firebase from 'firebase';
+import { toast } from 'react-toastify';
 import { fetchSubjectList } from '../../actions/subject';
+import { updateCourse } from '../../actions/course';
+import 'antd/dist/antd.css';
+import { usePrevious } from '../../utils/helper';
 
 const LecturerCourseDetailCourseForm = (props) => {
+  const { selectedCourse } = props;
+  const prevProps = usePrevious(props);
+
   const [course, setCourse] = useState({
-    name: '',
-    description: '',
-    price: '',
-    accessibleDays: '',
-    duration: '',
-    _idSubject: '',
-    imageURL: '',
+    startDate: selectedCourse.startDate,
+    _idLecturer: selectedCourse._idLecturer,
+    name: selectedCourse.name,
+    description: selectedCourse.description,
+    price: selectedCourse.price,
+    accessibleDays: selectedCourse.accessibleDays,
+    duration: selectedCourse.duration,
+    _idSubject: selectedCourse._idSubject,
+    imageURL: selectedCourse.imageURL,
   });
+
+  const [image, setImage] = useState(null);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     props.fetchSubjectListAction();
   }, []);
 
-  const subjects = props.subjectState.subjectList.filter((e) => !e.isDelete);
+  useEffect(() => {
+    if (prevProps && prevProps.selectedCourse !== props.selectedCourse) {
+      setCourse({
+        startDate: selectedCourse.startDate,
+        _idLecturer: selectedCourse._idLecturer,
+        name: selectedCourse.name,
+        description: selectedCourse.description,
+        price: selectedCourse.price,
+        accessibleDays: selectedCourse.accessibleDays,
+        duration: selectedCourse.duration,
+        _idSubject: selectedCourse._idSubject,
+        imageURL: selectedCourse.imageURL,
+      });
+    }
+  });
 
-  const handleSubmit = e => {
+  const subjects = props.subjectState.subjectList.filter((e) => !e.isDelete);
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(course);
+    const storage = firebase.storage();
+    const newCourse = { ...course, _idCourse: selectedCourse._id };
+    if (image !== course.imageURL) {
+      const task = storage.ref(`images/${image.name}`).put(image);
+      task.on(
+        'state_changed',
+        (snapshot) => {
+          setProgress(
+            Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100),
+          );
+        },
+        (error) => {
+          toast.error(error.message);
+        },
+        () => {
+          storage
+            .ref('images')
+            .child(image.name)
+            .getDownloadURL()
+            .then((imageURL) => {
+              props.updateCourseAction({ ...newCourse, imageURL });
+            });
+        },
+      );
+    } else {
+      props.updateCourseAction(newCourse);
+    }
   };
 
   const handleChange = (e) => {
     const { value, name } = e.target;
-    setCourse({
-      ...course,
-      [name]: value,
-    });
+    if (name === 'image') {
+      setImage(e.target.files[0]);
+      setCourse({
+        ...course,
+        imageURL: URL.createObjectURL(e.target.files[0]),
+      });
+    } else {
+      setCourse({
+        ...course,
+        [name]: value,
+      });
+    }
   };
 
   return (
@@ -49,11 +111,10 @@ const LecturerCourseDetailCourseForm = (props) => {
                 className="kt-avatar"
                 style={{ marginLeft: `${20}px` }}
                 id="kt_user_avatar_2">
-                <div
+                <img
                   className="kt-avatar__holder"
-                  style={{
-                    backgroundImage: `url(${IMAGE_URL.BACKGROUND_3})`,
-                  }}
+                  src={course.imageURL}
+                  alt=""
                 />
                 <label
                   className="kt-avatar__upload"
@@ -63,18 +124,14 @@ const LecturerCourseDetailCourseForm = (props) => {
                   <i className="icon-pen" />
                   <input
                     type="file"
-                    name="imageURL"
+                    name="image"
                     onChange={handleChange}
                     accept=".png, .jpg, .jpeg"
                   />
                 </label>
-                <span
-                  className="kt-avatar__cancel"
-                  data-toggle="kt-tooltip"
-                  title=""
-                  data-original-title="Cancel avatar">
-                  <i className="fa fa-times" />
-                </span>
+                <small>
+                  <Progress percent={progress} showInfo={false} />
+                </small>
               </div>
             </div>
 
@@ -108,7 +165,11 @@ const LecturerCourseDetailCourseForm = (props) => {
                     name="_idSubject"
                     value={course._idSubject}
                     onChange={handleChange}>
-                    <option value="" selected> None </option>;
+                    <option value="" selected>
+                      {' '}
+                      None{' '}
+                    </option>
+                    ;
                     {subjects.map((subject, index) => {
                       return (
                         <option key={index.toString()} value={subject._id}>
@@ -179,6 +240,7 @@ const LecturerCourseDetailCourseForm = (props) => {
             </label>
             <div className="col-10">
               <textarea
+                style={{ height: 300 }}
                 className="form-control"
                 id="descriptionCourse"
                 name="description"
@@ -194,11 +256,26 @@ const LecturerCourseDetailCourseForm = (props) => {
             <div className="row">
               <div className="col-2" />
               <div className="col-10">
-                <button type="submit" className="btn btn-success w-25 mr-5">
-                  Submit
+                <button type="submit" className="btn btn-info w-25 mr-5">
+                  Update
                 </button>
-                <button type="reset" className="btn btn-secondary w-25">
-                  Cancel
+                <button
+                  type="reset"
+                  className="btn btn-secondary w-25"
+                  onClick={() => {
+                    setCourse({
+                      startDate: selectedCourse.startDate,
+                      _idLecturer: selectedCourse._idLecturer,
+                      name: selectedCourse.name,
+                      description: selectedCourse.description,
+                      price: selectedCourse.price,
+                      accessibleDays: selectedCourse.accessibleDays,
+                      duration: selectedCourse.duration,
+                      _idSubject: selectedCourse._idSubject,
+                      imageURL: selectedCourse.imageURL,
+                    });
+                  }}>
+                  Reset
                 </button>
               </div>
             </div>
@@ -217,6 +294,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    updateCourseAction: bindActionCreators(updateCourse, dispatch),
     fetchSubjectListAction: bindActionCreators(fetchSubjectList, dispatch),
   };
 };

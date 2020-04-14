@@ -16,3 +16,11 @@ export const getCourse = (_id) => {
 export const getCourseByLessonId = (_id) => {
   return AxiosService.get(`${SERVER_URL}/course/lesson/${_id}`);
 };
+
+export const createCourse = (course) => {
+  return AxiosService.post(`${SERVER_URL}/course/create`, { ...course });
+}
+
+export const updateCourse = course => {
+  return AxiosService.post(`${SERVER_URL}/course/update`, { ...course });
+}

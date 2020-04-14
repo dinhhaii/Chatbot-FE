@@ -16,23 +16,22 @@ const CourseCarousel = ({ courseList }) => {
       slidesToShow={3}
       slidesToScroll="auto"
       wrapAround
-      autoplay
       transitionMode="scroll3d">
       {courseList.map((course, index) => {
         const rateAverage = course.feedback.reduce((total, num) => total + num.rate, 0) / course.feedback.length;
         return course.isDelete ? null : (
           <div className="item" key={index.toString()}>
             <div className="box_grid">
-              <figure>
+              <figure style={{textAlign: 'center'}}>
                 <Link
                   to={`${PATH.COURSE_DETAIL}/${course._id}`}
                   className="wish_bt"
                 />
-                <Link to={`${PATH.COURSE_DETAIL}/${course._id}`}>
+                <Link to={`${PATH.COURSE_DETAIL}/${course._id}`} >
                   <div className="preview">
                     <span>Preview course</span>
                   </div>
-                  <img src={course.imageURL} className="img-fluid" alt="" />
+                  <img src={course.imageURL} className="img-fluid" alt="" style={{ height: 200 }} />
                 </Link>
                 <div className="price">${course.price}</div>
               </figure>
@@ -49,7 +48,7 @@ const CourseCarousel = ({ courseList }) => {
                   ])}`}>
                   {`${course.lecturer.firstName.toUpperCase()} ${course.lecturer.lastName.toUpperCase()}`}
                 </Link>
-                <p>{course.description}</p>
+                <p style={{ height: 100, overflow: 'hidden' }}>{course.description}</p>
                 <div className="rating">
                   <Rate
                     defaultValue={rateAverage}

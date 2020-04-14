@@ -4,19 +4,30 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { IMAGE_URL } from '../../utils/constant';
+import { Progress } from 'antd';
+import firebase from 'firebase';
+import { toast } from 'react-toastify';
+import { SERVER_URL } from '../../utils/constant';
 import { fetchSubjectList } from '../../actions/subject';
+import 'antd/dist/antd.css';
+import { createCourse } from '../../actions/course';
 
 const LecturerCourseDetailCourseCreateForm = (props) => {
+  const { userState } = props;
   const [course, setCourse] = useState({
+    startDate: new Date(),
+    _idLecturer: '',
     name: '',
     description: '',
     price: '',
     accessibleDays: '',
     duration: '',
     _idSubject: '',
-    imageURL: '',
+    imageURL: `${SERVER_URL}/images/no-avatar.png`,
   });
+
+  const [image, setImage] = useState(null);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     props.fetchSubjectListAction();
@@ -24,17 +35,52 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
 
   const subjects = props.subjectState.subjectList.filter((e) => !e.isDelete);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(course);
+    const storage = firebase.storage();
+    const newCourse = { ...course, _idLecturer: userState.user._id };
+
+    if (image !== course.imageURL) {
+      const task = storage.ref(`images/${image.name}`).put(image);
+      task.on(
+        'state_changed',
+        (snapshot) => {
+          setProgress(
+            Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100),
+          );
+        },
+        (error) => {
+          toast.error(error.message);
+        },
+        () => {
+          storage
+            .ref('images')
+            .child(image.name)
+            .getDownloadURL()
+            .then((imageURL) => {
+              props.createCourseAction({ ...newCourse, imageURL });
+            });
+        },
+      );
+    } else {
+      props.createCourseAction(newCourse);
+    }
   };
 
   const handleChange = (e) => {
     const { value, name } = e.target;
-    setCourse({
-      ...course,
-      [name]: value,
-    });
+    if (name === 'image') {
+      setImage(e.target.files[0]);
+      setCourse({
+        ...course,
+        imageURL: URL.createObjectURL(e.target.files[0]),
+      });
+    } else {
+      setCourse({
+        ...course,
+        [name]: value,
+      });
+    }
   };
   return (
     <div className="kt-portlet">
@@ -54,11 +100,10 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
                 className="kt-avatar"
                 style={{ marginLeft: `${20}px` }}
                 id="kt_user_avatar_2">
-                <div
+                <img
                   className="kt-avatar__holder"
-                  style={{
-                    backgroundImage: `url(${IMAGE_URL.BACKGROUND_3})`,
-                  }}
+                  src={course.imageURL}
+                  alt=""
                 />
                 <label
                   className="kt-avatar__upload"
@@ -68,18 +113,14 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
                   <i className="icon-pen" />
                   <input
                     type="file"
-                    name="imageURL"
+                    name="image"
                     onChange={handleChange}
                     accept=".png, .jpg, .jpeg"
                   />
                 </label>
-                <span
-                  className="kt-avatar__cancel"
-                  data-toggle="kt-tooltip"
-                  title=""
-                  data-original-title="Cancel avatar">
-                  <i className="fa fa-times" />
-                </span>
+                <small>
+                  <Progress percent={progress} showInfo={false} />
+                </small>
               </div>
             </div>
 
@@ -113,7 +154,11 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
                     name="_idSubject"
                     value={course._idSubject}
                     onChange={handleChange}>
-                    <option value="" selected> None </option>;
+                    <option value="" selected>
+                      {' '}
+                      None{' '}
+                    </option>
+                    ;
                     {subjects.map((subject, index) => {
                       return (
                         <option key={index.toString()} value={subject._id}>
@@ -184,6 +229,7 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
             </label>
             <div className="col-10">
               <textarea
+                style={{ height: 300 }}
                 className="form-control"
                 id="descriptionCourse"
                 name="description"
@@ -200,10 +246,25 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
               <div className="col-2" />
               <div className="col-10">
                 <button type="submit" className="btn btn-success w-25 mr-5">
-                  Submit
+                  Create
                 </button>
-                <button type="reset" className="btn btn-secondary w-25">
-                  Cancel
+                <button
+                  type="reset"
+                  className="btn btn-secondary w-25"
+                  onClick={() => {
+                    setCourse({
+                      startDate: new Date(),
+                      _idLecturer: '',
+                      name: '',
+                      description: '',
+                      price: '',
+                      accessibleDays: '',
+                      duration: '',
+                      _idSubject: '',
+                      imageURL: `${SERVER_URL}/images/no-avatar.png`,
+                    });
+                  }}>
+                  Reset
                 </button>
               </div>
             </div>
@@ -217,11 +278,13 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
 const mapStateToProps = (state) => {
   return {
     subjectState: state.subjectState,
+    userState: state.userState,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    createCourseAction: bindActionCreators(createCourse, dispatch),
     fetchSubjectListAction: bindActionCreators(fetchSubjectList, dispatch),
   };
 };

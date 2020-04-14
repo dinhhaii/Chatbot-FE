@@ -79,3 +79,17 @@ export const fetchCourseByLessonFailed = () => {
     type: actionTypes.FETCH_COURSE_BY_LESSON_FAILED,
   };
 };
+
+export const createCourse = (course) => {
+  return {
+    type: actionTypes.CREATE_COURSE,
+    course,
+  };
+};
+
+export const updateCourse = (course) => {
+  return {
+    type: actionTypes.UPDATE_COURSE,
+    course,
+  };
+};

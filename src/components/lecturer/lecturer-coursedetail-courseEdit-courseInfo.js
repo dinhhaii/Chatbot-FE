@@ -9,7 +9,7 @@ const VIEW = {
 
 const LecturerCourseDetailCourseInfo = ({ courseLecturerList, select }) => {
   const [view, setView] = useState(VIEW.COURSE_EDIT);
-
+  const selectedCourseLecturerList = { ...courseLecturerList[select] };
   if (courseLecturerList[select]) {
     return (
       <div className="col-lg-8">
@@ -35,7 +35,7 @@ const LecturerCourseDetailCourseInfo = ({ courseLecturerList, select }) => {
             </div>
           </div>
 
-          {view === VIEW.COURSE_EDIT ? <LecturerCourseDetailCourseForm course={courseLecturerList[select]} /> : null }
+          {view === VIEW.COURSE_EDIT ? <LecturerCourseDetailCourseForm selectedCourse={selectedCourseLecturerList} /> : null }
           {view === VIEW.LESSONS ? courseLecturerList[select].lessons.map((lesson, index) => {
             return <LecturerCourseDetailLessonForm key={index.toString()} lesson={lesson} index={index} />;
           }) : null}

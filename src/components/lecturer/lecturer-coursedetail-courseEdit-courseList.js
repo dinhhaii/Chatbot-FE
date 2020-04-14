@@ -25,7 +25,7 @@ const LecturerCourseDetailCourseList = ({ courseLecturerList, setSelect, select 
               <div className="kt-callout__body">
                 <div className="kt-callout__content">
                   <h4 className="kt-callout__title">{course.name}</h4>
-                  <p className="kt-callout__desc">{course.description}</p>
+                  <p className="kt-callout__desc" style={{ height: 50, overflow: 'hidden' }}>{course.description}</p>
                 </div>
                 <div className="kt-callout__action">
                   <button

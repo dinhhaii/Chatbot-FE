@@ -1,3 +1,9 @@
 .btn-custom-1 {
     width: 100%;
 }
+
+.react-player-custom video {
+    position: static;
+    opacity: 1;
+    margin-top: 5px;
+}
