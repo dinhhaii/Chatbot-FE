@@ -10,7 +10,7 @@ const LessonComment = (props) => {
         <div className="reviews-container">
           {comments.map((comment, index) => {
             if (comment.isDelete) {
-              return false;
+              return null;
             }
             return (
               <div className="review-box clearfix" key={index.toString()}>

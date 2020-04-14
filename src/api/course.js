@@ -12,3 +12,7 @@ export const getCourseLecturerList = (_id) => {
 export const getCourse = (_id) => {
   return AxiosService.get(`${SERVER_URL}/course/${_id}`);
 };
+
+export const getCourseByLessonId = (_id) => {
+  return AxiosService.get(`${SERVER_URL}/course/lesson/${_id}`);
+};

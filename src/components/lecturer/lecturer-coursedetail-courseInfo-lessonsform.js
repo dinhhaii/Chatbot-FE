@@ -1,7 +1,4 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable import/no-named-as-default-member */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
 import { Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
@@ -69,6 +66,7 @@ const LecturerCourseDetailLessonForm = ({ lesson, index }) => {
                 <div className="col-lg-6">
                   <div>
                     <Upload
+                      className="mr-2"
                       multiple={false}
                       beforeUpload={(e) => false}
                       showUploadList={false}
@@ -79,12 +77,14 @@ const LecturerCourseDetailLessonForm = ({ lesson, index }) => {
                         <UploadOutlined /> Upload Video
                       </Button>
                     </Upload>
-                    <Button onClick={() => setVideoData(null)}>Clear</Button>
+                    <Button onClick={() => setVideoData(null)}>
+                      <i className="icon-trash-1" />
+                    </Button>
                   </div>
                   <div>
                     {videoData && videoData.file && videoData.blobData && (
                       <video
-                        width={400}
+                        width="400"
                         controls
                         style={{ position: 'static', opacity: 1, marginTop: 5 }}>
                         <source

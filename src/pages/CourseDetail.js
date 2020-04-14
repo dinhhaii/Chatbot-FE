@@ -44,7 +44,7 @@ const CourseDetail = (props) => {
               <div className="row">
                 <div className="col-lg-8">
                   <CourseDescription description={course.description} />
-                  <LessonsList lessons={course.lessons} idCourse={course._id} />
+                  <LessonsList lessons={course.lessons} />
                   <CourseReview feedback={course.feedback} />
                 </div>
                 <CoursePurchase course={course} />

@@ -5,9 +5,12 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
+import { Progress } from 'antd';
 import { requestVerificationEmail } from '../../api/user';
 import { showLoading, hideLoading } from '../../actions/general';
 import { updateUser } from '../../actions/user';
+import firebase from '../../utils/firebase';
+import 'antd/dist/antd.css';
 
 const ProfileInformation = (props) => {
   const { userState } = props;
@@ -19,6 +22,8 @@ const ProfileInformation = (props) => {
     lastName: userState.user.lastName,
     bio: userState.user.bio,
   });
+  const [image, setImage] = useState(null);
+  const [progress, setProgress] = useState(0);
 
   const requestVerification = () => {
     props.showLoadingAction();
@@ -39,15 +44,49 @@ const ProfileInformation = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.updateUserAction(state);
+    const storage = firebase.storage();
+
+    if (image !== state.imageURL) {
+      const task = storage.ref(`images/${image.name}`).put(image);
+      task.on(
+        'state_changed',
+        (snapshot) => {
+          setProgress(Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100));
+        },
+        (error) => {
+          toast.error(error.message);
+        },
+        () => {
+          storage
+            .ref('images')
+            .child(image.name)
+            .getDownloadURL()
+            .then((imageURL) => {
+              const newState = { ...state, imageURL };
+              setState(newState);
+              props.updateUserAction(newState);
+            });
+        },
+      );
+    } else {
+      props.updateUserAction(state);
+    }   
   };
 
   const handleChangle = (e) => {
     const { name, value } = e.target;
-    setState({
-      ...state,
-      [name]: value,
-    });
+    if (name === 'image') {
+      setImage(e.target.files[0]);
+      setState({
+        ...state,
+        imageURL: URL.createObjectURL(e.target.files[0]),
+      });
+    } else {
+      setState({
+        ...state,
+        [name]: value,
+      });
+    }
   };
 
   return (
@@ -112,11 +151,10 @@ const ProfileInformation = (props) => {
                           <div
                             className="kt-avatar kt-avatar--outline"
                             id="kt_user_avatar">
-                            <div
+                            <img
                               className="kt-avatar__holder"
-                              style={{
-                                backgroundImage: `url(${state.imageURL})`,
-                              }}
+                              src={state.imageURL}
+                              alt=""
                             />
                             <label
                               className="kt-avatar__upload"
@@ -126,17 +164,14 @@ const ProfileInformation = (props) => {
                               <i className="icon-pen" />
                               <input
                                 type="file"
-                                name="profile_avatar"
+                                name="image"
                                 accept=".png, .jpg, .jpeg"
+                                onChange={handleChangle}
                               />
                             </label>
-                            <span
-                              className="kt-avatar__cancel"
-                              data-toggle="kt-tooltip"
-                              title=""
-                              data-original-title="Cancel avatar">
-                              <i className="fa fa-times" />
-                            </span>
+                            <small>
+                              <Progress percent={progress} showInfo={false} />
+                            </small>
                           </div>
                         </div>
                       </div>
@@ -188,15 +223,12 @@ const ProfileInformation = (props) => {
                         </label>
                         <div className="col-lg-9 col-xl-6">
                           <textarea
+                            style={{ height: 400 }}
                             className="form-control"
                             name="bio"
                             value={state.bio}
                             onChange={handleChangle}
                           />
-                          {/* <span className="form-text text-muted">
-                            If you want your invoices addressed to a company.
-                            Leave blank to use your full name.
-                          </span> */}
                         </div>
                       </div>
                     </div>

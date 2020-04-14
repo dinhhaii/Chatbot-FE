@@ -6,6 +6,7 @@
     "antd": "^4.0.4",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
+    "firebase": "^7.14.0",
     "icheck": "^1.0.2",
     "moment": "^2.24.0",
     "nuka-carousel": "^4.6.6",

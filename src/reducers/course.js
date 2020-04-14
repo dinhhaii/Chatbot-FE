@@ -55,6 +55,21 @@ const courseState = (state = initialState, action) => {
         ...state,
         course: null,
       };
+    case actionTypes.FETCH_COURSE_BY_LESSON:
+      return {
+        ...state,
+        course: null,
+      };
+    case actionTypes.FETCH_COURSE_BY_LESSON_SUCCESS:
+      return {
+        ...state,
+        course: { ...data },
+      };
+    case actionTypes.FETCH_COURSE_BY_LESSON_FAILED:
+      return {
+        ...state,
+        course: null,
+      };
     default:
       return state;
   }

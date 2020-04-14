@@ -59,3 +59,23 @@ export const fetchCourseFailed = () => {
     type: actionTypes.FETCH_COURSE_FAILED,
   };
 };
+
+export const fetchCourseByLesson = (_id) => {
+  return {
+    type: actionTypes.FETCH_COURSE_BY_LESSON,
+    _id,
+  };
+};
+
+export const fetchCourseByLessonSuccess = (data) => {
+  return {
+    type: actionTypes.FETCH_COURSE_BY_LESSON_SUCCESS,
+    data,
+  };
+};
+
+export const fetchCourseByLessonFailed = () => {
+  return {
+    type: actionTypes.FETCH_COURSE_BY_LESSON_FAILED,
+  };
+};

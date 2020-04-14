@@ -12,7 +12,7 @@ import bcrypt from 'bcryptjs';
 import * as actionTypes from '../utils/actionTypes';
 import { AUTH_TOKEN } from '../utils/constant';
 import { getUser, updateUser, getUserList } from '../api/user';
-import { getCourseList, getCourseLecturerList, getCourse } from '../api/course';
+import { getCourseList, getCourseLecturerList, getCourse, getCourseByLessonId } from '../api/course';
 import { getInvoiceLearnerList, getInvoiceLecturerList } from '../api/invoice';
 import { getSubjectList } from '../api/subject';
 import { showLoading, hideLoading } from '../actions/general';
@@ -46,6 +46,7 @@ function* rootSaga() {
   yield takeLatest(actionTypes.UPDATE_USER, updateUserSaga);
   yield takeLatest(actionTypes.CHANGE_PASSWORD, changePasswordSaga);
   yield takeLatest(actionTypes.FETCH_COURSE, fetchCourseSaga);
+  yield takeLatest(actionTypes.FETCH_COURSE_BY_LESSON, fetchCourseByLessonSaga);
   yield takeLatest(actionTypes.FETCH_COURSE_LIST, fetchCourseListSaga);
   yield takeLatest(actionTypes.FETCH_SUBJECT_LIST, fetchSubjectListSaga);
   yield takeLatest(
@@ -218,6 +219,19 @@ function* fetchLessonSaga({ _id }) {
   } else {
     yield put(fetchLessonFailed());
     toast.error('Sorry, fetch lesson failed!');
+  }
+  yield delay(1000);
+  yield put(hideLoading());
+}
+
+function* fetchCourseByLessonSaga({ _id }) {
+  yield put(showLoading());
+  const { data } = yield call(getCourseByLessonId, _id);
+  if (data) {
+    yield put(fetchCourseSuccess(data));
+  } else {
+    yield put(fetchCourseFailed());
+    toast.error('Sorry, fetch course by lesson failed!');
   }
   yield delay(1000);
   yield put(hideLoading());

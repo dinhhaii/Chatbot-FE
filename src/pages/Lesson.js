@@ -7,62 +7,39 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import LessonsList from '../components/lessons/lessons-list';
 import LessonComment from '../components/lessons/lessons-comments';
-import { fetchCourse } from '../actions/course';
+import { fetchLesson } from '../actions/lesson';
+import { fetchCourseByLesson } from '../actions/course';
 
 const { TabPane } = Tabs;
 
 const LessonDetail = (props) => {
-  const { match, location, courseState } = props;
-  const urlParams = new URLSearchParams(location.search);
-  const idCourse = urlParams.get('idCourse');
+  const { match, courseState, lessonState } = props;
 
   useEffect(() => {
-    props.fetchCourseAction(idCourse);
+    props.fetchCourseByLessonAction(match.params.id);
+    props.fetchLessonAction(match.params.id);
   }, []);
 
   return (
     <div>
       <main>
         <div className="bg-dark">
-          {/* <nav className="secondary_nav sticky_horizontal">
-            <div className="container">
-              <ul className="clearfix">
-                <li>
-                  <Link href="#description" class="active">
-                    Description
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#lessons">Lessons</Link>
-                </li>
-                <li>
-                  <Link href="#reviews">Reviews</Link>
-                </li>
-              </ul>
-            </div>
-          </nav> */}
-          {courseState.course ? (
+          {lessonState.lesson && courseState.course && (
             <div className="bg-white" style={{ marginTop: `${73}px` }}>
               <div className="container-fluid margin_60_35">
                 <div className="row">
                   <div className="col-lg-8">
                     <div>
-                      <button
-                        onClick={() => {
-                          console.log(props.courseState.course);
-                        }}>
-                        {' '}
-                        TEST
-                      </button>
+                      VIDEO HERE
                     </div>
                   </div>
                   <div className="col-lg-4">
                     <Tabs defaultActiveKey="1">
-                      <TabPane tab={<span>Lessons</span>} key="2">
-                        <LessonsList lessons={courseState.course.lessons} idCourse={idCourse}/>
+                      <TabPane tab={<span>Lessons</span>} key="1">
+                        <LessonsList lessons={courseState.course.lessons} idCourse={courseState.course._id} />
                       </TabPane>
-                      <TabPane tab={<span>Comments</span>} key="3">
-                        <LessonComment />
+                      <TabPane tab={<span>Comments</span>} key="2">
+                        <LessonComment comments={lessonState.lesson.comments} />
                       </TabPane>
                     </Tabs>
                     ,
@@ -70,7 +47,7 @@ const LessonDetail = (props) => {
                 </div>
               </div>
             </div>
-          ) : null}
+          )}
         </div>
       </main>
     </div>
@@ -79,13 +56,15 @@ const LessonDetail = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    lessonState: state.lessonState,
     courseState: state.courseState,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchCourseAction: bindActionCreators(fetchCourse, dispatch),
+    fetchLessonAction: bindActionCreators(fetchLesson, dispatch),
+    fetchCourseByLessonAction: bindActionCreators(fetchCourseByLesson, dispatch),
   };
 };
 

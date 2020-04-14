@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/destructuring-assignment */
 import React from 'react';
@@ -15,7 +16,7 @@ const LecturerCourseDetailCourseList = ({ courseLecturerList, setSelect, select 
             ${course.status === 'pending' ? 'kt-callout--warning' : ''} 
             kt-callout--diagonal-bg`}
             style={
-              select === index ? { pointerEvents: 'none', opacity: 0.5, border: 'black 4px solid', background: 'gray'}
+              select === index ? { pointerEvents: 'none', opacity: 0.5, border: 'black 4px solid', background: 'gray' }
                 : { cursor: 'pointer' }  
             }
             onClick={() => setSelect(index)}

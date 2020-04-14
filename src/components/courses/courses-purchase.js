@@ -9,12 +9,12 @@ const CoursePurchase = (props) => {
     <aside className="col-lg-4" id="sidebar">
       <div className="box_detail">
         <figure>
-          <Link to={PATH.LESSON_DETAIL} className="video" >
+          <Link to={`${PATH.LESSON_DETAIL}/${course.lessons[0]._id}`} className="video">
             <i className="arrow_triangle-right" />
             <img src={course.imageURL} className="img-fluid" alt="" />
             <span>View course preview</span>
           </Link>
-        </figure>
+        </figure>ß
         <div className="price">
           <h4 className="d-inline">Price: </h4>${course.price}
         </div>

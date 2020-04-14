@@ -7,7 +7,7 @@ import { PATH } from '../../utils/constant';
 const { Panel } = Collapse;
 
 const LessonsList = (props) => {
-  const { lessons, idCourse } = props;
+  const { lessons } = props;
 
   return (
     <section id="lessons">
@@ -24,7 +24,7 @@ const LessonsList = (props) => {
               <Panel
                 key={index.toString()}
                 header={(
-                  <Link to={`${PATH.LESSON_DETAIL}/${value._id}?idCourse=${idCourse}`}>
+                  <Link to={`${PATH.LESSON_DETAIL}/${value._id}`}>
                     <strong>LESSON {index + 1}: </strong> {value.name}
                   </Link>
                 )}>
