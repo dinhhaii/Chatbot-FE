@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Upload, Button, Progress } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import ReactPlayer from 'react-player';
@@ -13,6 +13,12 @@ import { bindActionCreators } from 'redux';
 import firebase from '../../utils/firebase';
 import { updateLesson } from '../../actions/lesson';
 
+const STATUS = {
+  SAVED: 1,
+  LOADING: 2,
+  UNSAVED: 3,
+};
+
 const LecturerCourseDetailLessonForm = (props) => {
   const { lesson, index } = props;
   const [state, setState] = useState({
@@ -22,14 +28,15 @@ const LecturerCourseDetailLessonForm = (props) => {
     files: lesson.files,
   });
 
-  const [save, setSave] = useState(true);
+  const [save, setSave] = useState(STATUS.SAVED);
   const [fileList, setFileList] = useState([]);
   const [videoData, setVideoData] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [fileName, setFileName] = useState('');
 
-  useEffect(() => {
-    setFileList([...lesson.files]);
-  }, []);
+  // useEffect(() => {
+  //   setFileList([...lesson.files]);
+  // }, []);
 
   const viewAttachment = (file) => {
     const reader = new FileReader();
@@ -51,47 +58,80 @@ const LecturerCourseDetailLessonForm = (props) => {
       setFileList([...fileList].splice(key, 1));
     },
     beforeUpload: file => {
-      setSave(false);
+      setSave(STATUS.UNSAVED);
       setFileList([...fileList, file]);
       return false;
     },
     fileList,
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    setSave(true);
-    const newState = { ...state, _idLesson: lesson._id };
-    const storage = firebase.storage();
-    const { file } = videoData || null;
-    if (file) {
-      const task = storage.ref(`videos/${file.name}`).put(file);
+  const putStorageItem = (directoryName, file) => {
+    return new Promise((resolve, reject) => {
+      const task = firebase.storage().ref(`${directoryName}/${file.name}`).put(file);
       task.on(
         'state_changed',
         (snapshot) => {
-          setProgress(
-            Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100),
-          );
+          const percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          setProgress(percent);
+          setFileName(percent === 100 ? '' : file.name);
         },
         (error) => {
           toast.error(error.message);
+          reject(error);
         },
         () => {
-          storage
-            .ref('videos')
-            .child(file.name)
-            .getDownloadURL().then(lectureURL => {
-              props.updateLessonAction({ ...newState, lectureURL });
+          firebase.storage().ref(directoryName).child(file.name).getDownloadURL()
+            .then(fileURL => {
+              const fileInfo = {
+                name: file.name,
+                type: file.type,
+                fileURL,
+              };
+              resolve(fileInfo);
             });
         },
       );
-    } else {
+    });
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    setSave(STATUS.LOADING);
+    const newState = { ...state, _idLesson: lesson._id };
+    const videoFile = videoData ? videoData.file : null;
+    
+    const videoItem = videoFile ? [putStorageItem('videos', videoFile)] : [];
+    const storageItems = fileList ? [...videoItem, ...fileList.map(file => putStorageItem('docs', file))] : videoItem;
+    Promise.all(storageItems)
+      .then((files) => {
+        // props.updateLessonAction({ ...state, _idLesson: lesson._id });
+        files.forEach(element => {
+          if (element.type.includes('video')) {
+            console.log('hi');
+            props.updateLessonAction({ ...newState, lectureURL: element.fileURL });
+          } else {
+            props.updateLessonAction({
+              ...newState,
+              files: [...state.files, {
+                name: element.name,
+                fileURL: element.fileURL,
+              }], 
+            });
+          }
+        });
+        setSave(STATUS.SAVED);
+      })
+      .catch((error) => toast.error(error.message));
+
+
+    if (!videoFile && !fileList) {
       props.updateLesson(newState);
+      setSave(STATUS.SAVED);
     }
   };
 
   const handleChange = e => {
-    setSave(false);
+    setSave(STATUS.UNSAVED);
     const { name, value } = e.target;
     setState({
       ...state,
@@ -105,19 +145,20 @@ const LecturerCourseDetailLessonForm = (props) => {
         <div className="kt-portlet__head-label" style={{ color: 'white' }}>
           LESSON {index + 1}: {lesson.name}
         </div>
+        <Button onClick={() => console.log(state)}>TEST</Button>
         <div className="kt-portlet__head-toolbar">
           <div className="kt-portlet__head-group">
             <button
               type="submit"
-              form="lessonForm"
-              className={`btn ${
-                save ? 'btn-success' : 'btn-info'
-              } btn-icon btn-pill`}
-              disabled={save}>
-              {save ? (
-                <i className="icon-ok-5" />
-              ) : (
-                <i className="icon-paper-plane" />
+              form={`lessonForm${index}`}
+              className={`btn ${save === STATUS.SAVED && 'btn-success'} ${
+                save === STATUS.LOADING && 'btn-warning'
+              } ${save === STATUS.UNSAVED && 'btn-info'} btn-icon btn-pill`}
+              disabled={save === STATUS.SAVED}>
+              {save === STATUS.SAVED && <i className="icon-ok-5" />}
+              {save === STATUS.UNSAVED && <i className="icon-paper-plane" />}
+              {save === STATUS.LOADING && (
+                <i className="icon-spin6 animate-spin" />
               )}
             </button>
           </div>
@@ -135,9 +176,19 @@ const LecturerCourseDetailLessonForm = (props) => {
             marginTop: '-8px',
           }}
         />
+        <small
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 5,
+            marginTop: '-3px',
+            fontSize: '7pt',
+          }}>
+          {fileName} 
+        </small>
         <form
           className="kt-form kt-form--label-right"
-          id="lessonForm"
+          id={`lessonForm${index}`}
           onSubmit={handleSubmit}>
           <div className="kt-portlet__body">
             <div className="container-fluid">
@@ -151,7 +202,7 @@ const LecturerCourseDetailLessonForm = (props) => {
                       beforeUpload={(e) => false}
                       showUploadList={false}
                       onChange={(info) => {
-                        setSave(false);
+                        setSave(STATUS.UNSAVED);
                         viewAttachment(info.file);
                       }}>
                       <Button>

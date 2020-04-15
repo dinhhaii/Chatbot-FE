@@ -1,4 +1,5 @@
 export const SERVER_URL = 'http://localhost:3000';
+// export const SERVER_URL = 'http://cafocc-api.herokuapp.com/';
 export const AUTH_TOKEN = 'AUTH_TOKEN';
 
 export const IMAGE_URL = {
