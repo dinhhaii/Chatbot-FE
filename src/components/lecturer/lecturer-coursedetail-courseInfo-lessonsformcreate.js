@@ -14,7 +14,8 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import firebase from '../../utils/firebase';
-import { updateLesson } from '../../actions/lesson';
+import { createLesson } from '../../actions/lesson';
+import { fetchCourseLecturerList } from '../../actions/course';
 
 const STATUS = {
   SAVED: 1,
@@ -22,13 +23,15 @@ const STATUS = {
   UNSAVED: 3,
 };
 
-const LecturerCourseDetailLessonForm = (props) => {
-  const { lesson, index } = props;
+const LecturerCourseDetailLessonFormCreate = (props) => {
+  const {
+    lessonFormCreateList, setLessonFormCreateList, index, pos, selectedCourse,
+  } = props;
   const [state, setState] = useState({
-    name: lesson.name,
-    description: lesson.description,
-    lectureURL: lesson.lectureURL,
-    files: lesson.files,
+    name: '',
+    description: '',
+    lectureURL: '',
+    files: [],
   });
 
   const [save, setSave] = useState(STATUS.SAVED);
@@ -36,10 +39,6 @@ const LecturerCourseDetailLessonForm = (props) => {
   const [videoData, setVideoData] = useState(null);
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState('');
-
-  // useEffect(() => {
-  //   setFileList([...lesson.files]);
-  // }, []);
 
   const viewAttachment = (file) => {
     const reader = new FileReader();
@@ -100,9 +99,9 @@ const LecturerCourseDetailLessonForm = (props) => {
   const handleSubmit = e => {
     e.preventDefault();
     setSave(STATUS.LOADING);
-    const newState = { ...state, _idLesson: lesson._id };
+    const newState = { ...state, _idCourse: selectedCourse._id };
     const videoFile = videoData ? videoData.file : null;
-    
+
     const videoItem = videoFile ? [putStorageItem('videos', videoFile)] : [];
     const storageItems = fileList ? [...videoItem, ...fileList.map(file => putStorageItem('docs', file))] : videoItem;
     Promise.all(storageItems)
@@ -111,25 +110,28 @@ const LecturerCourseDetailLessonForm = (props) => {
         files.forEach(element => {
           if (element.type.includes('video')) {
             const updatedState = { ...newState, lectureURL: element.fileURL };
-            props.updateLessonAction(updatedState);
+            props.createLessonAction(updatedState);
             setState(updatedState);
           } else {
             const updatedState = {
-              ...newState,
-              files: [...state.files, element], 
+              ...state,
+              files: [...newState.files, element], 
             };
-            props.updateLessonAction(updatedState);
+            props.createLessonAction(updatedState);
             setState(updatedState);
           }
         });
         setSave(STATUS.SAVED);
+        lessonFormCreateList.splice(pos, 1);
+        setLessonFormCreateList([...lessonFormCreateList]);
       })
       .catch((error) => toast.error(error.message));
-
     
     if (!videoFile && fileList.length === 0) {
-      props.updateLessonAction(newState);
+      props.createLessonAction(newState);
       setSave(STATUS.SAVED);
+      lessonFormCreateList.splice(pos, 1);
+      setLessonFormCreateList([...lessonFormCreateList]);
     }
   };
 
@@ -143,26 +145,24 @@ const LecturerCourseDetailLessonForm = (props) => {
   };
 
   return (
-    <div className="kt-portlet" data-ktportlet="true">
-      <div className="kt-portlet__head bg-dark">
-        <div className="kt-portlet__head-label" style={{ color: 'white' }}>
-          LESSON {index + 1}: {lesson.name}
+    <div className="kt-portlet" data-ktportlet="true" style={{ border: '1px black solid' }}>
+      <div className="kt-portlet__head bg-light" style={{ borderBottom: '1px black solid' }}>
+        <div className="kt-portlet__head-label">
+          CREATE NEW LESSON
         </div>
         <div className="kt-portlet__head-toolbar">
           <div className="kt-portlet__head-group">
             <button
               type="submit"
               form={`lessonForm${index}`}
-              className={`btn ${save === STATUS.SAVED && 'btn-success'} ${
-                save === STATUS.LOADING && 'btn-warning'
-              } ${save === STATUS.UNSAVED && 'btn-info'} btn-icon btn-pill`}
+              className={`btn 
+                ${save === STATUS.SAVED && 'btn-info'} 
+                ${save === STATUS.LOADING && 'btn-warning'} 
+                ${save === STATUS.UNSAVED && 'btn-info'} btn-icon btn-pill`}
               disabled={save === STATUS.SAVED}>
-              {save === STATUS.SAVED && <i className="icon-ok-5" />}
+              {save === STATUS.SAVED && <i className="icon-paper-plane" />}
               {save === STATUS.UNSAVED && <i className="icon-paper-plane" />}
               {save === STATUS.LOADING && <i className="icon-spin6 animate-spin" />}
-            </button>
-            <button className="ml-2 btn btn-danger btn-icon btn-pill">
-              <i className="icon-trash-1" />
             </button>
           </div>
         </div>
@@ -313,8 +313,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateLessonAction: bindActionCreators(updateLesson, dispatch),
+    createLessonAction: bindActionCreators(createLesson, dispatch),
+    fetchCourseLecturerListAction: bindActionCreators(fetchCourseLecturerList, dispatch),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LecturerCourseDetailLessonForm));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LecturerCourseDetailLessonFormCreate));
