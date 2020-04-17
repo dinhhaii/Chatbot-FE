@@ -31,11 +31,11 @@ const LecturerCourseDetailCourseList = (props) => {
             style={
               select === index
                 ? {
-                    pointerEvents: 'none',
-                    opacity: 0.5,
-                    border: 'black 4px solid',
-                    background: 'gray',
-                  }
+                  pointerEvents: 'none',
+                  opacity: 0.5,
+                  border: 'black 4px solid',
+                  background: 'gray',
+                }
                 : { cursor: 'pointer' }
             }
             onClick={() => setSelect(index)}>

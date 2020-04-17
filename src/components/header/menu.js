@@ -24,14 +24,16 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
                 <h3>Profile</h3>
                 <ul>
                   <li>
-                    <Link to={PATH.PROFILE}>Information</Link>
+                    <Link to={PATH.PROFILE} onClick={showMenuContent}>Information</Link>
                   </li>
                   <li>
-                    <Link to={PATH.PROFILE}>Change Password</Link>
+                    <Link to={PATH.PROFILE} onClick={showMenuContent}>Change Password</Link>
                   </li>
-                  <li>
-                    <Link to={PATH.PROFILE}>My Invoices</Link>
-                  </li>
+                  {userState.user.role === 'learner' && (
+                    <li>
+                      <Link to={PATH.PROFILE} onClick={showMenuContent}>My Invoices</Link>
+                    </li>
+                  )}
                   <li>
                     <Link
                       to={PATH.LOGOUT}
@@ -45,20 +47,20 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
               <div className="col-md-4">
                 <h3>Courses</h3>
                 <ul>
-                  {userState.user.role === 'lecturer' ? (
+                  {userState.user.role === 'lecturer' && (
                     <li>
-                      <Link to={PATH.LECTURER_COURSE}>
+                      <Link to={PATH.LECTURER_COURSE} onClick={showMenuContent}>
                         My Courses 
                       </Link>
                       <span className="badge_info">Lecturer</span>
                     </li>
-                  ) : null}
+                  )}
 
                   <li>
-                    <Link to={PATH.COURSES}>All Courses</Link>
+                    <Link to={PATH.COURSES} onClick={showMenuContent}>All Courses</Link>
                   </li>
                   <li>
-                    <Link to={PATH.LECTURERS}>All Teachers</Link>
+                    <Link to={PATH.LECTURERS} onClick={showMenuContent}>All Teachers</Link>
                   </li>
                 </ul>
               </div>
@@ -66,27 +68,27 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
                 <h3>UDEMA</h3>
                 <ul>
                   <li>
-                    <Link to={PATH.CONTACT}>
+                    <Link to={PATH.CONTACT} onClick={showMenuContent}>
                       <i className="icon-contacts" /> Contact
                     </Link>
                   </li>
                   <li>
-                    <Link to="/">
+                    <Link to="/" onClick={showMenuContent}>
                       <i className="icon-newspaper" /> Blog
                     </Link>
                   </li>
                   <li>
-                    <Link to="/">
+                    <Link to="/" onClick={showMenuContent}>
                       <i className="icon-puzzle" /> Setting
                     </Link>
                   </li>
                   <li>
-                    <Link to="/">
+                    <Link to="/" onClick={showMenuContent}>
                       <i className="icon-help" /> FAQ
                     </Link>
                   </li>
                   <li>
-                    <Link to={PATH.ABOUT}>
+                    <Link to={PATH.ABOUT} onClick={showMenuContent}>
                       <i className="icon-home" /> About
                     </Link>
                   </li>

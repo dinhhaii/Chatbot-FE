@@ -1,7 +1,26 @@
+/* eslint-disable no-mixed-operators */
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-const LecturerCourseFinanceSummary = () => {
+const LecturerCourseFinanceSummary = (props) => {
+  const { courseLecturerList } = props;
+  // Number of Courses, Lessons
+  const numberCourses = courseLecturerList.length;
+  const numberLessons = courseLecturerList.reduce((accumulator, course) => accumulator + course.lessons.length, 0);
+  // Revenue
+  const amountInvoiceOfEachCourse = invoices => {
+    return invoices.reduce((accumulator, invoice) => accumulator + invoice.totalPrice, 0);
+  };
+  const amountOfCourses = courseLecturerList.reduce((accumulator, course) => accumulator + amountInvoiceOfEachCourse(course.invoices), 0);
+  const revenue = amountOfCourses * 80 / 100;
+  // Satisfication Rate
+  const totalRatesOfEachCourse = feedback => {
+    return feedback.reduce((accumulator, value) => accumulator + value.rate, 0);
+  };
+  const totalRates = courseLecturerList.reduce((accumulator, course) => accumulator + totalRatesOfEachCourse(course.feedback), 0);
+  const totalFeedbackOfEachCourse = courseLecturerList.reduce((accumulator, course) => accumulator + course.feedback.length, 0);
+  const satisficationRate = Math.round((totalRates * 100) / (totalFeedbackOfEachCourse * 5));
+
+
   return (
     <div className="col-xl-4 col-lg-6 order-lg-1 order-xl-1">
       {/* begin:: Widgets/Finance Summary */}
@@ -10,112 +29,6 @@ const LecturerCourseFinanceSummary = () => {
           <div className="kt-portlet__head-label">
             <h3 className="kt-portlet__head-title">Finance Summary</h3>
           </div>
-          <div className="kt-portlet__head-toolbar">
-            <Link
-              to="/"
-              className="btn btn-label-brand btn-sm  btn-bold dropdown-toggle"
-              data-toggle="dropdown">
-              Latest
-            </Link>
-            <div className="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-md">
-              {/* begin::Nav */}
-              <ul className="kt-nav">
-                <li className="kt-nav__head">
-                  Export Options
-                  <span
-                    data-toggle="kt-tooltip"
-                    data-placement="right"
-                    title="Click to learn more...">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlnsXlink="http://www.w3.org/1999/xlink"
-                      width="24px"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      version="1.1"
-                      className="kt-svg-icon kt-svg-icon--brand kt-svg-icon--md1">
-                      <g
-                        stroke="none"
-                        strokeWidth="1"
-                        fill="none"
-                        fillRule="evenodd">
-                        <rect x="0" y="0" width="24" height="24" />
-                        <circle
-                          fill="#000000"
-                          opacity="0.3"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                        />
-                        <rect
-                          fill="#000000"
-                          x="11"
-                          y="10"
-                          width="2"
-                          height="7"
-                          rx="1"
-                        />
-                        <rect
-                          fill="#000000"
-                          x="11"
-                          y="7"
-                          width="2"
-                          height="2"
-                          rx="1"
-                        />
-                      </g>
-                    </svg>
-                  </span>
-                </li>
-                <li className="kt-nav__separator" />
-                <li className="kt-nav__item">
-                  <Link to="/" className="kt-nav__link">
-                    <i className="kt-nav__link-icon flaticon2-drop" />
-                    <span className="kt-nav__link-text">Activity</span>
-                  </Link>
-                </li>
-                <li className="kt-nav__item">
-                  <Link to="/" className="kt-nav__link">
-                    <i className="kt-nav__link-icon flaticon2-calendar-8" />
-                    <span className="kt-nav__link-text">FAQ</span>
-                  </Link>
-                </li>
-                <li className="kt-nav__item">
-                  <Link to="/" className="kt-nav__link">
-                    <i className="kt-nav__link-icon flaticon2-telegram-logo" />
-                    <span className="kt-nav__link-text">Settings</span>
-                  </Link>
-                </li>
-                <li className="kt-nav__item">
-                  <Link to="/" className="kt-nav__link">
-                    <i className="kt-nav__link-icon flaticon2-new-email" />
-                    <span className="kt-nav__link-text">Support</span>
-                    <span className="kt-nav__link-badge">
-                      <span className="kt-badge kt-badge--success kt-badge--rounded">
-                        5
-                      </span>
-                    </span>
-                  </Link>
-                </li>
-                <li className="kt-nav__separator" />
-                <li className="kt-nav__foot">
-                  <Link className="btn btn-label-danger btn-bold btn-sm" to="/">
-                    Upgrade plan
-                  </Link>
-                  <Link
-                    className="btn btn-clean btn-bold btn-sm"
-                    to="/"
-                    data-toggle="kt-tooltip"
-                    data-placement="right"
-                    title="Click to learn more...">
-                    Learn more
-                  </Link>
-                </li>
-              </ul>
-
-              {/* end::Nav */}
-            </div>
-          </div>
         </div>
         <div className="kt-portlet__body">
           <div className="kt-widget12">
@@ -123,38 +36,32 @@ const LecturerCourseFinanceSummary = () => {
               <div className="kt-widget12__item">
                 <div className="kt-widget12__info">
                   <span className="kt-widget12__desc">
-                    Annual Companies Taxes EMS
+                    Courses
                   </span>
-                  <span className="kt-widget12__value">$500,000</span>
+                  <span className="kt-widget12__value">{numberCourses}</span>
                 </div>
                 <div className="kt-widget12__info">
                   <span className="kt-widget12__desc">
-                    Next Tax Review Date
+                    Lessons
                   </span>
-                  <span className="kt-widget12__value">July 24,2017</span>
+                  <span className="kt-widget12__value">{numberLessons}</span>
                 </div>
               </div>
               <div className="kt-widget12__item">
                 <div className="kt-widget12__info">
                   <span className="kt-widget12__desc">
-                    Total Annual Profit Before Tax
+                    Amount of Courses
                   </span>
-                  <span className="kt-widget12__value">$3,800,000</span>
+                  <span className="kt-widget12__value">${amountOfCourses}</span>
                 </div>
                 <div className="kt-widget12__info">
                   <span className="kt-widget12__desc">
-                    Type Of Market Share
+                    Revenue
                   </span>
-                  <span className="kt-widget12__value">Grossery</span>
+                  <span className="kt-widget12__value">${revenue}</span>
                 </div>
               </div>
               <div className="kt-widget12__item">
-                <div className="kt-widget12__info">
-                  <span className="kt-widget12__desc">
-                    Avarage Product Price
-                  </span>
-                  <span className="kt-widget12__value">$60,70</span>
-                </div>
                 <div className="kt-widget12__info">
                   <span className="kt-widget12__desc">Satisfication Rate</span>
                   <span className="kt-widget12__progress">
@@ -162,13 +69,10 @@ const LecturerCourseFinanceSummary = () => {
                       <div
                         className="progress-bar kt-bg-brand"
                         role="progressbar"
-                        style={{ width: `${63}%` }}
-                        aria-valuenow="63"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
+                        style={{ width: `${satisficationRate}%` }}
                       />
                     </div>
-                    <span className="kt-widget12__stat">63%</span>
+                    <span className="kt-widget12__stat">{satisficationRate}%</span>
                   </span>
                 </div>
               </div>

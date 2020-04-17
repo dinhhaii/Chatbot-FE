@@ -5,6 +5,7 @@ import courseState from './course';
 import subjectState from './subject';
 import invoiceState from './invoice';
 import lessonState from './lesson';
+import discountState from './discount';
 
 const reducer = combineReducers({
   userState,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   subjectState,
   invoiceState,
   lessonState,
+  discountState,
 });
 
 export default reducer;

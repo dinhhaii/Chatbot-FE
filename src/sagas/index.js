@@ -12,11 +12,16 @@ import bcrypt from 'bcryptjs';
 import * as actionTypes from '../utils/actionTypes';
 import { AUTH_TOKEN } from '../utils/constant';
 import { getUser, updateUser, getUserList } from '../api/user';
-import { getCourseList, getCourseLecturerList, getCourse, getCourseByLessonId, createCourse, updateCourse } from '../api/course';
+import {
+  getCourseList, getCourseLecturerList, getCourse, getCourseByLessonId, createCourse, updateCourse, 
+} from '../api/course';
 import { getInvoiceLearnerList, getInvoiceLecturerList } from '../api/invoice';
 import { getSubjectList } from '../api/subject';
+import { createDiscount, updateDiscount } from '../api/discount';
 import { showLoading, hideLoading } from '../actions/general';
-import { fetchUserSuccess, fetchUserFailed, setIsLogin, fetchUserListSuccess, fetchUserListFailed } from '../actions/user';
+import {
+  fetchUserSuccess, fetchUserFailed, setIsLogin, fetchUserListSuccess, fetchUserListFailed, 
+} from '../actions/user';
 import {
   fetchCourseListSuccess,
   fetchCourseListFailed,
@@ -38,6 +43,7 @@ import {
 } from '../actions/invoice';
 import { getLesson, createLesson, updateLesson } from '../api/lesson';
 import { fetchLessonSuccess, fetchLessonFailed } from '../actions/lesson';
+import { fetchDiscountSuccess } from '../actions/discount';
 
 function* rootSaga() {
   yield takeEvery(actionTypes.FETCH_USER, fetchUserSaga);
@@ -50,6 +56,8 @@ function* rootSaga() {
   yield takeLatest(actionTypes.FETCH_COURSE, fetchCourseSaga);
   yield takeLatest(actionTypes.CREATE_COURSE, createCourseSaga);
   yield takeLatest(actionTypes.UPDATE_COURSE, updateCourseSaga);
+  yield takeLatest(actionTypes.CREATE_DISCOUNT, createDiscountSaga);
+  yield takeLatest(actionTypes.UPDATE_DISCOUNT, updateDiscountSaga);
   yield takeLatest(actionTypes.FETCH_COURSE_BY_LESSON, fetchCourseByLessonSaga);
   yield takeLatest(actionTypes.FETCH_COURSE_LIST, fetchCourseListSaga);
   yield takeLatest(actionTypes.FETCH_SUBJECT_LIST, fetchSubjectListSaga);
@@ -271,7 +279,6 @@ function* createLessonSaga({ lesson }) {
   yield put(showLoading());
   const { data } = yield call(createLesson, lesson);
   if (data) {
-    console.log(data);
     yield put(fetchLessonSuccess(data));
     toast.success('Created successfully!');
   } else {
@@ -285,8 +292,33 @@ function* updateLessonSaga({ lesson }) {
   yield put(showLoading());
   const { data } = yield call(updateLesson, lesson);
   if (data) {
-    console.log(data);
     yield put(fetchLessonSuccess(data));
+    toast.success('Updated successfully!');
+  } else {
+    toast.error('Sorry, updated failed!');
+  }
+  yield delay(1000);
+  yield put(hideLoading());
+}
+
+function* createDiscountSaga({ discount }) {
+  yield put(showLoading());
+  const { data } = yield call(createDiscount, discount);
+  if (data) {
+    yield put(fetchDiscountSuccess(data));
+    toast.success('Created successfully!');
+  } else {
+    toast.error('Sorry, created failed!');
+  }
+  yield delay(1000);
+  yield put(hideLoading());
+}
+
+function* updateDiscountSaga({ discount }) {
+  yield put(showLoading());
+  const { data } = yield call(updateDiscount, discount);
+  if (data) {
+    yield put(fetchDiscountSuccess(data));
     toast.success('Updated successfully!');
   } else {
     toast.error('Sorry, updated failed!');
