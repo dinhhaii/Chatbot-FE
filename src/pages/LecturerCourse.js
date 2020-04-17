@@ -4,11 +4,10 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
-import LecturerCourseList from '../components/lecturer/lecturer-course-courselist';
+import LecturerInvoiceList from '../components/lecturer/lecturer-course-invoicelist';
 import LecturerCourseFinanceSummary from '../components/lecturer/lecturer-course-financesummary';
 import LecturerCourseDiscount from '../components/lecturer/lecturer-course-discount';
-import LecturerCourseStatistic from '../components/lecturer/lecturer-cousre-statistic';
-import LecturerCourseBestSeller from '../components/lecturer/lecturer-course-bestseller';
+import LecturerCourseChart from '../components/lecturer/lecturer-course-chart';
 import { fetchCourseLecturerList } from '../actions/course';
 
 const LecturerCourseManagement = (props) => {
@@ -39,17 +38,14 @@ const LecturerCourseManagement = (props) => {
         <div className="kt-container  kt-grid__item kt-grid__item--fluid mt-4">
           <div className="row">
             <LecturerCourseFinanceSummary courseLecturerList={courseState.courseLecturerList} />
-
             <LecturerCourseDiscount courseLecturerList={courseState.courseLecturerList} />
-
-            <LecturerCourseStatistic courseLecturerList={courseState.courseLecturerList} />
           </div>
 
           <div className="row">
-            <LecturerCourseBestSeller courseLecturerList={courseState.courseLecturerList}/>
+            <LecturerCourseChart courseLecturerList={courseState.courseLecturerList} />
           </div>
           <div className="row">
-            <LecturerCourseList courseLecturerList={courseState.courseLecturerList} />
+            <LecturerInvoiceList courseLecturerList={courseState.courseLecturerList} />
           </div>
         </div>
       )}

@@ -53,7 +53,7 @@ const LecturerCourseDiscount = (props) => {
     return result;
   };
   return (
-    <div className="col-xl-4 col-lg-6 order-lg-2 order-xl-1">
+    <div className="col-xl-6 col-lg-6 col-sm-12 order-lg-2 order-xl-1">
       {/* begin:: Widgets/New Users */}
       <div className="kt-portlet kt-portlet--tabs kt-portlet--height-fluid">
         <div className="kt-portlet__head">
