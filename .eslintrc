@@ -41,5 +41,6 @@
     "Headers": true,
     "Request": true,
     "fetch": true
-  }
+  },
+  "plugins": ["react-hooks"]
 }

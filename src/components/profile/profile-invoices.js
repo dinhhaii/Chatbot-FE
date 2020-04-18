@@ -16,9 +16,10 @@ const ProfileInvoices = (props) => {
   const { invoiceState, userState } = props;
   const dataPerPage = 3;
 
-  // const [filter, setFilter] = useState({
-  //   search: '',
-  // });
+  const [filter, setFilter] = useState({
+    search: '',
+    status: '',
+  });
 
   const [pagination, setPagination] = useState({
     indexFirst: 0,
@@ -43,7 +44,7 @@ const ProfileInvoices = (props) => {
         totalPage: Math.ceil(
           invoiceState.invoiceLearnerList.length / dataPerPage,
         ),
-        data: [...invoiceState.invoiceLearnerList].slice(0, dataPerPage),
+        data: invoiceState.invoiceLearnerList.slice(0, dataPerPage),
       });
     }
   });
@@ -52,8 +53,7 @@ const ProfileInvoices = (props) => {
     const indexFirst = (page - 1) * dataPerPage;
     const indexLast = page * dataPerPage;
     const currentPage = page;
-    const data = invoiceState.invoiceLearnerList
-      .filter(e => true)
+    const data = handleFilter(invoiceState.invoiceLearnerList, filter)
       .slice(indexFirst, indexLast);
 
     setPagination({
@@ -64,6 +64,28 @@ const ProfileInvoices = (props) => {
       data,
     });
   };
+
+  const handleFilter = (list, filterState) => {
+    const { search, statusFilter } = filterState;
+    return list.filter(e => search === ''
+        || statusFilter === ''
+        || e.course.name.toLowerCase().includes(search.toLowerCase())
+        || e.course.lecturer.firstName.toLowerCase().includes(search.toLowerCase())
+        || e.course.lecturer.lastName.toLowerCase().includes(search.toLowerCase()));
+  };
+
+  const handleFilterChange = filterState => {
+    const data = handleFilter(invoiceState.invoiceLearnerList, filterState);
+    setPagination({
+      ...pagination,
+      indexFirst: 0,
+      indexLast: dataPerPage,
+      totalPage: Math.ceil(data.length / dataPerPage),
+      data: data.slice(pagination.indexFirst, pagination.indexLast),
+    });
+  };
+
+  const [timer, setTimer] = useState(null);
 
   return (
     <div className="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
@@ -87,8 +109,16 @@ const ProfileInvoices = (props) => {
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="Search..."
-                        id="generalSearch"
+                        placeholder="Search course name, lecturer..."
+                        onChange={e => {
+                          const _filter = {
+                            ...filter,
+                            search: e.target.value,
+                          };
+                          setFilter(_filter);
+                          clearInterval(timer);
+                          setTimer(setTimeout(() => handleFilterChange(_filter), 500));
+                        }}
                       />
                       <span className="kt-input-icon__icon kt-input-icon__icon--left">
                         <span>
@@ -103,16 +133,18 @@ const ProfileInvoices = (props) => {
                         <label>Status:</label>
                       </div>
                       <div className="kt-form__control">
-                        <select
-                          className="form-control bootstrap-select"
-                          id="kt_form_status">
-                          <option value="">All</option>
-                          <option value="1">Pending</option>
-                          <option value="2">Delivered</option>
-                          <option value="3">Canceled</option>
-                          <option value="4">Success</option>
-                          <option value="5">Info</option>
-                          <option value="6">Danger</option>
+                        <select 
+                          className="form-control bootstrap-select" 
+                          value={filter.status}
+                          onChange={e => {
+                            const _filter = { ...filter, status: e.target.value };
+                            setFilter(_filter);
+                            handleFilterChange(_filter);
+                          }}>
+                          <option value="">None</option>
+                          <option value="success">Success</option>
+                          <option value="canceled">Canceled</option>
+                          <option value="reported">Reported</option>
                         </select>
                       </div>
                     </div>

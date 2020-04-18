@@ -24,14 +24,20 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
                 <h3>Profile</h3>
                 <ul>
                   <li>
-                    <Link to={PATH.PROFILE} onClick={showMenuContent}>Information</Link>
+                    <Link to={PATH.PROFILE} onClick={showMenuContent}>
+                      Information
+                    </Link>
                   </li>
                   <li>
-                    <Link to={PATH.PROFILE} onClick={showMenuContent}>Change Password</Link>
+                    <Link to={PATH.PROFILE} onClick={showMenuContent}>
+                      Change Password
+                    </Link>
                   </li>
                   {userState.user.role === 'learner' && (
                     <li>
-                      <Link to={PATH.PROFILE} onClick={showMenuContent}>My Invoices</Link>
+                      <Link to={PATH.PROFILE} onClick={showMenuContent}>
+                        My Invoices
+                      </Link>
                     </li>
                   )}
                   <li>
@@ -48,19 +54,33 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
                 <h3>Courses</h3>
                 <ul>
                   {userState.user.role === 'lecturer' && (
-                    <li>
-                      <Link to={PATH.LECTURER_COURSE} onClick={showMenuContent}>
-                        My Courses 
-                      </Link>
-                      <span className="badge_info">Lecturer</span>
-                    </li>
+                    <>
+                      <li>
+                        <Link
+                          to={`${PATH.LECTURER_COURSE}`}
+                          onClick={showMenuContent}>
+                          My Courses
+                        </Link>
+                        <span className="badge_info">Lecturer</span>
+                      </li>
+                      <li>
+                        <Link to={PATH.COURSE_EDIT} onClick={showMenuContent}>
+                          Courses Management
+                        </Link>
+                        <span className="badge_info">Lecturer</span>
+                      </li>
+                    </>
                   )}
 
                   <li>
-                    <Link to={PATH.COURSES} onClick={showMenuContent}>All Courses</Link>
+                    <Link to={PATH.COURSES} onClick={showMenuContent}>
+                      All Courses
+                    </Link>
                   </li>
                   <li>
-                    <Link to={PATH.LECTURERS} onClick={showMenuContent}>All Teachers</Link>
+                    <Link to={PATH.LECTURERS} onClick={showMenuContent}>
+                      All Teachers
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -68,13 +88,13 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
                 <h3>UDEMA</h3>
                 <ul>
                   <li>
-                    <Link to={PATH.CONTACT} onClick={showMenuContent}>
-                      <i className="icon-contacts" /> Contact
+                    <Link to={PATH.CHAT} className="btn btn-info" style={{ opacity: 1 }} onClick={showMenuContent}>
+                      <i className="icon-chat-empty" /> Messenger
                     </Link>
                   </li>
                   <li>
-                    <Link to="/" onClick={showMenuContent}>
-                      <i className="icon-newspaper" /> Blog
+                    <Link to={PATH.CONTACT} onClick={showMenuContent}>
+                      <i className="icon-contacts" /> Contact
                     </Link>
                   </li>
                   <li>

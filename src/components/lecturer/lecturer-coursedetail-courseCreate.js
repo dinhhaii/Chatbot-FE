@@ -154,11 +154,7 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
                     name="_idSubject"
                     value={course._idSubject}
                     onChange={handleChange}>
-                    <option value="" selected>
-                      {' '}
-                      None{' '}
-                    </option>
-                    ;
+                    <option value="" selected>None</option>
                     {subjects.map((subject, index) => {
                       return (
                         <option key={index.toString()} value={subject._id}>

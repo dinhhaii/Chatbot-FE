@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
@@ -10,17 +11,17 @@ import LecturerCourseDiscount from '../components/lecturer/lecturer-course-disco
 import LecturerCourseChart from '../components/lecturer/lecturer-course-chart';
 import { fetchCourseLecturerList } from '../actions/course';
 
-const LecturerCourseManagement = (props) => {
+const LecturerCourse = (props) => {
   const { courseState, userState, discountState, history } = props;
 
   useEffect(() => {
     if (!userState.isLogin || userState.user.role !== 'lecturer') {
-      history.push('/');
       toast.warn("You don't have permission to access this site.");
+      history.push('/');
     } else {
-      props.fetchCourseLecturerListAction(props.userState.user._id);
+      props.fetchCourseLecturerListAction(userState.user._id);
     }
-  }, [discountState]);
+  }, [discountState.discount]);
 
   return (
     <main>
@@ -34,7 +35,7 @@ const LecturerCourseManagement = (props) => {
           </div>
         </div>
       </section>
-      {courseState.courseLecturerList && (
+      {courseState.courseLecturerList && userState.user && (
         <div className="kt-container  kt-grid__item kt-grid__item--fluid mt-4">
           <div className="row">
             <LecturerCourseFinanceSummary courseLecturerList={courseState.courseLecturerList} />
@@ -45,7 +46,7 @@ const LecturerCourseManagement = (props) => {
             <LecturerCourseChart courseLecturerList={courseState.courseLecturerList} />
           </div>
           <div className="row">
-            <LecturerInvoiceList courseLecturerList={courseState.courseLecturerList} />
+            <LecturerInvoiceList idLecturer={userState.user._id} />
           </div>
         </div>
       )}
@@ -57,7 +58,7 @@ const mapStateToProps = (state) => {
   return {
     userState: state.userState,
     courseState: state.courseState,
-    discoutState: state.discountState,
+    discountState: state.discountState,
   };
 };
 
@@ -67,4 +68,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LecturerCourseManagement));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LecturerCourse));

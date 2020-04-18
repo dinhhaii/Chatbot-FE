@@ -13,7 +13,7 @@ import Course from '../pages/Courses';
 import CourseDetail from '../pages/CourseDetail';
 import About from '../pages/About';
 import Contact from '../pages/Contact';
-import LecturerCourseManagement from '../pages/LecturerCourse';
+import LecturerCourse from '../pages/LecturerCourse';
 import LessonDetail from '../pages/Lesson';
 import Cart from '../pages/Cart';
 import Profile from '../pages/Profile';
@@ -83,7 +83,7 @@ const routes = [
   {
     path: PATH.LECTURER_COURSE,
     exact: false,
-    component: () => <LecturerCourseManagement />,
+    component: () => <LecturerCourse />,
   },
   {
     path: PATH.COURSES,

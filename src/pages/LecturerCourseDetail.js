@@ -1,12 +1,25 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
 import 'antd/dist/antd.css';
 import { Tabs } from 'antd';
-import LecturerCourseDetailCourseCreateForm from '../components/lecturer/lecturer-coursedetail-courseCreate';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import LecturerCourseDetailCourseEdit from '../components/lecturer/lecturer-coursedetail-courseEdit';
+import LecturerCourseDetailCourseCreateForm from '../components/lecturer/lecturer-coursedetail-courseCreate';
 
 const { TabPane } = Tabs;
 
-const LecturerCourseDetail = () => {
+const LecturerCourseDetail = (props) => {
+  const { userState, history } = props;
+
+  useEffect(() => { 
+    if (!userState.isLogin || userState.user.role !== 'lecturer') {
+      toast.warn("You don't have permission to access this site.");
+      history.push('/');
+    }
+  }, []);
+
   return (
     <main>
       <section id="hero_in" className="contacts">
@@ -38,4 +51,10 @@ const LecturerCourseDetail = () => {
   );
 };
 
-export default LecturerCourseDetail;
+const mapStateToProps = (state) => {
+  return {
+    userState: state.userState,
+  };
+};
+
+export default connect(mapStateToProps, null)(withRouter(LecturerCourseDetail));

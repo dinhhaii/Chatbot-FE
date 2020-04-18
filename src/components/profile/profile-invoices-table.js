@@ -51,7 +51,7 @@ const InvoiceTable = (props) => {
                 <td className="kt-datatable__cell" style={{ width: headers[0].width }}>
                   <div className="kt-user-card-v2">
                     <div className="kt-user-card-v2__pic">
-                      <img src={element.course.imageURL} alt="" />
+                      <img src={element.course.imageURL} style={{ borderRadius: 0 }} alt="" />
                     </div>
                     <div className="kt-user-card-v2__details">
                       <Link
@@ -99,7 +99,7 @@ const InvoiceTable = (props) => {
                 <td className="kt-datatable__cell" style={{ width: headers[6].width }}>
                   <div className="kt-user-card-v2">
                     <div className="kt-user-card-v2__pic">
-                      <img src={element.course.lecturer.imageURL} alt="" />
+                      <img src={element.course.lecturer.imageURL} style={{ borderRadius: 0 }} alt="" />
                     </div>
                     <div className="kt-user-card-v2__details">
                       <Link

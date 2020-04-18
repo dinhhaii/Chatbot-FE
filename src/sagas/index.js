@@ -189,6 +189,7 @@ function* fetchInvoiceLearnerListSaga({ _id }) {
 function* fetchInvoiceLecturerListSaga({ _id }) {
   yield put(showLoading());
   const { data } = yield call(getInvoiceLecturerList, _id);
+  console.log(data);
   if (data) {
     yield put(fetchInvoiceLecturerListSuccess(data.filter(e => !e.isDelete)));
   } else {

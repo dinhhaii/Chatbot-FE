@@ -24,9 +24,9 @@ const LecturerCourseTable = ({ courseState, fetchCourseLecturerListAction, user 
   ];
   const data = courseState.courseLecturerList;
   return (
-    <div style={{ position: 'relative', height: 550 }}>
+    <div className="table-responsive" style={{ position: 'relative', height: 550 }}>
       <table
-        className="table table-striped kt-datatable__table pb-5"
+        className="table table-striped kt-datatable__table pb-5 shadow"
         style={{
           display: 'block',
           maxHeight: 500,
@@ -34,11 +34,9 @@ const LecturerCourseTable = ({ courseState, fetchCourseLecturerListAction, user 
           position: 'absolute',
           right: 0,
           left: 0,
-          width: 800,
-          maxWidth: `${100}%`,
         }}>
         {/* HEAD */}
-        <thead className="kt-datatable__head">
+        <thead className="kt-datatable__head bg-light">
           <tr className="kt-datatable__row" style={{ left: `${0}px` }}>
             {headers.map((value, index) => {
               const { name, width } = value;
@@ -103,7 +101,7 @@ const LecturerCourseTable = ({ courseState, fetchCourseLecturerListAction, user 
                 </td>
 
                 <td
-                  className="kt-datatable__cell"
+                  className="kt-datatable__cell text-nowrap"
                   style={{ width: headers[4].width }}>
                   <span style={{ width: `${100}px` }}>
                     <Rate

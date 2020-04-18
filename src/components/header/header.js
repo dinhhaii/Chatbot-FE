@@ -72,18 +72,23 @@ const Header = (props) => {
           {/* SEARCH  */}
           <li>
             <Link
-              className="search-overlay-menu-btn mr-2"
               style={{ fontSize: `${17}pt` }}
               onClick={props.showSearchBarAction}>
               <i className="icon-search" />
             </Link>
           </li>
+          {/* MESSENGER  */}
+          <li>
+            <Link
+              to={PATH.CHAT}
+              style={{ fontSize: `${17}pt` }}>
+              <i className="icon-chat-1" />
+            </Link>
+          </li>
           {/* CART  */}
           <li>
             <Link
-              className="search-overlay-menu-btn"
-              style={{ fontSize: `${17}pt`, marginRight: `${20}px` }}
-              onClick={props.showSearchBarAction}>
+              style={{ fontSize: `${17}pt`, marginRight: `${20}px` }}>
               <i className="icon-cart" />
             </Link>
           </li>
@@ -91,7 +96,7 @@ const Header = (props) => {
           {userState.isLogin ? (
             <>
               <li>
-                <Link to={PATH.PROFILE} style={{ fontSize: `${14}pt` }}>
+                <Link to={PATH.PROFILE} className="d-none d-md-inline d-lg-inline d-xl-inline" style={{ fontSize: `${14}pt` }}>
                   {userState.user
                     ? `${userState.user.firstName} ${userState.user.lastName}`
                     : ''}
@@ -100,7 +105,7 @@ const Header = (props) => {
               <li>
                 <Link
                   to={PATH.PROFILE}
-                  className="kt-media kt-media--sm"
+                  className="kt-media kt-media--sm mr-2"
                   style={{ verticalAlign: 'middle' }}>
                   <img
                     src={userState.user ? userState.user.imageURL : ''}

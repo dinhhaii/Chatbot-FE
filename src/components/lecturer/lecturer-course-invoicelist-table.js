@@ -2,102 +2,113 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Rate } from 'antd';
 import { PATH } from '../../utils/constant';
+import 'antd/dist/antd.css';
 
 const LecturerInvoiceListTable = (props) => {
   const headers = [
-    { name: "Course's Name", width: `${200}px` },
-    { name: 'Price', width: `${80}px` },
-    { name: 'Pay Day', width: `${120}px` },
-    { name: 'Duration', width: `${80}px` },
-    { name: 'Accessible Days', width: `${100}px` },
-    { name: 'Status', width: `${100}px` },
+    { name: "Course's Name" },
+    { name: 'Rate' },
+    { name: 'Price' },
+    { name: 'Total' },
+    { name: 'Pay Day' },
+    { name: 'Duration' },
+    { name: 'Accessible Days' },
+    { name: 'Status', width: 'auto' },
   ];
-  const { courseLecturerList } = props;
+  const { data } = props;
   
   const showTableContent = () => {
-    const result = [];
+    return data.map((invoice, index) => {
+      const rateAverage = Math.round(invoice.feedback.reduce((total, num) => total + num.rate, 0) / invoice.feedback.length);
 
-    courseLecturerList.forEach(course => {
-      course.invoices.forEach(invoice => {
-        result.push(
-          <tr
-            className="kt-datatable__row"
-            style={{ left: `${0}px` }}
-            key={invoice._id}>
-            <td className="kt-datatable__cell" style={{ width: headers[0].width }}>
-              <div className="kt-user-card-v2">
-                <div className="kt-user-card-v2__pic">
-                  <img src={course.imageURL} alt="" />
-                </div>
-                <div className="kt-user-card-v2__details">
-                  <Link
-                    to={`${PATH.COURSE_DETAIL}/${course._id}`}
-                    class="kt-user-card-v2__name">
-                    {course.name}
-                  </Link>
-                </div>
+      return (
+        <tr
+          className="kt-datatable__row"
+          style={{ left: `${0}px` }}
+          key={index.toString()}>
+          <td>
+            <div className="kt-user-card-v2">
+              <div className="kt-user-card-v2__pic">
+                <img src={invoice.course.imageURL} style={{ borderRadius: 0 }} alt="" />
               </div>
-            </td>
+              <div className="kt-user-card-v2__details">
+                <Link
+                  to={`${PATH.COURSE_DETAIL}/${invoice.course._id}`}
+                  class="kt-user-card-v2__name">
+                  {invoice.course.name}
+                </Link>
+              </div>
+            </div>
+          </td>
   
-            <td className="kt-datatable__cell" style={{ width: headers[1].width }}>
-              <span className="kt-font-bold">
-                {invoice.totalPrice}
-              </span>
-            </td>
+          <td style={{ textAlign: 'center' }}>
+            <span className="kt-font-bold">
+              <Rate defaultValue={rateAverage} disabled />
+            </span>
+          </td>
+
+          <td style={{ textAlign: 'center' }}>
+            <span className="kt-font-bold">
+              ${invoice.course.price}
+            </span>
+          </td>
+
+          <td style={{ textAlign: 'center' }}>
+            <span className="kt-font-bold">
+              ${invoice.totalPrice}
+            </span>
+          </td>
   
-            <td className="kt-datatable__cell" style={{ width: headers[2].width }}>
-              <span className="kt-font-bold">{invoice.payDay.substr(0, 10)}</span>
-            </td>
+          <td style={{ textAlign: 'center' }}>
+            <span className="kt-font-bold">{invoice.payDay.substr(0, 10)}</span>
+          </td>
   
-            <td className="kt-datatable__cell" style={{ width: headers[3].width }}>
-              <span className="kt-font-bold">
-                {course.duration}
-              </span>
-            </td>
+          <td style={{ textAlign: 'center' }}>
+            <span className="kt-font-bold">
+              {invoice.course.duration}
+            </span>
+          </td>
   
-            <td className="kt-datatable__cell" style={{ width: headers[4].width }}>
-              <span className="kt-font-bold">
-                {course.accessibleDays}
-              </span>
-            </td>
+          <td style={{ textAlign: 'center' }}>
+            <span className="kt-font-bold">
+              {invoice.course.accessibleDays}
+            </span>
+          </td>
   
-            <td className="kt-datatable__cell" style={{ width: headers[5].width }}>
-              <span style={{ width: `${100}px` }}>
-                <span className={`btn btn-bold btn-sm btn-font-sm 
+          <td style={{ textAlign: 'center' }}>
+            <span style={{ width: `${120}px` }}>
+              <span className={`btn btn-bold btn-sm btn-font-sm 
                   ${invoice.status === 'success' ? 'btn-label-success' : ''}
                   ${invoice.status === 'canceled' ? 'btn-label-danger' : ''}
                   ${invoice.status === 'reported' ? 'btn-label-warning' : ''}`}>
-                  {invoice.status}
-                </span>
+                {invoice.status}
               </span>
-            </td>
+            </span>
+          </td>
             
-          </tr>,
-        ); 
-      }); 
+        </tr>
+      );
     });
-    
-
-    return result;
   };
+
   return (
     <div
-      className="kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--scroll kt-datatable--loaded"
-      id="kt_datatable_latest_orders">
+      className="table-responsive mb-3">
       <table
-        className="kt-datatable__table"
-        style={{ display: 'block', maxHeight: `${500}px` }}>
+        className="table table-hover shadow"
+        style={{ maxHeight: `${500}px` }}>
         {/* HEAD */}
-        <thead className="kt-datatable__head">
+        <thead className="kt-datatable__head bg-light">
           <tr className="kt-datatable__row" style={{ left: `${0}px` }}>
             {headers.map((value, index) => {
               const { name, width } = value;
               return (
                 <th
                   key={index.toString()}
-                  className="kt-datatable__cell kt-datatable__cell--sort"
-                  style={{ width }}>
+                  scope="col"
+                  style={{ width, textAlign: 'center' }}>
                   <span>{name}</span>
                 </th>
               );
@@ -106,7 +117,6 @@ const LecturerInvoiceListTable = (props) => {
         </thead>
         {/* BODY */}
         <tbody
-          className="kt-datatable__body ps ps--active-y"
           style={{ maxHeight: `${447}px` }}>
           {showTableContent()}
         </tbody>

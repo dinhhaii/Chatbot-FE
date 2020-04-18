@@ -34,12 +34,12 @@ const ProfileInformation = (props) => {
           toast.success(data.message);
           setIsVerified(true);
         }
+        props.hideLoadingAction();
       })
       .catch((error) => {
         toast.error(error.message);
         props.hideLoadingAction();
       });
-    props.hideLoadingAction();
   };
 
   const handleSubmit = (e) => {
