@@ -59,3 +59,17 @@ export const fetchInvoiceLecturerListFailed = () => {
     type: actionTypes.FETCH_INVOICE_LECTURER_LIST_FAILED,
   };
 };
+
+export const createInvoice = (invoice) => {
+  return {
+    type: actionTypes.CREATE_INVOICE,
+    invoice,
+  };
+};
+
+export const updateInvoice = (invoice) => {
+  return {
+    type: actionTypes.UPDATE_INVOICE,
+    invoice,
+  };
+};

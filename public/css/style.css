@@ -4241,10 +4241,9 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   -ms-border-radius: 50px;
   border-radius: 50px;
   position: absolute;
-  top: -5px;
-  left: 8px;
-  font-size: 32px;
-  font-size: 3rem;
+  top: -10px;
+  left: 4.6px;
+  font-size: 32pt;
   color: #FFC107;
 }
 .bs-wizard > .bs-wizard-step > .progress {

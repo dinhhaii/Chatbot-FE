@@ -15,7 +15,7 @@ import { getUser, updateUser, getUserList } from '../api/user';
 import {
   getCourseList, getCourseLecturerList, getCourse, getCourseByLessonId, createCourse, updateCourse, 
 } from '../api/course';
-import { getInvoiceLearnerList, getInvoiceLecturerList } from '../api/invoice';
+import { getInvoiceLearnerList, getInvoiceLecturerList, createInvoice, updateInvoice } from '../api/invoice';
 import { getSubjectList } from '../api/subject';
 import { createDiscount, updateDiscount } from '../api/discount';
 import { showLoading, hideLoading } from '../actions/general';
@@ -40,13 +40,20 @@ import {
   fetchInvoiceLearnerListFailed,
   fetchInvoiceLecturerListSuccess,
   fetchInvoiceLecturerListFailed,
+  fetchInvoiceList,
 } from '../actions/invoice';
 import { getLesson, createLesson, updateLesson } from '../api/lesson';
 import { fetchLessonSuccess, fetchLessonFailed } from '../actions/lesson';
 import { fetchDiscountSuccess } from '../actions/discount';
+import { fetchCartSuccess, fetchCartFailed } from '../actions/cart';
+import { getCart, updateCart } from '../api/cart';
 
 function* rootSaga() {
   yield takeEvery(actionTypes.FETCH_USER, fetchUserSaga);
+  yield takeLatest(actionTypes.CREATE_INVOICE, createInvoiceSaga);
+  yield takeLatest(actionTypes.UPDATE_INVOICE, updateInvoiceSaga);
+  yield takeLatest(actionTypes.FETCH_CART, fetchCartSaga);
+  yield takeLatest(actionTypes.UPDATE_CART, updateCartSaga);
   yield takeLatest(actionTypes.FETCH_LESSON, fetchLessonSaga);
   yield takeLatest(actionTypes.CREATE_LESSON, createLessonSaga);
   yield takeLatest(actionTypes.UPDATE_LESSON, updateLessonSaga);
@@ -328,4 +335,61 @@ function* updateDiscountSaga({ discount }) {
   yield put(hideLoading());
 }
 
+function* fetchCartSaga({ _id }) {
+  yield put(showLoading());
+  const { data } = yield call(getCart, _id);
+  console.log(data);
+  if (data) {
+    yield put(fetchCartSuccess(data));
+  } else {
+    yield put(fetchCartFailed());
+    toast.error('Sorry, fetch lesson failed!');
+  }
+  yield delay(1000);
+  yield put(hideLoading());
+}
+
+function* updateCartSaga({ cart }) {
+  yield put(showLoading());
+  const { data } = yield call(updateCart, cart);
+  console.log(data);
+  if (data) {
+    yield put(fetchCartSuccess(data));
+    toast.success('Updated successfully!');
+  } else {
+    toast.error('Sorry, updated failed!');
+  }
+  yield delay(1000);
+  yield put(hideLoading());
+}
+
+function* createInvoiceSaga({ invoice }) {
+  yield put(showLoading());
+  const { data } = yield call(createInvoice, invoice);
+  const { invoiceState } = yield select();
+  console.log(data);
+  if (data) {
+    yield put(fetchInvoiceList([...invoiceState.invoiceList, data]));
+    toast.success('Created successfully!');
+  } else {
+    toast.error('Sorry, created failed!');
+  }
+  yield delay(1000);
+  yield put(hideLoading());
+}
+
+function* updateInvoiceSaga({ discount }) {
+  yield put(showLoading());
+  const { data } = yield call(updateInvoice, discount);
+  const { invoiceState } = yield select();
+  console.log(data);
+  if (data) {
+    yield put(fetchInvoiceList([...invoiceState.invoiceList, data]));
+    toast.success('Updated successfully!');
+  } else {
+    toast.error('Sorry, updated failed!');
+  }
+  yield delay(1000);
+  yield put(hideLoading());
+}
 export default rootSaga;

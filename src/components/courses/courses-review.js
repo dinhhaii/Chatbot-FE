@@ -57,7 +57,7 @@ const CourseReview = (props) => {
               <div>
                 <Rate
                   defaultValue={rateAverage}
-                  style={{ paddingLeft: 5, marginBottom: 0 }}
+                  style={{ paddingLeft: 5, marginBottom: 0, whiteSpace: 'nowrap' }}
                   disabled
                 />
               </div>

@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux';
 import { Rate } from 'antd';
 import { PATH } from '../../utils/constant';
 import { fetchCourseLecturerList } from '../../actions/course';
+import '../../utils/css/scrollbar.css';
 
 const LecturerCourseTable = ({ courseState, fetchCourseLecturerListAction, user }) => {
   useEffect(() => {
@@ -26,11 +27,10 @@ const LecturerCourseTable = ({ courseState, fetchCourseLecturerListAction, user 
   return (
     <div className="table-responsive" style={{ position: 'relative', height: 550 }}>
       <table
-        className="table table-striped kt-datatable__table pb-5 shadow"
+        className="table table-striped kt-datatable__table pb-5 shadow scrollbar"
         style={{
           display: 'block',
           maxHeight: 500,
-          overflow: 'auto',
           position: 'absolute',
           right: 0,
           left: 0,

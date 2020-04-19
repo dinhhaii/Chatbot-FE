@@ -7,15 +7,16 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
+import { Badge } from 'antd';
 import { fetchUser, setIsLogin, fetchUserSuccess } from '../../actions/user';
-
 import Menu from './menu';
 import { AUTH_TOKEN, PATH } from '../../utils/constant';
 import { authorizeUser } from '../../api/user';
 import { showSearchBar } from '../../actions/general';
+import { fetchCart } from '../../actions/cart';
 
 const Header = (props) => {
-  const { userState } = props;
+  const { userState, cartState } = props;
   const [isDisplayedMenu, setIsDisplayedMenu] = useState(false);
   const showMenuContent = () => {
     setIsDisplayedMenu(!isDisplayedMenu);
@@ -29,14 +30,15 @@ const Header = (props) => {
       .then((response) => {
         const { data } = response;
         if (data) {
-          const { firstName, lastName } = data;
+          const { firstName, lastName, _id } = data;
           props.setIsLoginAction();
+          props.fetchCartAction(_id);
           props.fetchUserSuccessAction({ user: data });
           toast.success(`Hi, ${firstName} ${lastName}!`);
         }
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error.message);
       });
   }, []);
 
@@ -79,18 +81,23 @@ const Header = (props) => {
           </li>
           {/* MESSENGER  */}
           <li>
-            <Link
-              to={PATH.CHAT}
-              style={{ fontSize: `${17}pt` }}>
-              <i className="icon-chat-1" />
-            </Link>
+            <Badge count={3}>
+              <Link
+                to={PATH.CHAT}
+                style={{ fontSize: `${17}pt`, marginRight: 10 }}>
+                <i className="icon-chat-1" />
+              </Link>
+            </Badge>
           </li>
           {/* CART  */}
           <li>
-            <Link
-              style={{ fontSize: `${17}pt`, marginRight: `${20}px` }}>
-              <i className="icon-cart" />
-            </Link>
+            <Badge count={cartState.cart ? cartState.cart.items.length : 0} style={{ backgroundColor: '#52c41a' }}>
+              <Link
+                to={PATH.CART}
+                style={{ fontSize: `${17}pt`, marginRight: 10 }}>
+                <i className="icon-cart" />
+              </Link>
+            </Badge>
           </li>
 
           {userState.isLogin ? (
@@ -157,6 +164,7 @@ const Header = (props) => {
 const mapStateToProps = (state) => {
   return {
     userState: state.userState,
+    cartState: state.cartState,
   };
 };
 
@@ -166,6 +174,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchUserSuccessAction: bindActionCreators(fetchUserSuccess, dispatch),
     setIsLoginAction: bindActionCreators(setIsLogin, dispatch),
     showSearchBarAction: bindActionCreators(showSearchBar, dispatch),
+    fetchCartAction: bindActionCreators(fetchCart, dispatch),
   };
 };
 

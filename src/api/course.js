@@ -19,8 +19,8 @@ export const getCourseByLessonId = (_id) => {
 
 export const createCourse = (course) => {
   return AxiosService.post(`${SERVER_URL}/course/create`, { ...course });
-}
+};
 
-export const updateCourse = course => {
+export const updateCourse = (course) => {
   return AxiosService.post(`${SERVER_URL}/course/update`, { ...course });
-}
+};
