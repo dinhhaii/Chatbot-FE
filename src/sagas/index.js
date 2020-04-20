@@ -45,7 +45,7 @@ import {
 import { getLesson, createLesson, updateLesson } from '../api/lesson';
 import { fetchLessonSuccess, fetchLessonFailed } from '../actions/lesson';
 import { fetchDiscountSuccess } from '../actions/discount';
-import { fetchCartSuccess, fetchCartFailed } from '../actions/cart';
+import { fetchCartSuccess, fetchCartFailed, fetchUpdatedCartSuccess } from '../actions/cart';
 import { getCart, updateCart } from '../api/cart';
 
 function* rootSaga() {
@@ -338,7 +338,6 @@ function* updateDiscountSaga({ discount }) {
 function* fetchCartSaga({ _id }) {
   yield put(showLoading());
   const { data } = yield call(getCart, _id);
-  console.log(data);
   if (data) {
     yield put(fetchCartSuccess(data));
   } else {
@@ -352,9 +351,8 @@ function* fetchCartSaga({ _id }) {
 function* updateCartSaga({ cart }) {
   yield put(showLoading());
   const { data } = yield call(updateCart, cart);
-  console.log(data);
   if (data) {
-    yield put(fetchCartSuccess(data));
+    yield put(fetchUpdatedCartSuccess(data));
     toast.success('Updated successfully!');
   } else {
     toast.error('Sorry, updated failed!');
@@ -367,7 +365,7 @@ function* createInvoiceSaga({ invoice }) {
   yield put(showLoading());
   const { data } = yield call(createInvoice, invoice);
   const { invoiceState } = yield select();
-  console.log(data);
+  console.log('create invoice', data);
   if (data) {
     yield put(fetchInvoiceList([...invoiceState.invoiceList, data]));
     toast.success('Created successfully!');
@@ -382,7 +380,7 @@ function* updateInvoiceSaga({ discount }) {
   yield put(showLoading());
   const { data } = yield call(updateInvoice, discount);
   const { invoiceState } = yield select();
-  console.log(data);
+  console.log('update invoice', data);
   if (data) {
     yield put(fetchInvoiceList([...invoiceState.invoiceList, data]));
     toast.success('Updated successfully!');

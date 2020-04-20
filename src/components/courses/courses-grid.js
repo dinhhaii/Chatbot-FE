@@ -1,13 +1,58 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Rate } from 'antd';
 import 'antd/dist/antd.css';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toast } from 'react-toastify';
 import { PATH } from '../../utils/constant';
+import { updateCart } from '../../actions/cart';
 
 const CoursesGrid = (props) => {
-  const { data } = props;
+  const { data, cartState } = props;
+
+  const addToCart = (course) => {
+    // Map CartState to items
+    const items = [];
+    cartState.cart.items.forEach(element => {
+      if (!element.course.isDelete) {
+        if (element.discount) {
+          const discount = element.course.discountList.find(value => value._id === element.discount._id && value.status !== 'expired'); 
+          items.push({
+            _idCourse: element.course._id,
+            _idDiscount: discount ? discount._id : null,
+          });
+        } else {
+          const availableDiscount = element.course.discountList.find(value => value.status === 'available');
+          items.push({
+            _idCourse: element.course._id,
+            _idDiscount: availableDiscount ? availableDiscount._id : null,
+          });
+        }
+      }
+    });
+    // Add new course to Cart
+    if (cartState.cart.items.find(value => value.course._id === course._id)) {
+      toast.warn('The course is already in cart.');
+    } else {
+      const availableDiscount = course.discount.find(value => value.status === 'available');
+      items.push({
+        _idCourse: course._id,
+        _idDiscount: availableDiscount ? availableDiscount._id : null,
+      });
+    }
+
+    // Update Data
+    const updateData = {
+      _idCart: cartState.cart._id,
+      items,
+    };
+    props.updateCartAction(updateData);
+  };
+
   return (
     <div className="row">
       {data.map((value, index) => {
@@ -49,7 +94,7 @@ const CoursesGrid = (props) => {
                     <i className="icon_clock_alt" /> {value.duration}
                   </li>
                   <li>
-                    <Link href="course-detail.html">Enroll now</Link>
+                    <Link onClick={() => addToCart(value)}>Enroll now</Link>
                   </li>
                 </ul>
               </div>
@@ -62,4 +107,16 @@ const CoursesGrid = (props) => {
   );
 };
 
-export default withRouter(CoursesGrid);
+const mapStateToProps = (state) => {
+  return {
+    cartState: state.cartState,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateCartAction: bindActionCreators(updateCart, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CoursesGrid));

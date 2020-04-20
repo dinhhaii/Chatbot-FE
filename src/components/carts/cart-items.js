@@ -1,12 +1,49 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toast } from 'react-toastify';
 import { getRandom } from '../../utils/helper';
+import { updateCart, fetchCart } from '../../actions/cart';
 
 const CartItems = (props) => {
   const headers = ['Item', 'Discount', 'Price', 'Actions'];
-  const { cartState } = props;
+  const { cartState, userState } = props;
+  const [couponCode, setCouponCode] = useState('');
+
+  const handleChangeCoupon = (e) => {
+    setCouponCode(e.target.value);
+  };
+
+  const applyCouponCode = () => {
+    const items = [];
+    cartState.cart.items.forEach(element => {
+      const discount = element.course.discountList.find(value => value.code === couponCode);
+      if (discount && discount.status !== 'expired') {
+        items.push({
+          _idCourse: element.course._id,
+          _idDiscount: discount._id,
+        });
+      } else {
+        items.push({
+          _idCourse: element.course._id,
+          _idDiscount: element.discount && element.discount.status !== 'expired' ? element.discount._id : null,
+        });
+      }
+    });
+    if (items.length !== 0) {
+      const updateData = {
+        _idCart: cartState.cart._id,
+        items,
+      };
+      props.updateCartAction(updateData);
+    } else {
+      toast.warn(`Sorry, ${couponCode} is not available!`);
+    }
+    setCouponCode('');
+  };
+
   return (
     <div className="col-lg-8">
       <div className="box_cart">
@@ -53,20 +90,28 @@ const CartItems = (props) => {
                 <input
                   type="text"
                   name="coupon-code"
-                  value=""
+                  value={couponCode}
+                  onChange={handleChangeCoupon}
                   placeholder="Your Coupon Code"
                   className="form-control"
-                      />
+                />
               </div>
               <div className="form-group">
-                <button type="button" className="btn_1 outline">
+                <button
+                  type="button"
+                  className="btn_1 outline"
+                  onClick={applyCouponCode}>
                   Apply Coupon
                 </button>
               </div>
             </div>
           </div>
           <div className="float-right fix_mobile">
-            <button type="button" className="btn_1 outline">
+            <button type="button" className="btn_1 outline" onClick={() => {
+              if (userState.user) {
+                props.fetchCartAction(userState.user._id);
+              }
+            }}>
               Update Cart
             </button>
           </div>
@@ -80,12 +125,14 @@ const CartItems = (props) => {
 const mapStateToProps = (state) => {
   return {
     cartState: state.cartState,
+    userState: state.userState,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    
+    updateCartAction: bindActionCreators(updateCart, dispatch),
+    fetchCartAction: bindActionCreators(fetchCart, dispatch),
   };
 };
 

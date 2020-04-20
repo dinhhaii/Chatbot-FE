@@ -15,6 +15,13 @@ export const fetchCartSuccess = (data) => {
   };
 };
 
+export const fetchUpdatedCartSuccess = (data) => {
+  return {
+    type: actionTypes.FETCH_UPDATED_CART_SUCCESS,
+    data,
+  };
+};
+
 export const fetchCartFailed = () => {
   return {
     type: actionTypes.FETCH_CART_FAILED,

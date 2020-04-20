@@ -42,6 +42,12 @@ const Header = (props) => {
       });
   }, []);
 
+  useEffect(() => {
+    if (userState.user) {
+      props.fetchCartAction(userState.user._id);
+    }
+  }, [cartState.updatedCart]);
+
   return (
     <div>
       <header
