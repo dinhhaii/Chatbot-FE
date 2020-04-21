@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const CartTotal = (props) => {
-  const { currentStep, setCurrentStep, cartState } = props;
+  const {
+    currentStep, setCurrentStep, cartState, setShowDialogSubmit, 
+  } = props;
   const total = cartState.cart ? cartState.cart.items.reduce((initValue, value) => {
     return initValue + (value.discount ? value.course.price * (100 - value.discount.percentage) / 100 : value.course.price);
   }, 0) : 0;
@@ -19,10 +21,15 @@ const CartTotal = (props) => {
         <div className="add_bottom_30">
           The price includes promotion. Please check all products carefully before payment.
         </div>
+        
         <Link 
           className="btn_1 full-width"
           onClick={() => {
-            setCurrentStep(currentStep + 1);
+            if (currentStep === 1) {
+              setShowDialogSubmit(true);
+            } else {
+              setCurrentStep(currentStep + 1);
+            }
           }}>
           Checkout
         </Link>

@@ -353,7 +353,7 @@ function* updateCartSaga({ cart }) {
   const { data } = yield call(updateCart, cart);
   if (data) {
     yield put(fetchUpdatedCartSuccess(data));
-    toast.success('Updated successfully!');
+    toast.success('Updated successfully!', { autoClose: 1000 });
   } else {
     toast.error('Sorry, updated failed!');
   }

@@ -8,7 +8,7 @@ import { getRandom } from '../../utils/helper';
 import { updateCart, fetchCart } from '../../actions/cart';
 
 const CartItems = (props) => {
-  const headers = ['Item', 'Discount', 'Price', 'Actions'];
+  const headers = ['Item', 'Discount', 'Price', ''];
   const { cartState, userState } = props;
   const [couponCode, setCouponCode] = useState('');
 
@@ -17,37 +17,43 @@ const CartItems = (props) => {
   };
 
   const applyCouponCode = () => {
+    let checkCode = false;
     const items = [];
     cartState.cart.items.forEach(element => {
-      const discount = element.course.discountList.find(value => value.code === couponCode);
-      if (discount && discount.status !== 'expired') {
-        items.push({
-          _idCourse: element.course._id,
-          _idDiscount: discount._id,
-        });
-      } else {
-        items.push({
-          _idCourse: element.course._id,
-          _idDiscount: element.discount && element.discount.status !== 'expired' ? element.discount._id : null,
-        });
+      if (!element.course.isDelete) {
+        const discount = element.course.discountList.find(value => value.code === couponCode);
+        const availableDiscount = element.course.discountList.find(value => value.status === 'available');
+        if (discount && discount.status !== 'expired') {
+          checkCode = true;
+          items.push({
+            _idCourse: element.course._id,
+            _idDiscount: discount._id,
+          });
+        } else {
+          items.push({
+            _idCourse: element.course._id,
+            _idDiscount: element.discount && element.discount.status !== 'expired' ? element.discount._id : availableDiscount,
+          });
+        }
       }
     });
-    if (items.length !== 0) {
-      const updateData = {
-        _idCart: cartState.cart._id,
-        items,
-      };
-      props.updateCartAction(updateData);
-    } else {
+
+    if (!checkCode) {
       toast.warn(`Sorry, ${couponCode} is not available!`);
     }
+    const updateData = {
+      _idCart: cartState.cart._id,
+      items,
+    };
+
+    props.updateCartAction(updateData);
     setCouponCode('');
   };
 
   return (
     <div className="col-lg-8">
       <div className="box_cart">
-        <table className="table table-hover table-striped cart-list shadow">
+        <table className="table table-hover table-striped table-borderless cart-list shadow">
           <thead style={{ paddingTop: 20 }}>
             <tr>
               {headers.map((value, index) => <th key={index.toString()}>{value}</th>)}
@@ -107,17 +113,19 @@ const CartItems = (props) => {
             </div>
           </div>
           <div className="float-right fix_mobile">
-            <button type="button" className="btn_1 outline" onClick={() => {
-              if (userState.user) {
-                props.fetchCartAction(userState.user._id);
-              }
-            }}>
+            <button
+              type="button"
+              className="btn_1 outline"
+              onClick={() => {
+                if (userState.user) {
+                  props.fetchCartAction(userState.user._id);
+                }
+              }}>
               Update Cart
             </button>
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

@@ -1,222 +1,211 @@
+/* eslint-disable react/jsx-no-bind */
+/* eslint-disable no-mixed-operators */
 import React from 'react';
+import { CardElement, injectStripe } from 'react-stripe-elements';
+import { toast } from 'react-toastify';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Modal } from 'antd';
+import { showLoading, hideLoading } from '../../actions/general';
+import { makePayment } from '../../api/payment';
+import { updateCart } from '../../actions/cart';
 
-const CartPayment = () => {
+const CartPayment = (props) => {
+  const {
+    userState, cartState, setCurrentStep, showDialogSubmit, setShowDialogSubmit, 
+  } = props;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    props.showLoadingAction();
+    const name = `${userState.user.firstName} ${userState.user.lastName}_${userState.user._id}`;
+    try {
+      cartState.cart.items.forEach(async item => {
+        const { token } = await props.stripe.createToken({ name, email: userState.user.email, _id: userState.user._id });
+        const course = {
+          name: item.course.name,
+          price: item.discount ? item.course.price * (100 - item.discount.percentage) / 100 : item.course.price,
+          discount: item.discount ? item.discount : null,
+        };
+        const { data } = await makePayment(token, course);
+        if (data) {
+          props.updateCartAction({
+            _idCart: cartState.cart._id,
+            items: [],
+          });
+          setCurrentStep(2);
+        }
+      });
+    } catch (error) {
+      toast.error(error.message);
+      props.hideLoadingAction();
+    }
+  };
+
   return (
     <div className="col-lg-8">
-      <div className="box_cart">
-        <div className="message">
-          <p>
-            Exisitng Customer? <a href="#0">Click here to login</a>
-          </p>
-        </div>
-        <div className="form_title">
-          <h3>
-            <strong>1</strong>Your Details
-          </h3>
-          <p>Mussum ipsum cacilds, vidis litro abertis.</p>
-        </div>
-        <div className="step">
-          <div className="row">
-            <div className="col-sm-6">
-              <span className="input">
-                <input className="input_field" type="text" />
-                <label className="input_label">
-                  <span className="input__label-content">First name</span>
-                </label>
-              </span>
-            </div>
-            <div className="col-sm-6">
-              <span className="input">
-                <input className="input_field" type="text" />
-                <label className="input_label">
-                  <span className="input__label-content">Last name</span>
-                </label>
-              </span>
-            </div>
+      <form id="paymentForm" onSubmit={handleSubmit}>
+        <div className="box_cart">
+          <div className="form_title">
+            <h3>
+              <strong>1</strong>Your Details
+            </h3>
           </div>
-          <div className="row">
-            <div className="col-sm-6">
-              <span className="input">
-                <input className="input_field" type="email" />
-                <label className="input_label">
-                  <span className="input__label-content">Email</span>
-                </label>
-              </span>
-            </div>
-            <div className="col-sm-6">
-              <span className="input">
-                <input className="input_field" type="email" />
-                <label className="input_label">
-                  <span className="input__label-content">Confirm email</span>
-                </label>
-              </span>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-6">
-              <span className="input">
-                <input className="input_field" type="text" />
-                <label className="input_label">
-                  <span className="input__label-content">Telephone</span>
-                </label>
-              </span>
-            </div>
-          </div>
-        </div>
-        <hr />
-
-        <div className="form_title">
-          <h3>
-            <strong>2</strong>Payment Information
-          </h3>
-          <p>Mussum ipsum cacilds, vidis litro abertis.</p>
-        </div>
-        <div className="step">
-          <span className="input">
-            <input className="input_field" type="text" />
-            <label className="input_label">
-              <span className="input__label-content">Name on card</span>
-            </label>
-          </span>
-          <div className="row">
-            <div className="col-md-6">
-              <span className="input">
-                <input className="input_field" type="text" />
-                <label className="input_label">
-                  <span className="input__label-content">Card number</span>
-                </label>
-              </span>
-            </div>
-            <div className="col-md-6 col-sm-6">
-              <img src="img/payments.png" alt="Cards" className="cards" />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 add_top_30">
-              <label>Expiration date</label>
-              <div className="row">
-                <div className="col-md-6">
-                  <span className="input">
-                    <input className="input_field" type="text" />
-                    <label className="input_label">
-                      <span className="input__label-content">MM</span>
-                    </label>
-                  </span>
+          <div className="step">
+            <div className="row">
+              <div className="col-sm-6">
+                <div className="form-group">
+                  <label className="col-form-label">
+                    First name
+                  </label>
+                  <div>
+                    <input
+                      className="form-control"
+                      name="_id"
+                      type="text"
+                      value=""
+                  />
+                  </div>
                 </div>
-                <div className="col-md-6">
-                  <span className="input">
-                    <input className="input_field" type="text" />
-                    <label className="input_label">
-                      <span className="input__label-content">Year</span>
-                    </label>
-                  </span>
+              </div>
+              <div className="col-sm-6">
+                <div className="form-group">
+                  <label className="col-form-label">
+                    Last name
+                  </label>
+                  <div>
+                    <input
+                      className="form-control"
+                      name="_id"
+                      type="text"
+                      value=""
+                  />
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="col-md-6 add_top_30">
-              <div className="form-group">
-                <label>Security code</label>
-                <div className="row">
-                  <div className="col-md-4">
-                    <span className="input">
-                      <input className="input_field" type="text" />
-                      <label className="input_label">
-                        <span className="input__label-content">CCV</span>
-                      </label>
-                    </span>
+            <div className="row">
+              <div className="col-sm-12">
+                <div className="form-group">
+                  <label className="col-form-label">
+                    Email
+                  </label>
+                  <div>
+                    <input
+                      className="form-control"
+                      name="_id"
+                      type="text"
+                      value=""
+                  />
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <hr />
 
-          <h5>Or checkout with Paypal</h5>
-          <p>
-            Lorem ipsum dolor sit amet, vim id accusata sensibus, id
-            ridens quaeque qui. Ne qui vocent ornatus molestie, reque
-            fierent dissentiunt mel ea.
-          </p>
-          <p>
-            <img src="img/paypal_bt.png" alt="" />
-          </p>
-        </div>
-        <hr />
+          <div className="form_title">
+            <h3>
+              <strong>2</strong>Payment Information
+            </h3>
+          </div>
+          <div className="step">
+            <div className="col-md-6 col-sm-6 mb-5">
+              <img src="img/payments.png" alt="Cards" className="cards" />
+            </div>
+            <CardElement />
+          </div>
+          <hr />
 
-        <div className="form_title">
-          <h3>
-            <strong>3</strong>Billing Address
-          </h3>
-          <p>Mussum ipsum cacilds, vidis litro abertis.</p>
-        </div>
-        <div className="step">
-          <div className="row">
-            <div className="col-md-6 col-sm-6">
-              <span className="input">
-                <input className="input_field" type="text" />
-                <label className="input_label">
-                  <span className="input__label-content">Country</span>
-                </label>
-              </span>
+          <div className="form_title">
+            <h3>
+              <strong>3</strong>Billing Address
+            </h3>
+          </div>
+          <div className="step">
+            <div className="row">
+              <div className="col-md-6 col-sm-6">
+                <span className="input">
+                  <input className="input_field" type="text" />
+                  <label className="input_label">
+                    <span className="input__label-content">Country</span>
+                  </label>
+                </span>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6 col-sm-6">
+                <span className="input">
+                  <input className="input_field" type="text" />
+                  <label className="input_label">
+                    <span className="input__label-content">Street line 1</span>
+                  </label>
+                </span>
+              </div>
+              <div className="col-md-6 col-sm-6">
+                <span className="input">
+                  <input className="input_field" type="text" />
+                  <label className="input_label">
+                    <span className="input__label-content">Street line 2</span>
+                  </label>
+                </span>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6">
+                <span className="input">
+                  <input className="input_field" type="text" />
+                  <label className="input_label">
+                    <span className="input__label-content">City</span>
+                  </label>
+                </span>
+              </div>
+              <div className="col-md-3">
+                <span className="input">
+                  <input className="input_field" type="text" />
+                  <label className="input_label">
+                    <span className="input__label-content">State</span>
+                  </label>
+                </span>
+              </div>
+              <div className="col-md-3">
+                <span className="input">
+                  <input className="input_field" type="text" />
+                  <label className="input_label">
+                    <span className="input__label-content">Postal code</span>
+                  </label>
+                </span>
+              </div>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-6 col-sm-6">
-              <span className="input">
-                <input className="input_field" type="text" />
-                <label className="input_label">
-                  <span className="input__label-content">Street line 1</span>
-                </label>
-              </span>
-            </div>
-            <div className="col-md-6 col-sm-6">
-              <span className="input">
-                <input className="input_field" type="text" />
-                <label className="input_label">
-                  <span className="input__label-content">Street line 2</span>
-                </label>
-              </span>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6">
-              <span className="input">
-                <input className="input_field" type="text" />
-                <label className="input_label">
-                  <span className="input__label-content">City</span>
-                </label>
-              </span>
-            </div>
-            <div className="col-md-3">
-              <span className="input">
-                <input className="input_field" type="text" />
-                <label className="input_label">
-                  <span className="input__label-content">State</span>
-                </label>
-              </span>
-            </div>
-            <div className="col-md-3">
-              <span className="input">
-                <input className="input_field" type="text" />
-                <label className="input_label">
-                  <span className="input__label-content">Postal code</span>
-                </label>
-              </span>
-            </div>
-          </div>
+          <hr />
         </div>
-        <hr />
-        <div id="policy">
-          <h5>Cancellation policy</h5>
-          <p className="nomargin">
-            Lorem ipsum dolor sit amet, vix{' '}
-            <a href="#0">cu justo blandit deleniti</a>, discere omittantur
-            consectetuer per eu. Percipit repudiare similique ad sed, vix
-            ad decore nullam ornatus.
-          </p>
-        </div>
-      </div>
+      </form>
+
+      <Modal 
+        title="Payment Confirm"
+        visible={showDialogSubmit}
+        onOk={handleSubmit.bind(document.getElementById('paymentForm'))}
+        onCancel={() => setShowDialogSubmit(false)}>
+        Hello
+      </Modal>
     </div>
   );
 };
 
-export default CartPayment;
+const mapStateToProps = (state) => {
+  return {
+    userState: state.userState,
+    cartState: state.cartState,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showLoadingAction: bindActionCreators(showLoading, dispatch),
+    hideLoadingAction: bindActionCreators(hideLoading, dispatch),
+    updateCartAction: bindActionCreators(updateCart, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(injectStripe(CartPayment));
