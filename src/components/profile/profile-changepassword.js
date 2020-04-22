@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PATH } from '../../utils/constant';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { PATH } from '../../utils/constant';
 import { changePassword } from '../../actions/user';
 
 const ProfileChangePassword = (props) => {
@@ -113,11 +113,18 @@ const ProfileChangePassword = (props) => {
                       <button
                         type="submit"
                         className="btn btn-brand btn-bold w-25 mr-5">
-                        Change Password
+                        Save
                       </button>
                       &nbsp;
-                      <button type="reset" className="btn btn-secondary w-25">
-                        Cancel
+                      <button 
+                        type="reset" 
+                        className="btn btn-secondary w-25"
+                        onClick={() => setState({
+                          currentpassword: '',
+                          password: '',
+                          rpassword: '',
+                        })}>
+                        Reset
                       </button>
                     </div>
                   </div>

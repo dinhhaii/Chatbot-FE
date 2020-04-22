@@ -68,15 +68,6 @@ const Header = (props) => {
           </Link>
         </div>
         <ul id="top_menu">
-          <li>
-            <Link
-              to="course-detail/5e89e81b3d0842056c73a8c1"
-              // to="lesson-detail/5e89eab46590a805cee005f6"
-              className="btn btn-dark"
-              style={{ fontSize: `${17}pt` }}>
-              BUTTON TEST NHA
-            </Link>
-          </li>
           {/* SEARCH  */}
           <li>
             <Link

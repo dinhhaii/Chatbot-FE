@@ -244,8 +244,17 @@ const ProfileInformation = (props) => {
                           className="btn btn-success w-25 mr-5">
                           Save
                         </button>
-                        <button type="reset" className="btn btn-secondary w-25">
-                          Cancel
+                        <button 
+                          type="reset" 
+                          className="btn btn-secondary w-25"
+                          onClick={() => setState({
+                            imageURL: userState.user.imageURL,
+                            _id: userState.user._id,
+                            firstName: userState.user.firstName,
+                            lastName: userState.user.lastName,
+                            bio: userState.user.bio,
+                          })}>
+                          Reset
                         </button>
                       </div>
                     </div>

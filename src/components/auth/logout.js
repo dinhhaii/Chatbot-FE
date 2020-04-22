@@ -7,7 +7,6 @@ import { fetchUserFailed, setIsNotLogin } from '../../actions/user';
 
 const Logout = (props) => {
   useEffect(() => {
-      console.log("logout");
     props.resetUserAction();
     props.setIsNotLogin();
     localStorage.removeItem(AUTH_TOKEN);

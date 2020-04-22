@@ -1,7 +1,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable no-mixed-operators */
-import React from 'react';
+import React, { useState } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
@@ -14,6 +14,12 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const CartPayment = (props) => {
   const { userState, cartState, setCurrentStep } = props;
+  const [state, setState] = useState({
+    firstName: userState.user.firstName,
+    lastName: userState.user.lastName,
+    email: userState.user.email,
+
+  });
   const total = cartState.cart ? cartState.cart.items.reduce((initValue, value) => {
     return initValue + (value.discount ? value.course.price * (100 - value.discount.percentage) / 100 : value.course.price);
   }, 0) : 0;
@@ -55,9 +61,9 @@ const CartPayment = (props) => {
           label: 'Yes',
           onClick: async () => {
             props.showLoadingAction();
-            const name = `${userState.user.firstName} ${userState.user.lastName}_${userState.user._id}`;
+            const name = `${state.firstName} ${state.lastName}_${userState.user._id}`;
             try {
-              const { token } = await props.stripe.createToken({ name, email: userState.user.email, _id: userState.user._id });
+              const { token } = await props.stripe.createToken({ name, email: state.email });
               const courses = cartState.cart.items.map(item => {
                 return {
                   price: item.discount ? item.course.price * (100 - item.discount.percentage) / 100 : item.course.price,
@@ -91,6 +97,14 @@ const CartPayment = (props) => {
     });
   };
 
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setState({
+      ...state,
+      [name]: value,
+    });
+  };
+
   return (
     <div className="col-lg-8">
       <form
@@ -112,9 +126,10 @@ const CartPayment = (props) => {
                   <div>
                     <input
                       className="form-control"
-                      name="_id"
+                      name="firstName"
                       type="text"
-                      value=""
+                      value={state.firstName}
+                      onChange={handleChange}
                   />
                   </div>
                 </div>
@@ -127,9 +142,10 @@ const CartPayment = (props) => {
                   <div>
                     <input
                       className="form-control"
-                      name="_id"
+                      name="lastName"
                       type="text"
-                      value=""
+                      value={state.lastName}
+                      onChange={handleChange}
                   />
                   </div>
                 </div>
@@ -144,9 +160,10 @@ const CartPayment = (props) => {
                   <div>
                     <input
                       className="form-control"
-                      name="_id"
-                      type="text"
-                      value=""
+                      name="email"
+                      type="email"
+                      value={state.email}
+                      onChange={handleChange}
                   />
                   </div>
                 </div>
@@ -166,9 +183,8 @@ const CartPayment = (props) => {
             </div>
             <CardElement />
           </div>
-          <hr />
 
-          <div className="form_title">
+          {/* <div className="form_title">
             <h3>
               <strong>3</strong>Billing Address
             </h3>
@@ -228,8 +244,7 @@ const CartPayment = (props) => {
                 </span>
               </div>
             </div>
-          </div>
-          <hr />
+          </div> */}
         </div>
       </form>
     </div>

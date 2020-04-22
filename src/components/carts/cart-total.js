@@ -35,7 +35,7 @@ const CartTotal = (props) => {
               if (cartState.cart.items.length !== 0) {
                 setCurrentStep(currentStep + 1);
               } else {
-                toast.warn('Please select a course and add it to your order before checkout!')
+                toast.warn('Please select a course and add it to your order before checkout!');
               }
             }}>
             Checkout

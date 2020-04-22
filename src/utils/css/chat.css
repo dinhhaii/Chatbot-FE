@@ -1,0 +1,7 @@
+.chat-box {
+    height: calc(100vh - 100px) !important;
+}
+
+.overflowY-auto {
+    overflow-y: auto;
+}
