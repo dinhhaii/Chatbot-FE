@@ -6,11 +6,14 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Rate } from 'antd';
+import { toast } from 'react-toastify';
 import { PATH } from '../../utils/constant';
 import { fetchCourseLecturerList } from '../../actions/course';
 import '../../utils/css/scrollbar.css';
+import { updateCart } from '../../actions/cart';
 
-const LecturerCourseTable = ({ courseState, fetchCourseLecturerListAction, user }) => {
+const LecturerCourseTable = (props) => {
+  const { courseState, fetchCourseLecturerListAction, user, cartState } = props;
   useEffect(() => {
     fetchCourseLecturerListAction(user._id);
   }, []);
@@ -24,6 +27,46 @@ const LecturerCourseTable = ({ courseState, fetchCourseLecturerListAction, user 
     { name: '', width: `${100}px` },
   ];
   const data = courseState.courseLecturerList;
+
+  const addToCart = (course) => {
+    // Map CartState to items
+    const items = [];
+    cartState.cart.items.forEach(element => {
+      if (!element.course.isDelete) {
+        if (element.discount) {
+          const discount = element.course.discountList.find(value => value._id === element.discount._id && value.status !== 'expired'); 
+          items.push({
+            _idCourse: element.course._id,
+            _idDiscount: discount ? discount._id : null,
+          });
+        } else {
+          const availableDiscount = element.course.discountList.find(value => value.status === 'available');
+          items.push({
+            _idCourse: element.course._id,
+            _idDiscount: availableDiscount ? availableDiscount._id : null,
+          });
+        }
+      }
+    });
+    // Add new course to Cart
+    if (cartState.cart.items.find(value => value.course._id === course._id)) {
+      toast.warn('The course is already in cart.');
+    } else {
+      const availableDiscount = course.discount.find(value => value.status === 'available');
+      items.push({
+        _idCourse: course._id,
+        _idDiscount: availableDiscount ? availableDiscount._id : null,
+      });
+    }
+
+    // Update Data
+    const updateData = {
+      _idCart: cartState.cart._id,
+      items,
+    };
+    props.updateCartAction(updateData);
+  };
+
   return (
     <div className="table-responsive" style={{ position: 'relative', height: 550 }}>
       <table
@@ -115,9 +158,9 @@ const LecturerCourseTable = ({ courseState, fetchCourseLecturerListAction, user 
                 <td
                   className="kt-datatable__cell"
                   style={{ width: headers[5].width }}>
-                  <button className="btn btn-outline-dark">
+                  <button className="btn btn-outline-dark" onClick={() => addToCart(element)}>
                     <i className="icon-cart" />
-                    Enroll
+                    Add to cart
                   </button>
                 </td>
               </tr>
@@ -132,6 +175,7 @@ const LecturerCourseTable = ({ courseState, fetchCourseLecturerListAction, user 
 const mapStateToProps = (state) => {
   return {
     courseState: state.courseState,
+    cartState: state.cartState,
   };
 };
 
@@ -141,6 +185,7 @@ const mapDispatchToProps = (dispatch) => {
       fetchCourseLecturerList,
       dispatch,
     ),
+    updateCartAction: bindActionCreators(updateCart, dispatch),
   };
 };
 

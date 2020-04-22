@@ -9,7 +9,7 @@ import { updateCart, fetchCart } from '../../actions/cart';
 
 const CartItems = (props) => {
   const headers = ['Item', 'Discount', 'Price', ''];
-  const { cartState, userState } = props;
+  const { cartState } = props;
   const [couponCode, setCouponCode] = useState('');
 
   const handleChangeCoupon = (e) => {
@@ -17,37 +17,80 @@ const CartItems = (props) => {
   };
 
   const applyCouponCode = () => {
-    let checkCode = false;
+    if (cartState.cart.items.length !== 0) {
+      let checkCode = false;
+      const items = [];
+      cartState.cart.items.forEach(element => {
+        if (!element.course.isDelete) {
+          const discount = element.course.discountList.find(value => value.code === couponCode);
+          const availableDiscount = element.course.discountList.find(value => value.status === 'available');
+          if (discount && discount.status !== 'expired') {
+            checkCode = true;
+            items.push({
+              _idCourse: element.course._id,
+              _idDiscount: discount._id,
+            });
+          } else {
+            items.push({
+              _idCourse: element.course._id,
+              _idDiscount: element.discount && element.discount.status !== 'expired' ? element.discount._id : availableDiscount,
+            });
+          }
+        }
+      });
+  
+      if (!checkCode) {
+        toast.warn(`Sorry, ${couponCode} is not available!`);
+      }
+      const updateData = {
+        _idCart: cartState.cart._id,
+        items,
+      };
+  
+      props.updateCartAction(updateData);
+    } else {
+      toast.warn('Please select a course and add it to your order before adding coupon!');
+    }
+
+    setCouponCode('');
+  };
+
+  const deleteCourse = (course) => {
     const items = [];
     cartState.cart.items.forEach(element => {
-      if (!element.course.isDelete) {
-        const discount = element.course.discountList.find(value => value.code === couponCode);
+      if (!element.course.isDelete && element.course._id !== course._id) {
         const availableDiscount = element.course.discountList.find(value => value.status === 'available');
-        if (discount && discount.status !== 'expired') {
-          checkCode = true;
-          items.push({
-            _idCourse: element.course._id,
-            _idDiscount: discount._id,
-          });
-        } else {
-          items.push({
-            _idCourse: element.course._id,
-            _idDiscount: element.discount && element.discount.status !== 'expired' ? element.discount._id : availableDiscount,
-          });
-        }
+        items.push({
+          _idCourse: element.course._id,
+          _idDiscount: element.discount && element.discount.status !== 'expired' ? element.discount._id : availableDiscount,
+        });
       }
     });
-
-    if (!checkCode) {
-      toast.warn(`Sorry, ${couponCode} is not available!`);
-    }
     const updateData = {
       _idCart: cartState.cart._id,
       items,
     };
 
     props.updateCartAction(updateData);
-    setCouponCode('');
+  };
+
+  const refreshCart = () => {
+    const items = [];
+    cartState.cart.items.forEach(element => {
+      if (!element.course.isDelete) {
+        const availableDiscount = element.course.discountList.find(value => value.status === 'available');
+        items.push({
+          _idCourse: element.course._id,
+          _idDiscount: element.discount && element.discount.status !== 'expired' ? element.discount._id : availableDiscount,
+        });
+      }
+    });
+    const updateData = {
+      _idCart: cartState.cart._id,
+      items,
+    };
+
+    props.updateCartAction(updateData);
   };
 
   return (
@@ -80,13 +123,18 @@ const CartItems = (props) => {
                   <td
                     className="options"
                     style={{ width: `${5}%`, textAlign: 'center' }}>
-                    <Link onClick={() => {}}>
+                    <Link onClick={() => deleteCourse(item.course)}>
                       <i className="icon-trash" />
                     </Link>
                   </td>
                 </tr>
               );
             })}
+            {cartState.cart && cartState.cart.items.length === 0 && (
+              <tr className="text-center">
+                <td colSpan={4} className="pt-5 pb-5">You have no items in your cart.</td>
+              </tr>
+            )}
           </tbody>
         </table>
         <div className="cart-options clearfix">
@@ -116,11 +164,7 @@ const CartItems = (props) => {
             <button
               type="button"
               className="btn_1 outline"
-              onClick={() => {
-                if (userState.user) {
-                  props.fetchCartAction(userState.user._id);
-                }
-              }}>
+              onClick={refreshCart}>
               Update Cart
             </button>
           </div>

@@ -6,7 +6,7 @@ export const getInvoiceList = () => {
 };
 
 export const getInvoiceLearnerList = (_id) => {
-  return AxiosService.get(`${SERVER_URL}/invoice/${_id}/enrolled`);
+  return AxiosService.get(`${SERVER_URL}/course/${_id}/enrolled`);
 };
 
 export const getInvoiceLecturerList = (_id) => {

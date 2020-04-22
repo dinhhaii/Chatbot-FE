@@ -14,7 +14,7 @@ import 'antd/dist/antd.css';
 const ProfileInvoices = (props) => {
   const prevProps = usePrevious(props);
   const { invoiceState, userState } = props;
-  const dataPerPage = 3;
+  const dataPerPage = 5;
 
   const [filter, setFilter] = useState({
     search: '',
@@ -66,12 +66,12 @@ const ProfileInvoices = (props) => {
   };
 
   const handleFilter = (list, filterState) => {
-    const { search, statusFilter } = filterState;
+    const { search, status } = filterState;
     return list.filter(e => search === ''
-        || statusFilter === ''
         || e.course.name.toLowerCase().includes(search.toLowerCase())
         || e.course.lecturer.firstName.toLowerCase().includes(search.toLowerCase())
-        || e.course.lecturer.lastName.toLowerCase().includes(search.toLowerCase()));
+        || e.course.lecturer.lastName.toLowerCase().includes(search.toLowerCase()))
+      .filter(e => status === '' || e.invoice.status === status);
   };
 
   const handleFilterChange = filterState => {

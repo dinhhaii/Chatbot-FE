@@ -65,7 +65,7 @@ const Cart = (props) => {
               <div className="row">
                 {steps[currentStep] && steps[currentStep].content}
 
-                {currentStep < 2 && <CartTotal currentStep={currentStep} setCurrentStep={setCurrentStep} setShowDialogSubmit={setShowDialogSubmit} />}
+                {currentStep < 2 && <CartTotal currentStep={currentStep} setCurrentStep={setCurrentStep} showDialogSubmit={showDialogSubmit} setShowDialogSubmit={setShowDialogSubmit} />}
               </div>
             </div>
           </div>

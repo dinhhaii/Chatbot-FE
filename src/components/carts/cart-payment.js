@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable no-mixed-operators */
 import React from 'react';
@@ -5,46 +6,96 @@ import { CardElement, injectStripe } from 'react-stripe-elements';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Modal } from 'antd';
+import { confirmAlert } from 'react-confirm-alert'; // Import
 import { showLoading, hideLoading } from '../../actions/general';
 import { makePayment } from '../../api/payment';
 import { updateCart } from '../../actions/cart';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const CartPayment = (props) => {
-  const {
-    userState, cartState, setCurrentStep, showDialogSubmit, setShowDialogSubmit, 
-  } = props;
+  const { userState, cartState, setCurrentStep } = props;
+  const total = cartState.cart ? cartState.cart.items.reduce((initValue, value) => {
+    return initValue + (value.discount ? value.course.price * (100 - value.discount.percentage) / 100 : value.course.price);
+  }, 0) : 0;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    props.showLoadingAction();
-    const name = `${userState.user.firstName} ${userState.user.lastName}_${userState.user._id}`;
-    try {
-      cartState.cart.items.forEach(async item => {
-        const { token } = await props.stripe.createToken({ name, email: userState.user.email, _id: userState.user._id });
-        const course = {
-          name: item.course.name,
-          price: item.discount ? item.course.price * (100 - item.discount.percentage) / 100 : item.course.price,
-          discount: item.discount ? item.discount : null,
-        };
-        const { data } = await makePayment(token, course);
-        if (data) {
-          props.updateCartAction({
-            _idCart: cartState.cart._id,
-            items: [],
-          });
-          setCurrentStep(2);
-        }
-      });
-    } catch (error) {
-      toast.error(error.message);
-      props.hideLoadingAction();
-    }
+    confirmAlert({
+      title: 'Are you sure you pay for these courses?',
+      message: (
+        <table className="table table-hover table-borderless cart-list" style={{ fontFamily: 'Poppins' }}>
+          <tbody>
+            {cartState.cart && cartState.cart.items.map((item, index) => {
+              const price = item.discount ? ((item.course.price * (100 - item.discount.percentage)) / 100).toFixed(2) : item.course.price;
+              return (
+                <tr key={index.toString()}>
+                  <td>
+                    <div className="thumb_cart" style={{ borderRadius: 0 }}>
+                      <img src={item.course.imageURL} alt="" />
+                    </div>
+                    <span className="item_cart">{item.course.name}</span>
+                  </td>
+                  <td className="text-center">
+                    <strong>${price}</strong>
+                  </td>
+                </tr>
+              );
+            })}
+            <tr style={{ borderTop: '1px solid gray' }}>
+              <td className="text-center"><h4>Total</h4></td>
+              <td className="text-center">
+                <h4>${total}</h4>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      ),
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: async () => {
+            props.showLoadingAction();
+            const name = `${userState.user.firstName} ${userState.user.lastName}_${userState.user._id}`;
+            try {
+              const { token } = await props.stripe.createToken({ name, email: userState.user.email, _id: userState.user._id });
+              const courses = cartState.cart.items.map(item => {
+                return {
+                  price: item.discount ? item.course.price * (100 - item.discount.percentage) / 100 : item.course.price,
+                  discount: item.discount ? item.discount : null,
+                  idLearner: userState.user._id,
+                  course: item.course,
+                };
+              });
+
+              const { data } = await makePayment(token, courses);
+              if (data) {
+                props.updateCartAction({
+                  _idCart: cartState.cart._id,
+                  items: [],
+                });
+                toast.success('Payment successfully!');
+                setCurrentStep(2);
+              } else {
+                toast.error('Payment failed!');
+              }
+            } catch (error) {
+              toast.error(error.message);
+              props.hideLoadingAction();
+            }
+          },
+        },
+        {
+          label: 'No',
+        },
+      ],
+    });
   };
 
   return (
     <div className="col-lg-8">
-      <form id="paymentForm" onSubmit={handleSubmit}>
+      <form
+        id="paymentForm"
+        onSubmit={handleSubmit}>
         <div className="box_cart">
           <div className="form_title">
             <h3>
@@ -181,14 +232,6 @@ const CartPayment = (props) => {
           <hr />
         </div>
       </form>
-
-      <Modal 
-        title="Payment Confirm"
-        visible={showDialogSubmit}
-        onOk={handleSubmit.bind(document.getElementById('paymentForm'))}
-        onCancel={() => setShowDialogSubmit(false)}>
-        Hello
-      </Modal>
     </div>
   );
 };
