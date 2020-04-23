@@ -5,3 +5,17 @@
 .overflowY-auto {
     overflow-y: auto;
 }
+
+.user-cell {
+    cursor: pointer;
+    padding: 1.5rem 1rem;
+    border-radius: 10px;
+}
+
+.user-cell:hover {
+    background-color: rgb(230, 230, 230)
+}
+
+.selected {
+    background-color: rgb(230, 230, 230)
+}

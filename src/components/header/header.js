@@ -9,15 +9,17 @@ import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
 import { Badge } from 'antd';
 import { fetchUser, setIsLogin, fetchUserSuccess } from '../../actions/user';
-import Menu from './menu';
 import { AUTH_TOKEN, PATH } from '../../utils/constant';
 import { authorizeUser } from '../../api/user';
 import { showSearchBar } from '../../actions/general';
 import { fetchCart } from '../../actions/cart';
+import Menu from './menu';
+import { updateStatusUser } from '../../utils/presence';
 
 const Header = (props) => {
   const { userState, cartState } = props;
   const [isDisplayedMenu, setIsDisplayedMenu] = useState(false);
+
   const showMenuContent = () => {
     setIsDisplayedMenu(!isDisplayedMenu);
   };
@@ -25,12 +27,13 @@ const Header = (props) => {
   useEffect(() => {
     // AUTHORIZATION
     const token = localStorage.getItem(AUTH_TOKEN);
-
+    
     authorizeUser(token)
       .then((response) => {
         const { data } = response;
         if (data) {
           const { firstName, lastName, _id } = data;
+          updateStatusUser(_id);
           props.setIsLoginAction();
           props.fetchCartAction(_id);
           props.fetchUserSuccessAction({ user: data });

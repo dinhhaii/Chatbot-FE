@@ -1,15 +1,18 @@
-/* eslint-disable react/jsx-max-props-per-line */
 import React from 'react';
+import { connect } from 'react-redux';
 import UserCell from './chat-userlist-cell';
 import '../../utils/css/chat.css'; 
 
 const ChatUserList = (props) => {
-  const { showAside, setShowAside } = props;
+  const {
+    showAside, setShowAside, message, setMessage, userList, setRecipient, statusUsers, countUnreadMessages,
+  } = props;
+        
   return (
     <div 
-      style={{ zIndex: 99999 }}
       className={`kt-grid__item kt-app__toggle kt-app__aside kt-app__aside--lg kt-app__aside--fit ${showAside && 'kt-app__aside--on'}`}
-      id="kt_chat_aside">
+      id="kt_chat_aside"
+      style={{ zIndex: 99999 }}>
       <button className="kt-app__aside-close" id="kt_chat_aside_close" onClick={() => setShowAside(false)}>
         <i className="icon-cancel-5" />
       </button>
@@ -35,14 +38,16 @@ const ChatUserList = (props) => {
           <div className="kt-widget kt-widget--users kt-mt-20" style={{ height: `${85}%` }}>
             <div className="kt-scroll kt-scroll--pull h-100 overflowY-auto">
               <div className="kt-widget__items h-100">
-                <UserCell />
-                <UserCell />
-                <UserCell />
-                <UserCell />
-                <UserCell />
-                <UserCell />
-                <UserCell />
-                <UserCell />
+                {userList.map((user, index) => (
+                  <UserCell 
+                    key={index.toString()}
+                    user={user}
+                    message={message}
+                    setMessage={setMessage}
+                    setRecipient={setRecipient}
+                    statusUsers={statusUsers}
+                    countUnreadMessages={countUnreadMessages} />
+                ))}
               </div>
             </div>
           </div>
@@ -51,5 +56,15 @@ const ChatUserList = (props) => {
     </div>
   );
 };
+const mapStateToProps = (state) => {
+  return {
+    userState: state.userState,
+  };
+};
 
-export default ChatUserList;
+const mapDispatchToProps = (dispatch) => {
+  return {
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatUserList);

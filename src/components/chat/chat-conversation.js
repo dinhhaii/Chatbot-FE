@@ -1,13 +1,49 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import ReceivedMessageCell from './chat-conversation-receivedMessage';
 import SentMessageCell from './chat-conversation-sentMessage';
+import firebase from '../../utils/firebase';
 import '../../utils/css/chat.css'; 
+import { FIREBASE_MESSAGE_REF, PATH } from '../../utils/constant';
 
 const Conversation = (props) => {
-  const { setShowAside } = props;
-  return (
+  const { setShowAside, message, setMessage, userState, recipient, conversation } = props;
+  const scrollbar = useRef(null);
+  const database = firebase.database();
+  const messagesRef = database.ref(FIREBASE_MESSAGE_REF);
+
+  useEffect(() => {
+    if (userState.user && recipient) {
+      scrollbar.current.scrollTop = scrollbar.current.scrollHeight;
+    }
+  }, [conversation]);
+
+  const handleMessageChange = e => {
+    setMessage({
+      ...message,
+      content: e.target.value,
+    });
+  };
+
+  const sendMessage = () => {
+    if (recipient && message._idRecipient && message.content.length !== 0) {
+      messagesRef.push().set({
+        ...message,
+        _idSender: userState.user._id,
+        createdAt: firebase.database.ServerValue.TIMESTAMP,
+      });
+      setMessage({
+        ...message,
+        content: '',
+      });
+    }
+  };
+
+  return message._idRecipient && recipient && (
     <div className="kt-grid__item kt-grid__item--fluid kt-app__content" id="kt_chat_content">
       <div className="kt-chat">
         <div className="kt-portlet kt-portlet--head-lg kt-portlet--last chat-box">
@@ -25,8 +61,8 @@ const Conversation = (props) => {
               {/* CENTER */}
               <div className="kt-chat__center">
                 <div className="kt-chat__label">
-                  <Link to="/" class="kt-chat__title">
-                    Jason Muller
+                  <Link to={`${PATH.PROFILE_USER}/${recipient._id}`} class="kt-chat__title">
+                    {`${recipient.firstName} ${recipient.lastName}`}
                   </Link>
                   <span className="kt-chat__status">
                     <span className="kt-badge kt-badge--dot kt-badge--success mr-2" />
@@ -39,17 +75,11 @@ const Conversation = (props) => {
             </div>
           </div>
           <div className="kt-portlet__body" style={{ height: `${70}%` }}>
-            <div className="kt-scroll kt-scroll--pull h-100 overflowY-auto">
+            <div className="kt-scroll kt-scroll--pull h-100 overflowY-auto" ref={scrollbar}>
               <div className="kt-chat__messages h-100">
-                <ReceivedMessageCell />
-                <SentMessageCell />
-                <ReceivedMessageCell />
-                <ReceivedMessageCell />
-                <SentMessageCell />
-                <ReceivedMessageCell />
-                <ReceivedMessageCell />
-                <SentMessageCell />
-                <ReceivedMessageCell />
+                {conversation.map((item, index) => {
+                  return item._idSender === userState.user._id ? <SentMessageCell key={index.toString()} message={item} /> : <ReceivedMessageCell key={index.toString()} message={item} recipient={recipient} />;
+                })}
               </div>
             </div>
           </div>
@@ -59,6 +89,14 @@ const Conversation = (props) => {
                 <textarea
                   style={{ height: `${50}px` }}
                   placeholder="Type here..."
+                  onKeyPress={e => {
+                    if (e.which === 13 && !e.shiftKey) {
+                      e.preventDefault();
+                      sendMessage();
+                    }
+                  }}
+                  value={message.content}
+                  onChange={handleMessageChange}
                 />
               </div>
               <div className="kt-chat__toolbar mt-0">
@@ -76,7 +114,8 @@ const Conversation = (props) => {
                 <div className="kt_chat__actions">
                   <button
                     type="button"
-                    className="btn btn-brand btn-md btn-upper btn-bold kt-chat__reply">
+                    className="btn btn-brand btn-md btn-upper btn-bold kt-chat__reply"
+                    onClick={sendMessage}>
                     Reply
                   </button>
                 </div>
@@ -89,4 +128,15 @@ const Conversation = (props) => {
   );
 };
 
-export default Conversation;
+const mapStateToProps = (state) => {
+  return {
+    userState: state.userState,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Conversation);

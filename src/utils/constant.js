@@ -2,7 +2,9 @@ export const SERVER_URL = 'http://localhost:3000';
 // export const SERVER_URL = 'http://cafocc-api.herokuapp.com/';
 export const PUBLISH_KEY_STRIPE = 'pk_test_bVMx06pYmPZ1mR7lj74RSrlf00TcSnax3B';
 export const AUTH_TOKEN = 'AUTH_TOKEN';
-
+export const FIREBASE_MESSAGE_REF = 'messages';
+export const FIREBASE_STATUS_REF = 'status';
+export const FIREBASE_CONNECTED_REF = '.info/connected';
 export const IMAGE_URL = {
   BACKGROUND_1:
     'https://cdn.pixabay.com/photo/2017/06/23/11/49/laptop-2434393_1280.jpg',
