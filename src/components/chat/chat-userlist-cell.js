@@ -1,14 +1,41 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { capitalize } from '../../utils/helper';
+import { connect } from 'react-redux';
+import { capitalize, calculateTimeTilNow } from '../../utils/helper';
+import firebase from '../../utils/firebase';
 import '../../utils/css/chat.css';
+import { FIREBASE_MESSAGE_REF } from '../../utils/constant';
 
 const UserCell = (props) => {
-  const { user, message, setRecipient, setMessage, statusUsers, countUnreadMessages } = props;
-  const status = statusUsers[user._id] ? statusUsers[user._id].status : 'offline';
+  const { user, message, setRecipient, setMessage, generalState } = props;
+  const database = firebase.database();
+
+  const unreadMessages = generalState.unreadMessages || null;
+  const userStatus = generalState.statusUser ? generalState.statusUser[user._id] : null;
+  const status = userStatus ? userStatus.status : 'offline';
+  const timestamp = userStatus ? userStatus.lastOnline : null;
+  const [lastOnline, setLastOnline] = useState(null);
+
+  useEffect(() => {
+    if (timestamp && lastOnline == null) {
+      console.log(timestamp);
+      setLastOnline(calculateTimeTilNow(timestamp));
+    }
+  });
+
+  const setReadMessage = () => {
+    const messagesRef = database.ref(FIREBASE_MESSAGE_REF);
+    unreadMessages[user._id].forEach(value => {
+      messagesRef.child(value).update({
+        seen: true,
+      });
+    });
+  };
+
   return (
     <div
       style={{ margin: 0 }}
@@ -16,10 +43,15 @@ const UserCell = (props) => {
       onClick={() => {
         setRecipient(user);
         setMessage({ ...message, _idRecipient: user._id });
+        setReadMessage();
+        if (timestamp) {
+          setLastOnline(calculateTimeTilNow(timestamp));
+        }
       }}>
       <span className="kt-media kt-media--circle">
         <img src={user.imageURL} alt="" />
       </span>
+      
       <div className="kt-widget__info">
         <div className="kt-widget__section">
           <Link class="kt-widget__username">
@@ -32,11 +64,21 @@ const UserCell = (props) => {
         <span className="kt-widget__desc">{capitalize(user.role)}</span>
       </div>
       <div className="kt-widget__action">
-        <span className="kt-widget__date">12 mins</span>
-        {countUnreadMessages[user._id] && countUnreadMessages[user._id] > 0 ? <span className="kt-badge kt-badge--danger kt-font-bold">{countUnreadMessages[user._id]}</span> : null}
+        <span className="kt-widget__date">{lastOnline}</span>
+        {unreadMessages[user._id] && unreadMessages[user._id].length > 0 ? <span className="kt-badge kt-badge--danger kt-font-bold">{unreadMessages[user._id].length}</span> : null}
       </div>
     </div>
   );
 };
 
-export default UserCell;
+const mapStateToProps = (state) => {
+  return {
+    generalState: state.generalState,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserCell);

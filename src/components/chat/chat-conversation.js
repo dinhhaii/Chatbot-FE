@@ -11,10 +11,11 @@ import '../../utils/css/chat.css';
 import { FIREBASE_MESSAGE_REF, PATH } from '../../utils/constant';
 
 const Conversation = (props) => {
-  const { setShowAside, message, setMessage, userState, recipient, conversation } = props;
+  const { setShowAside, message, setMessage, userState, recipient, conversation, generalState } = props;
   const scrollbar = useRef(null);
   const database = firebase.database();
   const messagesRef = database.ref(FIREBASE_MESSAGE_REF);
+  const unreadMessages = generalState.unreadMessages || null;
 
   useEffect(() => {
     if (userState.user && recipient) {
@@ -41,6 +42,14 @@ const Conversation = (props) => {
         content: '',
       });
     }
+  };
+
+  const setReadMessage = () => {
+    unreadMessages[recipient._id].forEach(value => {
+      messagesRef.child(value).update({
+        seen: true,
+      });
+    });
   };
 
   return message._idRecipient && recipient && (
@@ -95,6 +104,7 @@ const Conversation = (props) => {
                       sendMessage();
                     }
                   }}
+                  onFocus={setReadMessage}
                   value={message.content}
                   onChange={handleMessageChange}
                 />
@@ -131,6 +141,7 @@ const Conversation = (props) => {
 const mapStateToProps = (state) => {
   return {
     userState: state.userState,
+    generalState: state.generalState,
   };
 };
 

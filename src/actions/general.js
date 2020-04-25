@@ -23,3 +23,17 @@ export const hideSearchBar = () => {
     type: actionTypes.HIDE_SEARCHBAR,
   };
 };
+
+export const updateUnreadMessages = (data) => {
+  return {
+    type: actionTypes.UPDATE_UNREAD_MESSAGE,
+    data,
+  };
+};
+
+export const setStatusUser = data => {
+  return {
+    type: actionTypes.UPDATE_STATUS_USER,
+    data,
+  };
+};

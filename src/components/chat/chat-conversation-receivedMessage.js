@@ -2,9 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { PATH } from '../../utils/constant';
+import { calculateTimeTilNow, formatDateToString2 } from '../../utils/helper';
 
 const ReceivedMessageCell = (props) => {
   const { message, recipient } = props;
+  const diffTime = calculateTimeTilNow(message.createdAt);
+  const date = diffTime.includes('d') ? formatDateToString2(message.createdAt) : `${diffTime} ago`;
   return (
     <div className="kt-chat__message">
       <div className="kt-chat__user">
@@ -14,7 +17,7 @@ const ReceivedMessageCell = (props) => {
         <Link to={`${PATH.PROFILE_USER}/${recipient._id}`} class="kt-chat__username">
           {`${recipient.firstName} ${recipient.lastName}`}
         </Link>
-        <span className="kt-chat__datetime">{message.createdAt}</span>
+        <span className="kt-chat__datetime">{date}</span>
       </div>
       <div className="kt-chat__text kt-bg-light-success">
         {message.content}

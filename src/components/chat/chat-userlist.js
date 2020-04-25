@@ -1,12 +1,11 @@
+/* eslint-disable object-curly-newline */
 import React from 'react';
 import { connect } from 'react-redux';
 import UserCell from './chat-userlist-cell';
 import '../../utils/css/chat.css'; 
 
 const ChatUserList = (props) => {
-  const {
-    showAside, setShowAside, message, setMessage, userList, setRecipient, statusUsers, countUnreadMessages,
-  } = props;
+  const { showAside, setShowAside, message, setMessage, userList, setRecipient, countUnreadMessages } = props;
         
   return (
     <div 
@@ -45,7 +44,6 @@ const ChatUserList = (props) => {
                     message={message}
                     setMessage={setMessage}
                     setRecipient={setRecipient}
-                    statusUsers={statusUsers}
                     countUnreadMessages={countUnreadMessages} />
                 ))}
               </div>

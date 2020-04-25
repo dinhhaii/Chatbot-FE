@@ -7,7 +7,7 @@ import ChatUserList from '../components/chat/chat-userlist';
 import Conversation from '../components/chat/chat-conversation';
 import firebase from '../utils/firebase';
 import { fetchUserList } from '../actions/user';
-import { FIREBASE_STATUS_REF, FIREBASE_MESSAGE_REF } from '../utils/constant';
+import { FIREBASE_MESSAGE_REF } from '../utils/constant';
 
 const Chat = (props) => {
   const { userState } = props;
@@ -15,7 +15,6 @@ const Chat = (props) => {
   const messagesRef = database.ref(FIREBASE_MESSAGE_REF);
 
   const [showAside, setShowAside] = useState(false);
-  const [statusUsers, setStatusUsers] = useState({});
   const [recipient, setRecipient] = useState(null);
   const [conversation, setConversation] = useState([]);
   const [countUnreadMessages, setCountUnreadMessages] = useState({});
@@ -30,22 +29,26 @@ const Chat = (props) => {
   const userList = userState.user && userState.userList && userState.userList.filter(item => item._id !== userState.user._id);
 
   useEffect(() => {
-    props.fetchUserListAction();
-    database.ref(FIREBASE_STATUS_REF).on('value', snapshot => {
-      setStatusUsers(snapshot.val());
-    });
-  }, []);
-
-  useEffect(() => {
     messagesRef.on('value', snapshot => {
       const allMessages = snapshot.val();
 
       if (userState.user && recipient) {
-        const conversations = allMessages 
+        const conversations = allMessages
           ? Object.values(allMessages)
-            .filter(messageItem => (messageItem._idSender === userState.user._id && messageItem._idRecipient === recipient._id)
-                                || (messageItem._idRecipient === userState.user._id && messageItem._idSender === recipient._id)) : [];
-        
+            .map((value) => {
+              return { ...value, id: value.key };
+            })
+            .filter(
+              (messageItem) => (messageItem._idSender === userState.user._id
+                    && messageItem._idRecipient === recipient._id)
+                  || (messageItem._idRecipient === userState.user._id
+                    && messageItem._idSender === recipient._id),
+            )
+          : [];
+
+        const key = allMessages ? Object.keys(allMessages) : [];
+        conversations.forEach((item, index) => { item.id = key[index]; });
+
         setConversation([...conversations]);
       } else {
         const countUnread = {};
@@ -69,7 +72,6 @@ const Chat = (props) => {
         {userState.user && (
           <div className="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
             <ChatUserList 
-              statusUsers={statusUsers}
               setRecipient={setRecipient}
               message={message}
               setMessage={setMessage}
