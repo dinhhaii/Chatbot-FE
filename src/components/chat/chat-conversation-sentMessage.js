@@ -2,13 +2,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { formatDateToString2, calculateTimeTilNow } from '../../utils/helper';
 
 const SentMessageCell = (props) => {
   const { message, userState } = props;
+  const diffTime = calculateTimeTilNow(message.createdAt);
+  const date = diffTime.includes('d') ? formatDateToString2(message.createdAt) : `${diffTime} ago`;
+
   return (
     <div className="kt-chat__message kt-chat__message--right">
       <div className="kt-chat__user">
-        <span className="kt-chat__datetime">Just Now</span>
+        <span className="kt-chat__datetime spoiler">
+          <span>{date === '0s ago' ? 'Just Now' : date}</span>
+        </span>
         <Link class="kt-chat__username">
           You
         </Link>

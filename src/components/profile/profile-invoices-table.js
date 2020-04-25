@@ -1,26 +1,71 @@
 /* eslint-disable no-underscore-dangle */
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Modal } from 'antd';
+import { bindActionCreators } from 'redux';
 import { PATH } from '../../utils/constant';
+import { updateInvoice } from '../../actions/invoice';
+import { capitalize } from '../../utils/helper';
 
 const InvoiceTable = (props) => {
   const headers = [
-    { name: 'Name', width: `${200}px` },
-    { name: 'Price', width: `${80}px` },
-    { name: 'Pay Day', width: `${120}px` },
-    { name: 'Duration', width: `${80}px` },
-    { name: 'Accessible Days', width: `${100}px` },
-    { name: 'Status', width: `${100}px` },
-    { name: 'Lecturer', width: `${200}px` },
+    { name: 'Name' },
+    { name: 'Price' },
+    { name: 'Pay Day' },
+    { name: 'Duration' },
+    { name: 'Accessible Days' },
+    { name: 'Status' },
+    { name: 'Lecturer' },
+    { name: '', width: 200 },
   ];
+
+  const msg = ['The video, audio, image quality of course is low.', 'The content of the course is not as description.', 'This course is not payable.', 'The resources are few and not enough for the whole course.'];
   const { data } = props; 
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [state, setState] = useState({
+    _idInvoice: '',
+    reportMsg: '',
+    courseName: '',
+    disableOther: true,
+  });
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    if (value === 'other') {
+      setState({ 
+        ...state,
+        disableOther: false,
+      });
+    } else {
+      setState({
+        ...state,
+        other: true,
+        [name]: value,
+      });
+    }
+  };
+
+  const handleReport = () => {
+    const invoice = {
+      _idInvoice: state._idInvoice,
+      reportMsg: state.reportMsg,
+      status: 'reported',
+    };
+    
+    props.updateInvoiceAction(invoice);
+
+    setState({
+      ...state,
+      reportMsg: '',
+    });
+  };
+
   return (
     <div
-      className="kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--scroll kt-datatable--loaded"
-      id="kt_datatable_latest_orders">
+      className="table-responsive">
       <table
-        className="kt-datatable__table"
+        className="table table-hover shadow"
         style={{ display: 'block', maxHeight: `${500}px` }}>
         {/* HEAD */}
         <thead className="kt-datatable__head">
@@ -30,7 +75,7 @@ const InvoiceTable = (props) => {
               return (
                 <th
                   key={index.toString()}
-                  className="kt-datatable__cell kt-datatable__cell--sort"
+                  className="text-center"
                   style={{ width }}>
                   <span>{name}</span>
                 </th>
@@ -48,7 +93,7 @@ const InvoiceTable = (props) => {
                 className="kt-datatable__row"
                 style={{ left: `${0}px` }}
                 key={index.toString()}>
-                <td className="kt-datatable__cell" style={{ width: headers[0].width }}>
+                <td className="kt-datatable__cell">
                   <div className="kt-user-card-v2">
                     <div className="kt-user-card-v2__pic">
                       <img src={element.course.imageURL} style={{ borderRadius: 0 }} alt="" />
@@ -63,45 +108,45 @@ const InvoiceTable = (props) => {
                   </div>
                 </td>
 
-                <td className="kt-datatable__cell" style={{ width: headers[1].width }}>
+                <td className="kt-datatable__cell text-center">
                   <span className="kt-font-bold">
                     {element.invoice.totalPrice}
                   </span>
                 </td>
 
-                <td className="kt-datatable__cell" style={{ width: headers[2].width }}>
-                  <span className="kt-font-bold">{element.invoice.payDay.substr(0,10)}</span>
+                <td className="kt-datatable__cell text-center text-nowrap">
+                  <span className="kt-font-bold">{element.invoice.payDay.substr(0, 10)}</span>
                 </td>
 
-                <td className="kt-datatable__cell" style={{ width: headers[3].width }}>
+                <td className="kt-datatable__cell">
                   <span className="kt-font-bold">
                     {element.course.duration}
                   </span>
                 </td>
 
-                <td className="kt-datatable__cell" style={{ width: headers[4].width }}>
+                <td className="kt-datatable__cell text-center">
                   <span className="kt-font-bold">
                     {element.course.accessibleDays}
                   </span>
                 </td>
 
-                <td className="kt-datatable__cell" style={{ width: headers[5].width }}>
+                <td className="kt-datatable__cell text-center">
                   <span style={{ width: `${100}px` }}>
                     <span className={`btn btn-bold btn-sm btn-font-sm 
                       ${element.invoice.status === 'success' ? 'btn-label-success' : ''}
                       ${element.invoice.status === 'canceled' ? 'btn-label-danger' : ''}
                       ${element.invoice.status === 'reported' ? 'btn-label-warning' : ''}`}>
-                      {element.invoice.status}
+                      {capitalize(element.invoice.status)}
                     </span>
                   </span>
                 </td>
 
-                <td className="kt-datatable__cell" style={{ width: headers[6].width }}>
+                <td className="kt-datatable__cell">
                   <div className="kt-user-card-v2">
                     <div className="kt-user-card-v2__pic">
                       <img src={element.course.lecturer.imageURL} style={{ borderRadius: 0 }} alt="" />
                     </div>
-                    <div className="kt-user-card-v2__details">
+                    <div className="kt-user-card-v2__details text-nowrap">
                       <Link
                         to={`${PATH.PROFILE_USER}/${element.course.lecturer._id}`}
                         class="kt-user-card-v2__name">
@@ -110,11 +155,75 @@ const InvoiceTable = (props) => {
                     </div>
                   </div>
                 </td>
+
+                {element.invoice.status === 'success' && (
+                <td className="text-center">
+                  <button 
+                    className="btn btn-warning"
+                    onClick={() => { 
+                      setState({
+                        ...state,
+                        _idInvoice: element.invoice._id,
+                        courseName: element.course.name, 
+                      });
+                      setVisibleModal(true); 
+                    }}>Report
+                  </button>
+                </td>
+                )}
               </tr>
             );
           })}
         </tbody>
       </table>
+
+      <Modal 
+        title="Report course"
+        visible={visibleModal}
+        onOk={() => handleReport()}
+        onCancel={() => setVisibleModal(false)}
+        okText="Report">
+        <h3 className="mb-3">{state.courseName}</h3>
+        <form>
+          {msg.map((value, index) => {
+            return (
+              <div className="form-group">
+                <input
+                  key={index.toString()}
+                  id={index.toString()}
+                  className="mr-3"
+                  type="radio"
+                  name="reportMsg"
+                  value={value}
+                  onChange={handleChange}
+                  />
+                <label htmlFor={index.toString()}>{value}</label>
+              </div>
+            );
+          })}
+          <div className="form-group">
+            <input
+              className="mr-3"
+              type="radio"
+              name="reportMsg"
+              value="other"
+              onChange={handleChange}
+            />
+            <label htmlFor="other">
+              Other:
+            </label>
+            <div>
+              <textarea
+                className="form-control"
+                type="text"
+                name="reportMsg"
+                onChange={handleChange}
+                disabled={state.disableOther}
+              />
+            </div>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };
@@ -126,4 +235,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(InvoiceTable);
+const mapDispatchToProps = dispatch => {
+  return {
+    updateInvoiceAction: bindActionCreators(updateInvoice, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(InvoiceTable);

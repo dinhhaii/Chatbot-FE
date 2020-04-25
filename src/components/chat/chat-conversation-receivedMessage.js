@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { PATH } from '../../utils/constant';
 import { calculateTimeTilNow, formatDateToString2 } from '../../utils/helper';
+import '../../utils/css/chat.css';
 
 const ReceivedMessageCell = (props) => {
   const { message, recipient } = props;
@@ -17,7 +18,9 @@ const ReceivedMessageCell = (props) => {
         <Link to={`${PATH.PROFILE_USER}/${recipient._id}`} class="kt-chat__username">
           {`${recipient.firstName} ${recipient.lastName}`}
         </Link>
-        <span className="kt-chat__datetime">{date}</span>
+        <span className="kt-chat__datetime spoiler">
+          <span>{date === '0s ago' ? 'Just Now' : date}</span>
+        </span>
       </div>
       <div className="kt-chat__text kt-bg-light-success">
         {message.content}

@@ -32,7 +32,7 @@ const ProfileInvoices = (props) => {
   // DID MOUNT
   useEffect(() => {
     props.fetchInvoiceLearnerListAction(userState.user._id);
-  }, []);
+  }, [invoiceState.invoiceList]);
 
   // DID UPDATE 
   useEffect(() => {

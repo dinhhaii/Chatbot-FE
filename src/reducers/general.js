@@ -4,7 +4,7 @@ const initialState = {
   isLoading: false,
   isSearching: false,
   unreadMessages: {},
-  statusUser: [],
+  statusUser: {},
 };
 
 const generalState = (state = initialState, action) => {

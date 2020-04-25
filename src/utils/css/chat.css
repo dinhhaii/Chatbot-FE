@@ -19,3 +19,13 @@
 .selected {
     background-color: rgb(230, 230, 230)
 }
+
+.spoiler {
+    outline: 1px solid transparent;
+}
+.spoiler span {
+    visibility: hidden;
+}
+.spoiler:hover span {
+    visibility: visible;
+}

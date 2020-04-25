@@ -64,7 +64,7 @@ const UserCell = (props) => {
         <span className="kt-widget__desc">{capitalize(user.role)}</span>
       </div>
       <div className="kt-widget__action">
-        <span className="kt-widget__date">{lastOnline}</span>
+        <span className="kt-widget__date">{lastOnline === '0s' ? '1s' : lastOnline}</span>
         {unreadMessages[user._id] && unreadMessages[user._id].length > 0 ? <span className="kt-badge kt-badge--danger kt-font-bold">{unreadMessages[user._id].length}</span> : null}
       </div>
     </div>

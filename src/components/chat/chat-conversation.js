@@ -12,6 +12,9 @@ import { FIREBASE_MESSAGE_REF, PATH } from '../../utils/constant';
 
 const Conversation = (props) => {
   const { setShowAside, message, setMessage, userState, recipient, conversation, generalState } = props;
+
+  const userStatus = generalState.statusUser && recipient ? generalState.statusUser[recipient._id] : null;
+  const status = userStatus ? userStatus.status : 'offline';
   const scrollbar = useRef(null);
   const database = firebase.database();
   const messagesRef = database.ref(FIREBASE_MESSAGE_REF);
@@ -74,8 +77,9 @@ const Conversation = (props) => {
                     {`${recipient.firstName} ${recipient.lastName}`}
                   </Link>
                   <span className="kt-chat__status">
-                    <span className="kt-badge kt-badge--dot kt-badge--success mr-2" />
-                    Active
+                    {status === 'online' && <> <span className="kt-badge kt-badge--dot kt-badge--success mr-2" /> Active </>}
+                    {status === 'offline' && <> <span className="kt-badge kt-badge--dot kt-badge--danger mr-2" /> Offline </>}
+                    {status === 'away' && <> <span className="kt-badge kt-badge--dot kt-badge--warning mr-2" /> Away </>}
                   </span>
                 </div>
               </div>

@@ -376,9 +376,9 @@ function* createInvoiceSaga({ invoice }) {
   yield put(hideLoading());
 }
 
-function* updateInvoiceSaga({ discount }) {
+function* updateInvoiceSaga({ invoice }) {
   yield put(showLoading());
-  const { data } = yield call(updateInvoice, discount);
+  const { data } = yield call(updateInvoice, invoice);
   const { invoiceState } = yield select();
   console.log('update invoice', data);
   if (data) {
