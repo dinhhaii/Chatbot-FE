@@ -43,6 +43,16 @@ export const changePassword = (currentPassword, password, rpassword) => {
   };
 };
 
+export const changePasswordWithoutConfirm = (id, token, password, rpassword) => {
+  return {
+    type: actionTypes.CHANGE_PASSWORD_WITHOUT_CONFIRM,
+    id,
+    token,
+    password,
+    rpassword,
+  };
+};
+
 export const updateUser = (user) => {
   return {
     type: actionTypes.UPDATE_USER,

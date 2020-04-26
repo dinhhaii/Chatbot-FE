@@ -21,6 +21,7 @@ import UserDetail from '../pages/UserProfile';
 import LecturerCourseDetail from '../pages/LecturerCourseDetail';
 import Chat from '../pages/Chat';
 import Logout from '../components/auth/logout';
+import ChangePassword from '../components/auth/change-password';
 // import App from '../App';
 
 // Main routes
@@ -60,6 +61,11 @@ const routes = [
             path: PATH.AUTH_FORGOT_PASSWORD,
             exact: false,
             component: () => <ForgotPassword />,
+          },
+          {
+            path: `${PATH.AUTH_RESET_PASSWORD}/:id/:token`,
+            exact: false,
+            component: () => <ChangePassword />,
           },
         ]}
       />

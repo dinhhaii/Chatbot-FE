@@ -1,6 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 
-const Introduction = () => {
+const Introduction = (props) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const handleChange = e => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (searchQuery.length !== 0) {
+      props.history.push(`/courses?search=${searchQuery}`);
+    }
+  };
+
   return (
     <section className="hero_single version_2">
       <div className="wrapper">
@@ -10,13 +23,14 @@ const Introduction = () => {
             Study any topic, anytime. Choose from thousands of expert-led
             courses now.
           </p>
-          <form style={{ margin: `${0}px ${50}px` }}>
+          <form style={{ margin: `${0}px ${50}px` }} onSubmit={handleSubmit}>
             <div id="custom-search-input">
               <div className="input-group">
                 <input
                   style={{ height: `${50}px` }}
                   type="text"
                   className="search-query"
+                  onChange={handleChange}
                   placeholder="Search course's name, teacher'name, ..."
                 />
                 <input
@@ -34,4 +48,4 @@ const Introduction = () => {
   );
 };
 
-export default Introduction;
+export default withRouter(Introduction);

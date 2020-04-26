@@ -183,7 +183,7 @@ const InvoiceTable = (props) => {
         onOk={() => handleReport()}
         onCancel={() => setVisibleModal(false)}
         okText="Report">
-        <h3 className="mb-3">{state.courseName}</h3>
+        <h3 className="mb-4">{state.courseName}</h3>
         <form>
           {msg.map((value, index) => {
             return (

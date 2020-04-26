@@ -49,7 +49,7 @@ const Header = (props) => {
         }
       })
       .catch((error) => {
-        toast.error(error.message);
+        console.log(error);
       });
   }, []);
 

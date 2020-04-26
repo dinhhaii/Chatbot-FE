@@ -20,6 +20,7 @@ const Register = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    props.showLoadingAction();
     const { firstName, lastName, email, password, role } = state;
 
     if (state.password === state.rpassword) {
@@ -34,6 +35,9 @@ const Register = (props) => {
         })
         .catch((error) => {
           toast.error(error.message);
+        })
+        .finally(() => {
+          props.hideLoadingAction();
         });
     }
   };

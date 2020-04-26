@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
@@ -65,10 +66,10 @@ const CoursesList = (props) => {
                 <div className="col-lg-5">
                   <figure className="block-reveal">
                     <div className="block-horizzontal" />
-                    <Link href="course-detail.html">
-                      <img src={value.imageURL} alt="" />
+                    <Link to={`${PATH.COURSE_DETAIL}/${value._id}`}>
+                      <img src={value.imageURL} className="w-100" alt="" />
                     </Link>
-                    <div className="preview">
+                    <div className="preview" onClick={() => props.history.push(`${PATH.COURSE_DETAIL}/${value._id}`)}>
                       <span>Preview course</span>
                     </div>
                   </figure>
@@ -89,7 +90,7 @@ const CoursesList = (props) => {
                       ])}`}>
                       {`${value.lecturer.firstName.toUpperCase()} ${value.lecturer.lastName.toUpperCase()}`}
                     </Link>
-                    <p>{value.description}</p>
+                    <p style={{ height: 100, maxHeight: 100, overflow: 'hidden' }}>{value.description}</p>
                     <Rate
                       defaultValue={rateAverage}
                       style={{ padding: 0 }}

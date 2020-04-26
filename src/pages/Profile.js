@@ -2,23 +2,28 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/heading-has-content */
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import ProfileChangePassword from '../components/profile/profile-changepassword';
 import ProfileInformation from '../components/profile/profile-information';
 import ProfileInvoices from '../components/profile/profile-invoices';
 import { capitalize } from '../utils/helper';
-
-const TAB = {
-  PERSONAL_INFORMATION: 1,
-  CHANGE_PASSWORD: 2,
-  INVOICES: 3,
-};
+import { TAB } from '../utils/constant';
 
 const Profile = (props) => {
-  const { userState } = props;
+  const { userState, location } = props;
   const [tabName, setTabName] = useState(TAB.PERSONAL_INFORMATION);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const tab = urlParams.get('tab');
+    console.log(tab);
+    if (tab) {
+      setTabName(tab);
+    }
+  }, []);
 
   return (
     <main>

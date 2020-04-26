@@ -54,6 +54,7 @@ const LecturerCourseDetailCourseForm = (props) => {
   const subjects = props.subjectState.subjectList.filter((e) => !e.isDelete);
   const handleSubmit = (e) => {
     e.preventDefault();
+    setProgress(1);
     const storage = firebase.storage();
     const newCourse = { ...course, _idCourse: selectedCourse._id };
     if (image !== course.imageURL) {
@@ -75,6 +76,7 @@ const LecturerCourseDetailCourseForm = (props) => {
             .getDownloadURL()
             .then((imageURL) => {
               props.updateCourseAction({ ...newCourse, imageURL });
+              setProgress(0);
             });
         },
       );
@@ -166,10 +168,8 @@ const LecturerCourseDetailCourseForm = (props) => {
                     value={course._idSubject}
                     onChange={handleChange}>
                     <option value="" selected>
-                      {' '}
-                      None{' '}
+                      None
                     </option>
-                    ;
                     {subjects.map((subject, index) => {
                       return (
                         <option key={index.toString()} value={subject._id}>
@@ -256,7 +256,7 @@ const LecturerCourseDetailCourseForm = (props) => {
             <div className="row">
               <div className="col-2" />
               <div className="col-10">
-                <button type="submit" className="btn btn-info w-25 mr-5">
+                <button type="submit" className="btn btn-info w-25 mr-5" disabled={progress !== 0}>
                   Update
                 </button>
                 <button
@@ -274,7 +274,8 @@ const LecturerCourseDetailCourseForm = (props) => {
                       _idSubject: selectedCourse._idSubject,
                       imageURL: selectedCourse.imageURL,
                     });
-                  }}>
+                  }}
+                  disabled={progress !== 0}>
                   Reset
                 </button>
               </div>

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Rate } from 'antd';
 import { PATH } from '../../utils/constant';
 import 'antd/dist/antd.css';
+import { capitalize } from '../../utils/helper';
 
 const LecturerInvoiceListTable = (props) => {
   const headers = [
@@ -83,7 +84,7 @@ const LecturerInvoiceListTable = (props) => {
                   ${invoice.status === 'success' ? 'btn-label-success' : ''}
                   ${invoice.status === 'canceled' ? 'btn-label-danger' : ''}
                   ${invoice.status === 'reported' ? 'btn-label-warning' : ''}`}>
-                {invoice.status}
+                {capitalize(invoice.status)}
               </span>
             </span>
           </td>

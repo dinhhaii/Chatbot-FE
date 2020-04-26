@@ -14,6 +14,12 @@ export const IMAGE_URL = {
     'https://cdn.pixabay.com/photo/2015/05/31/15/07/business-792113_1280.jpg',
 };
 
+export const TAB = {
+  PERSONAL_INFORMATION: 'personal-information',
+  CHANGE_PASSWORD: 'change-password',
+  INVOICES: 'invoices',
+};
+
 export const PATH = {
   LOGIN: '/login',
   REGISTER: '/register',
@@ -22,6 +28,7 @@ export const PATH = {
   AUTH_LOGIN: '/auth/login',
   AUTH_REGISTER: '/auth/register',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
+  AUTH_RESET_PASSWORD: '/auth/reset-password',
   PROFILE: '/profile',
   PROFILE_USER: '/profileuser',
   LECTURERS: '/lecturers',

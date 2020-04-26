@@ -16,7 +16,7 @@ import { fetchCourseList } from '../actions/course';
 const Course = (props) => {
   const [viewMode, setViewMode] = useState('grid');
   const prevProps = usePrevious(props);
-  const { courseState } = props;
+  const { courseState, location } = props;
   const dataPerPage = 4;
 
   const [filter, setFilter] = useState({
@@ -36,6 +36,11 @@ const Course = (props) => {
   // DID MOUNT
   useEffect(() => {
     props.fetchCourseListAction();
+    const urlParams = new URLSearchParams(location.search);
+    const searchParam = urlParams.get('search');
+    if (searchParam) {
+      setFilter({ ...filter, search: searchParam });
+    }
   }, []);
 
   // DID UPDATE
@@ -49,7 +54,7 @@ const Course = (props) => {
         indexLast: dataPerPage,
         currentPage: 1,
         totalPage: Math.ceil(courseState.courseList.length / dataPerPage),
-        data: handleFilter(courseState.courseList).slice(0, dataPerPage),
+        data: handleFilter(courseState.courseList, filter).slice(0, dataPerPage),
       });
     }
   });
@@ -58,7 +63,7 @@ const Course = (props) => {
     const { indexFirst } = pagination.indexFirst;
     const indexLast = page * dataPerPage;
     const currentPage = page;
-    const data = handleFilter(courseState.courseList).slice(indexFirst, indexLast);
+    const data = handleFilter(courseState.courseList, filter).slice(indexFirst, indexLast);
 
     setPagination({
       ...pagination,
@@ -68,8 +73,8 @@ const Course = (props) => {
     });
   };
 
-  const handleChangeFilter = () => {
-    const data = handleFilter(courseState.courseList).slice(0, dataPerPage);
+  const handleChangeFilter = (_filter) => {
+    const data = handleFilter(courseState.courseList, _filter).slice(0, dataPerPage);
     
     setPagination({
       ...pagination,
@@ -77,23 +82,17 @@ const Course = (props) => {
     });
   };
 
-  const handleFilter = list => {
+  const handleFilter = (list, _filter) => {
     return list.filter((e) => {
-      return filter.subject.length !== 0 ? filter.subject.some(name => name === e.subject.name) : true;
+      return _filter.subject.length !== 0 ? _filter.subject.some(name => name === e.subject.name) : true;
     }).filter((e) => {
-      const search = filter.search.toLowerCase();
-      // console.log(`${e.description.toLowerCase().includes(search)} - ${e.lecturer.firstName.toLowerCase().includes(search)} - ${e.subject.name.toLowerCase().includes(search)} - ${e.name.toLowerCase().includes(search)}`)
-      if (
-        filter.search === ''
+      const search = _filter.search.toLowerCase();
+      return search === ''
         || e.name.toLowerCase().includes(search)
         || e.subject.name.toLowerCase().includes(search)
         || e.lecturer.firstName.toLowerCase().includes(search)
         || e.lecturer.lastName.toLowerCase().includes(search)
-        || e.description.toLowerCase().includes(search)
-      ) {
-        return true;
-      }
-      return false;
+        || e.description.toLowerCase().includes(search);
     });
   };
 
@@ -131,11 +130,7 @@ const Course = (props) => {
             </aside>
 
             <div className="col-lg-9">
-              {viewMode === 'grid' ? (
-                <CoursesGrid data={pagination.data} />
-              ) : (
-                <CoursesList data={pagination.data} />
-              )}
+              {viewMode === 'grid' ? <CoursesGrid data={pagination.data} /> : <CoursesList data={pagination.data} />}
               <p className="text-center">
                 <Link
                   onClick={() => choosePage(pagination.currentPage + 1)}

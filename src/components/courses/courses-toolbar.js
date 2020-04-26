@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Input } from 'antd';
 import 'antd/dist/antd.css';
@@ -10,6 +10,8 @@ const { Search } = Input;
 const CourseToolBar = ({
   viewMode, setViewMode, filter, setFilter, handleChangeFilter, 
 }) => {
+  const [timer, setTimer] = useState(null);
+
   return (
     <div className="filters_listing sticky_horizontal">
       <div className="container">
@@ -37,12 +39,16 @@ const CourseToolBar = ({
           <li>
             <Search
               placeholder="Search courses, lecturer, ..."
+              value={filter.search}
               onChange={(value) => {
-                setFilter({
+                const _filter = {
                   ...filter,
                   search: value.target.value,
-                });
-                handleChangeFilter();
+                };
+
+                setFilter(_filter);
+                clearInterval(timer);
+                setTimer(setInterval(() => handleChangeFilter(_filter)), 500);
               }}
               style={{ width: 400, marginBottom: 5 }}
             />

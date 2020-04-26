@@ -61,11 +61,11 @@ const CoursesGrid = (props) => {
           return (
             <div className="col-md-6" key={index.toString()}>
               <div className="box_grid wow">
-                <figure className="block-reveal">
+                <figure className="block-reveal" style={{ height: 250 }}>
                   <div className="block-horizzontal" />
                   <Link href="#0" class="wish_bt" />
                   <Link to={`${PATH.COURSE_DETAIL}/${value._id}`}>
-                    <img src={value.imageURL} className="img-fluid" alt="" />
+                    <img src={value.imageURL} className="img-fluid w-100" alt="" />
                   </Link>
                   <div className="price">${value.price}</div>
                   <div className="preview" onClick={() => props.history.push(`${PATH.COURSE_DETAIL}/${value._id}`)}>
@@ -80,7 +80,7 @@ const CoursesGrid = (props) => {
                     className="mb-2 badge badge-success">
                     {`${value.lecturer.firstName.toUpperCase()} ${value.lecturer.lastName.toUpperCase()}`}
                   </Link>
-                  <p>{value.description}</p>
+                  <p style={{ height: 120, maxHeight: 120, overflow: 'hidden' }}>{value.description}</p>
                   <div className="rating">
                     <Rate
                       defaultValue={rateAverage}
@@ -94,7 +94,7 @@ const CoursesGrid = (props) => {
                     <i className="icon_clock_alt" /> {value.duration}
                   </li>
                   <li>
-                    <Link onClick={() => addToCart(value)}>Enroll now</Link>
+                    <Link onClick={() => addToCart(value)}>Add to cart</Link>
                   </li>
                 </ul>
               </div>

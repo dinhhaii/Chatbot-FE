@@ -5,12 +5,12 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Pagination } from 'antd';
+import { Link } from 'react-router-dom';
 import LecturerInvoiceListTable from './lecturer-course-invoicelist-table';
 import { fetchInvoiceLecturerList } from '../../actions/invoice';
 import { usePrevious } from '../../utils/helper';
 import 'antd/dist/antd.css';
 import { PATH } from '../../utils/constant';
-import { Link } from 'react-router-dom';
 
 const LecturerInvoiceList = (props) => {
   const prevProps = usePrevious(props);
@@ -66,12 +66,14 @@ const LecturerInvoiceList = (props) => {
   };
 
   const handleFilter = (list, filterState) => {
-    const { search, statusFilter } = filterState;
-    return list.filter(e => search === ''
-        || statusFilter === ''
+    const { search, status } = filterState;
+    return list
+      .filter(e => search === ''
+        || status === ''
         || e.course.name.toLowerCase().includes(search.toLowerCase())
         || e.lecturer.firstName.toLowerCase().includes(search.toLowerCase())
-        || e.lecturer.lastName.toLowerCase().includes(search.toLowerCase()));
+        || e.lecturer.lastName.toLowerCase().includes(search.toLowerCase()))
+      .filter(e => status === '' || e.status.toLowerCase().includes(status.toLowerCase()));
   };
 
   const handleFilterChange = filterState => {

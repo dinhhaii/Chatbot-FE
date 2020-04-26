@@ -26,11 +26,9 @@ const CourseFilter = ({
     } else {
       subject.splice(subject.indexOf(value), 1);
     }
-    setFilter({
-      ...filter,
-      subject,
-    });
-    handleChangeFilter();
+    const _filter = { ...filter, subject };
+    setFilter(_filter);
+    handleChangeFilter(_filter);
   };
 
   return (

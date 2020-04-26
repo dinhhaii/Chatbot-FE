@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchUser } from '../../actions/user';
-import { PATH } from '../../utils/constant';
+import { PATH, TAB } from '../../utils/constant';
 
 const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
   return (
@@ -24,18 +24,18 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
                 <h3>Profile</h3>
                 <ul>
                   <li>
-                    <Link to={PATH.PROFILE} onClick={showMenuContent}>
+                    <Link to={`${PATH.PROFILE}?tab=${TAB.PERSONAL_INFORMATION}`} onClick={showMenuContent}>
                       Information
                     </Link>
                   </li>
                   <li>
-                    <Link to={PATH.PROFILE} onClick={showMenuContent}>
+                    <Link to={`${PATH.PROFILE}?tab=${TAB.CHANGE_PASSWORD}`} onClick={showMenuContent}>
                       Change Password
                     </Link>
                   </li>
                   {userState.user.role === 'learner' && (
                     <li>
-                      <Link to={PATH.PROFILE} onClick={showMenuContent}>
+                      <Link to={`${PATH.PROFILE}?tab=${TAB.INVOICES}`} onClick={showMenuContent}>
                         My Invoices
                       </Link>
                     </li>
