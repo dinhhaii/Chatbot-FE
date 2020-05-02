@@ -10,7 +10,7 @@ import ProfileChangePassword from '../components/profile/profile-changepassword'
 import ProfileInformation from '../components/profile/profile-information';
 import ProfileInvoices from '../components/profile/profile-invoices';
 import { capitalize } from '../utils/helper';
-import { TAB } from '../utils/constant';
+import { TAB, PATH } from '../utils/constant';
 
 const Profile = (props) => {
   const { userState, location } = props;
@@ -85,14 +85,14 @@ const Profile = (props) => {
                           </span>
                         </div>
                         <div className="kt-widget__action">
-                          <button type="button" className="btn btn-info btn-sm">
+                          <Link to={PATH.CHAT} className="btn btn-info btn-sm">
                             Messages
-                          </button>
-                          <button
-                            type="button"
+                          </Link>
+                          <Link
+                            to={PATH.CART}
                             className="btn btn-success btn-sm">
-                            Payment
-                          </button>
+                            My cart
+                          </Link>
                         </div>
                       </div>
                     </div>

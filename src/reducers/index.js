@@ -7,6 +7,7 @@ import invoiceState from './invoice';
 import lessonState from './lesson';
 import discountState from './discount';
 import cartState from './cart';
+import feedbackState from './feedback';
 
 const reducer = combineReducers({
   userState,
@@ -17,6 +18,7 @@ const reducer = combineReducers({
   lessonState,
   discountState,
   cartState,
+  feedbackState,
 });
 
 export default reducer;

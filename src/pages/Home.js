@@ -55,7 +55,7 @@ const Home = (props) => {
             <span>
               <em />
             </span>
-            <h2>Top Subjects</h2>
+            <h2>Subjects</h2>
             <p />
           </div>
           <Subject subjectList={props.subjectState.subjectList} />

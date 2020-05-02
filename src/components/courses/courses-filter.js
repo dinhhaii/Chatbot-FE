@@ -49,7 +49,7 @@ const CourseFilter = ({
               if (!value.isDelete) {
                 return (
                   <li key={index.toString()}>
-                    <Checkbox value={value.name} onChange={handleChange}>
+                    <Checkbox value={value.name} onChange={handleChange} checked={filter.subject.some(name => name === value.name)}>
                       {value.name}
                     </Checkbox>
                   </li>

@@ -8,7 +8,7 @@ const Subject = ({ subjectList }) => {
       {subjectList.map((subject, index) => {
         return subject.isDelete ? null : (
           <div className="col-lg-4 col-md-6 wow" data-wow-offset="150" key={index.toString()}>
-            <Link to={PATH.COURSES} className="grid_item">
+            <Link to={`${PATH.COURSES}?subject=${subject.name}`} className="grid_item">
               <figure className="block-reveal">
                 <div className="block-horizzontal" />
                 <img

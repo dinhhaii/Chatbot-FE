@@ -2,11 +2,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Modal } from 'antd';
 import { bindActionCreators } from 'redux';
 import { PATH } from '../../utils/constant';
 import { updateInvoice } from '../../actions/invoice';
 import { capitalize } from '../../utils/helper';
+import ReportModal from './profile-invoices-report';
+import FeedbackModal from './profile-invoices-feedback';
 
 const InvoiceTable = (props) => {
   const headers = [
@@ -17,49 +18,20 @@ const InvoiceTable = (props) => {
     { name: 'Accessible Days' },
     { name: 'Status' },
     { name: 'Lecturer' },
-    { name: '', width: 200 },
+    { name: 'Feedback', width: 120 },
+    { name: '', width: 150 },
   ];
 
-  const msg = ['The video, audio, image quality of course is low.', 'The content of the course is not as description.', 'This course is not payable.', 'The resources are few and not enough for the whole course.'];
   const { data } = props; 
-  const [visibleModal, setVisibleModal] = useState(false);
   const [state, setState] = useState({
     _idInvoice: '',
     reportMsg: '',
     courseName: '',
+    course: null,
     disableOther: true,
+    visibleReportModal: false,
+    visibleFeedbackModal: false,
   });
-
-  const handleChange = e => {
-    const { name, value } = e.target;
-    if (value === 'other') {
-      setState({ 
-        ...state,
-        disableOther: false,
-      });
-    } else {
-      setState({
-        ...state,
-        other: true,
-        [name]: value,
-      });
-    }
-  };
-
-  const handleReport = () => {
-    const invoice = {
-      _idInvoice: state._idInvoice,
-      reportMsg: state.reportMsg,
-      status: 'reported',
-    };
-    
-    props.updateInvoiceAction(invoice);
-
-    setState({
-      ...state,
-      reportMsg: '',
-    });
-  };
 
   return (
     <div
@@ -88,12 +60,13 @@ const InvoiceTable = (props) => {
           className="kt-datatable__body ps ps--active-y"
           style={{ maxHeight: `${447}px` }}>
           {data.map((element, index) => {
+            console.log(element.feedback);
             return (
               <tr
                 className="kt-datatable__row"
                 style={{ left: `${0}px` }}
                 key={index.toString()}>
-                <td className="kt-datatable__cell">
+                <td className="kt-datatable__cell text-nowrap">
                   <div className="kt-user-card-v2">
                     <div className="kt-user-card-v2__pic">
                       <img src={element.course.imageURL} style={{ borderRadius: 0 }} alt="" />
@@ -156,74 +129,45 @@ const InvoiceTable = (props) => {
                   </div>
                 </td>
 
-                {element.invoice.status === 'success' && (
                 <td className="text-center">
                   <button 
-                    className="btn btn-warning"
+                    className="btn btn-info text-center"
                     onClick={() => { 
                       setState({
                         ...state,
-                        _idInvoice: element.invoice._id,
-                        courseName: element.course.name, 
+                        course: element.course,
+                        visibleFeedbackModal: true,
                       });
-                      setVisibleModal(true); 
-                    }}>Report
+                    }}
+                    style={{ width: 120 }}
+                    disabled={element.feedback}>
+                    Feedback {element.feedback && <i className="icon-check-1" />}
                   </button>
                 </td>
-                )}
+
+                {element.invoice.status === 'success' ? (
+                  <td className="text-center">
+                    <button 
+                      className="btn btn-warning"
+                      onClick={() => { 
+                        setState({
+                          ...state,
+                          _idInvoice: element.invoice._id,
+                          courseName: element.course.name, 
+                          visibleReportModal: true,
+                        });
+                      }}>Report
+                    </button>
+                  </td>
+                ) : <td />}
+
               </tr>
             );
           })}
         </tbody>
       </table>
-
-      <Modal 
-        title="Report course"
-        visible={visibleModal}
-        onOk={() => handleReport()}
-        onCancel={() => setVisibleModal(false)}
-        okText="Report">
-        <h3 className="mb-4">{state.courseName}</h3>
-        <form>
-          {msg.map((value, index) => {
-            return (
-              <div className="form-group">
-                <input
-                  key={index.toString()}
-                  id={index.toString()}
-                  className="mr-3"
-                  type="radio"
-                  name="reportMsg"
-                  value={value}
-                  onChange={handleChange}
-                  />
-                <label htmlFor={index.toString()}>{value}</label>
-              </div>
-            );
-          })}
-          <div className="form-group">
-            <input
-              className="mr-3"
-              type="radio"
-              name="reportMsg"
-              value="other"
-              onChange={handleChange}
-            />
-            <label htmlFor="other">
-              Other:
-            </label>
-            <div>
-              <textarea
-                className="form-control"
-                type="text"
-                name="reportMsg"
-                onChange={handleChange}
-                disabled={state.disableOther}
-              />
-            </div>
-          </div>
-        </form>
-      </Modal>
+      <ReportModal state={state} setState={setState} />
+      <FeedbackModal state={state} setState={setState} />
     </div>
   );
 };

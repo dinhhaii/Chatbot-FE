@@ -38,8 +38,13 @@ const Course = (props) => {
     props.fetchCourseListAction();
     const urlParams = new URLSearchParams(location.search);
     const searchParam = urlParams.get('search');
+    const subjectParam = urlParams.get('subject');
     if (searchParam) {
       setFilter({ ...filter, search: searchParam });
+    }
+    if (subjectParam) {
+      filter.subject.push(subjectParam);
+      setFilter({ ...filter });
     }
   }, []);
 
@@ -83,17 +88,17 @@ const Course = (props) => {
   };
 
   const handleFilter = (list, _filter) => {
-    return list.filter((e) => {
-      return _filter.subject.length !== 0 ? _filter.subject.some(name => name === e.subject.name) : true;
-    }).filter((e) => {
-      const search = _filter.search.toLowerCase();
-      return search === ''
+    return list
+      .filter((e) => _filter.subject.length === 0 || _filter.subject.some(name => name === e.subject.name))
+      .filter((e) => {
+        const search = _filter.search.toLowerCase();
+        return search === ''
         || e.name.toLowerCase().includes(search)
         || e.subject.name.toLowerCase().includes(search)
         || e.lecturer.firstName.toLowerCase().includes(search)
         || e.lecturer.lastName.toLowerCase().includes(search)
         || e.description.toLowerCase().includes(search);
-    });
+      });
   };
 
   
