@@ -13,7 +13,7 @@ import 'antd/dist/antd.css';
 
 const ProfileInvoices = (props) => {
   const prevProps = usePrevious(props);
-  const { invoiceState, userState } = props;
+  const { invoiceState, userState, feedbackState } = props;
   const dataPerPage = 5;
 
   const [filter, setFilter] = useState({
@@ -32,7 +32,7 @@ const ProfileInvoices = (props) => {
   // DID MOUNT
   useEffect(() => {
     props.fetchInvoiceLearnerListAction(userState.user._id);
-  }, [invoiceState.invoiceList]);
+  }, [invoiceState.invoiceList, feedbackState.feedback]);
 
   // DID UPDATE 
   useEffect(() => {
@@ -171,6 +171,7 @@ const mapStateToProps = (state) => {
   return {
     userState: state.userState,
     invoiceState: state.invoiceState,
+    feedbackState: state.feedbackState,
   };
 };
 

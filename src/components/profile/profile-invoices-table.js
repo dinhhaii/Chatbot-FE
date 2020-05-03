@@ -60,7 +60,6 @@ const InvoiceTable = (props) => {
           className="kt-datatable__body ps ps--active-y"
           style={{ maxHeight: `${447}px` }}>
           {data.map((element, index) => {
-            console.log(element.feedback);
             return (
               <tr
                 className="kt-datatable__row"
@@ -135,13 +134,14 @@ const InvoiceTable = (props) => {
                     onClick={() => { 
                       setState({
                         ...state,
+                        _idInvoice: element.invoice._id,
                         course: element.course,
                         visibleFeedbackModal: true,
                       });
                     }}
                     style={{ width: 120 }}
                     disabled={element.feedback}>
-                    Feedback {element.feedback && <i className="icon-check-1" />}
+                    Feedback {element.feedback && <i className="icon-check-1 pr-0 mr-0" />}
                   </button>
                 </td>
 
@@ -152,7 +152,6 @@ const InvoiceTable = (props) => {
                       onClick={() => { 
                         setState({
                           ...state,
-                          _idInvoice: element.invoice._id,
                           courseName: element.course.name, 
                           visibleReportModal: true,
                         });

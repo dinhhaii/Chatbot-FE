@@ -1,10 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter, useLocation } from 'react-router-dom';
 import { PATH } from '../../utils/constant';
 
-const Footer = () => {
+const Footer = (props) => {
+  const location = useLocation();
+  console.log(location);
+  const disabled = location.pathname.includes('chat') || location.pathname.includes('lesson-detail');
+
   return (
-    <footer>
+    <footer style={{ display: disabled && 'none' }}>
       <div className="container margin_120_95">
         <div className="row">
           <div className="col-lg-5 col-md-12 p-r-5">
@@ -119,4 +123,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default withRouter(Footer);

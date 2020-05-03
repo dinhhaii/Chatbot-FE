@@ -13,7 +13,8 @@ const Subject = ({ subjectList }) => {
                 <div className="block-horizzontal" />
                 <img
                   src={subject.imageURL}
-                  className="img-fluid"
+                  className="img-fluid w-100"
+                  style={{ height: 250 }}
                   alt=""
                 />
                 <div className="info">

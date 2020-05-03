@@ -5,6 +5,7 @@ import { Tabs } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import ReactPlayer from 'react-player';
 import LessonsList from '../components/lessons/lessons-list';
 import LessonComment from '../components/lessons/lessons-comments';
 import { fetchLesson } from '../actions/lesson';
@@ -18,19 +19,25 @@ const LessonDetail = (props) => {
   useEffect(() => {
     props.fetchCourseByLessonAction(match.params.id);
     props.fetchLessonAction(match.params.id);
-  }, []);
+  }, [match.params.id8]);
 
   return (
     <div>
       <main>
-        <div className="bg-dark">
+        <div className="bg-dark position-fixed">
           {lessonState.lesson && courseState.course && (
-            <div className="bg-white" style={{ marginTop: `${73}px` }}>
+            <div className="bg-white" style={{ marginTop: 73 }}>
               <div className="container-fluid margin_60_35">
                 <div className="row">
                   <div className="col-lg-8">
+                    <h2>{lessonState.lesson.name}</h2>
                     <div>
-                      VIDEO HERE
+                      <ReactPlayer
+                        url={lessonState.lesson.lectureURL}
+                        controls
+                        width="100%"
+                        className="react-player-custom"
+                      />
                     </div>
                   </div>
                   <div className="col-lg-4">

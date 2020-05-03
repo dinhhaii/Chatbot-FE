@@ -26,14 +26,14 @@ const FeedbackModal = (props) => {
 
   const handleSubmit = () => {
     if (userState.user) {
-      const { rate, content, course } = state;
+      const { rate, content, course, _idInvoice } = state;
       const _idCourse = course._id;
       const _idUser = userState.user._id;
       
       const feedback = {
-        _idCourse, _idUser, rate, content,
+        _idCourse, _idUser, rate, content, _idInvoice,
       };
-      console.log('handleSubmit -> feedback', feedback);
+      console.log("handleSubmit -> feedback", feedback);
       
       props.createFeedbackAction(feedback);
   

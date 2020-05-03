@@ -56,7 +56,7 @@ const Conversation = (props) => {
   };
 
   return message._idRecipient && recipient && (
-    <div className="kt-grid__item kt-grid__item--fluid kt-app__content" id="kt_chat_content">
+    <div className="kt-grid__item kt-grid__item--fluid kt-app__content" id="kt_chat_content" style={{ zIndex: 99999 }}>
       <div className="kt-chat">
         <div className="kt-portlet kt-portlet--head-lg kt-portlet--last chat-box">
           <div className="kt-portlet__head" style={{ maxHeight: `${80}px`, height: `${10}%` }}>

@@ -2,12 +2,9 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
-import {
-  Upload, Button, Progress, Tooltip, 
-} from 'antd';
+import { Upload, Button, Progress, Tooltip } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import ReactPlayer from 'react-player';
-import 'antd/dist/antd.css';
 import '../../utils/css/lecturer-coursedetail-lessonform.css';
 import { toast } from 'react-toastify';
 import { withRouter } from 'react-router-dom';
@@ -15,6 +12,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import firebase from '../../utils/firebase';
 import { updateLesson } from '../../actions/lesson';
+import 'antd/dist/antd.css';
 
 const STATUS = {
   SAVED: 1,

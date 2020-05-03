@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Collapse } from 'antd';
@@ -35,10 +37,15 @@ const LessonsList = (props) => {
                         {value.files.map((file, i) => {
                           return (
                             <li key={i.toString()}>
-                              <Link to="/" className="video">
+                              <Link className="video">
                                 {file.name}
                               </Link>
-                              <span className="icon-download" />
+                              <span
+                                className="icon-download"
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => {
+                                  window.open(file.fileURL, '_blank');
+                                }} />
                             </li>
                           );
                         })}

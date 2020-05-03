@@ -555,6 +555,7 @@ function* createFeedbackSaga({ feedback }) {
   yield put(showLoading());
   try {
     const { data } = yield call(createFeedback, feedback);
+    console.log(data);
     if (data) {
       yield put(fetchFeedbackSuccess(data));
       toast.success('Created successfully!');

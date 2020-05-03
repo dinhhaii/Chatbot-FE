@@ -14,7 +14,7 @@ const Chat = (props) => {
   const database = firebase.database();
   const messagesRef = database.ref(FIREBASE_MESSAGE_REF);
 
-  const [showAside, setShowAside] = useState(false);
+  const [showAside, setShowAside] = useState(true);
   const [recipient, setRecipient] = useState(null);
   const [conversation, setConversation] = useState([]);
   const [countUnreadMessages, setCountUnreadMessages] = useState({});

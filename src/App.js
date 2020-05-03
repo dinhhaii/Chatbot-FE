@@ -1,13 +1,24 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-
+import { connect } from 'react-redux';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import Header from './components/header/header';
-import Home from './pages/Home';
+import Footer from './components/footer/footer';
+import Search from './components/search';
+import CustomLoader from './components/loader';
+import routes from './routes/routes';
+import 'react-toastify/dist/ReactToastify.css';
 
-function App({ routes }) {
+function CAFOCC() {
   return (
-    <div>
+    <Router>
+      <CustomLoader />
+      <Search />
       <Header />
+      <ToastContainer
+        position={toast.POSITION.BOTTOM_CENTER}
+        style={{ zIndex: 100000 }}
+      />
       <Switch>
         {routes.map((route, index) => {
           return (
@@ -20,9 +31,19 @@ function App({ routes }) {
           );
         })}
       </Switch>
-      <Home />
-    </div>
+      <Footer />
+    </Router>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    generalState: state.generalState,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CAFOCC);
