@@ -8,6 +8,9 @@ import Search from './components/search';
 import CustomLoader from './components/loader';
 import routes from './routes/routes';
 import 'react-toastify/dist/ReactToastify.css';
+// import './utils/css/metronic/login-6.css';
+// import './utils/css/metronic/plugins.bundle.css';
+// import './utils/css/metronic/style.bundle.css';
 
 function CAFOCC() {
   return (

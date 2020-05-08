@@ -4,7 +4,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
@@ -23,7 +23,7 @@ import { updateStatusUser } from '../../utils/presence';
 import firebase from '../../utils/firebase';
 
 const Header = (props) => {
-  const { userState, cartState, generalState } = props;
+  const { userState, cartState, generalState, history } = props;
   const [isDisplayedMenu, setIsDisplayedMenu] = useState(false);
   const database = firebase.database();
 
@@ -50,6 +50,7 @@ const Header = (props) => {
       })
       .catch((error) => {
         console.log(error);
+        history.push(PATH.LOGOUT);
       });
   }, []);
 
@@ -126,15 +127,18 @@ const Header = (props) => {
           </li>
           )}
           {/* CART  */}
-          <li>
-            <Badge count={cartState.cart ? cartState.cart.items.length : 0} style={{ backgroundColor: '#52c41a' }}>
-              <Link
-                to={PATH.CART}
-                style={{ fontSize: `${17}pt`, marginRight: 10 }}>
-                <i className="icon-cart" />
-              </Link>
-            </Badge>
-          </li>
+          {userState.user && userState.user.role === 'learner' && (
+            <li>
+              <Badge count={cartState.cart ? cartState.cart.items.length : 0} style={{ backgroundColor: '#52c41a' }}>
+                <Link
+                  to={PATH.CART}
+                  style={{ fontSize: `${17}pt`, marginRight: 10 }}>
+                  <i className="icon-cart" />
+                </Link>
+              </Badge>
+            </li>  
+          )}
+          
 
           {userState.isLogin ? (
             <>
@@ -149,7 +153,7 @@ const Header = (props) => {
                 <Link
                   to={PATH.PROFILE}
                   className="kt-media kt-media--sm mr-2"
-                  style={{ verticalAlign: 'middle' }}>
+                  style={{ verticalAlign: 'middle', height: 30, width: 30 }}>
                   <img
                     src={userState.user ? userState.user.imageURL : ''}
                     alt=""
@@ -218,4 +222,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));

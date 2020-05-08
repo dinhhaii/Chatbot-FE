@@ -24,7 +24,7 @@ const feedback = [
       "As an employee, I dont have extra time to go to the teaching center/institution. Therefore I chose to study online on Udema and they didn't disappoint me. An interesting thing here is that we can get online advice about the learning paths from Chatbot.",
   },
   {
-    imageURL: 'https://www.thelocal.se/userdata/images/article/6d67730d16af04f3f956389d4cc244af808b8381c23b1e3d218ecd792de14fa8.jpg',
+    imageURL: 'https://instagram.fsgn5-3.fna.fbcdn.net/v/t51.2885-15/e35/46763665_199432781005498_2907469645428710769_n.jpg?_nc_ht=instagram.fsgn5-3.fna.fbcdn.net&_nc_cat=110&_nc_ohc=sbZIbPULoFEAX-vRIWt&oh=3e4c7fdf96a1fcfe3811321183ea36f7&oe=5EDBBAE2',
     name: 'Lam Tae Hoon',
     title: 'Professor of Linguistics',
     content:
@@ -48,7 +48,7 @@ const Feedback = () => {
               <div className="col-lg-6" key={index.toString()}>
                 <Link className="box_news" to="/">
                   <figure>
-                    <img src={data.imageURL} alt="" />
+                    <img style={{ width: '100%', height: 200 }} src={data.imageURL} alt="" />
                   </figure>
                   <ul>
                     <li>{data.title}</li>

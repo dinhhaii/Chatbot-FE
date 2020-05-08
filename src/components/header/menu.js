@@ -40,14 +40,7 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
                       </Link>
                     </li>
                   )}
-                  <li>
-                    <Link
-                      to={PATH.LOGOUT}
-                      className="btn btn-danger"
-                      onClick={showMenuContent}>
-                      <i className="icon-logout-1" /> Log Out
-                    </Link>
-                  </li>
+                  
                 </ul>
               </div>
               <div className="col-md-4">
@@ -88,7 +81,7 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
                 <h3>UDEMA</h3>
                 <ul>
                   <li>
-                    <Link to={PATH.CHAT} className="btn btn-info" style={{ opacity: 1 }} onClick={showMenuContent}>
+                    <Link to={PATH.CHAT} onClick={showMenuContent}>
                       <i className="icon-chat-empty" /> Messenger
                     </Link>
                   </li>
@@ -134,6 +127,16 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
                   <i className="ti-instagram" />
                 </Link>
               </li>
+              {userState.isLogin && (
+                <li>
+                  <Link
+                    to={PATH.LOGOUT}
+                    className="btn btn-danger"
+                    onClick={showMenuContent}>
+                    <i className="icon-logout-1" /> Log Out
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </div>
@@ -145,6 +148,7 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
 const mapStateToProps = (state) => {
   return {
     userState: state.userState,
+    generalState: state.generalState,
   };
 };
 

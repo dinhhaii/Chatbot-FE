@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -7,13 +8,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchUserList } from '../actions/user';
 import LecturerCourseTable from '../components/profile/profileuser-courses-table';
+import { PATH } from '../utils/constant';
 
 const UserDetail = (props) => {
   useEffect(() => {
     props.fetchUserListAction();
   }, []);
 
-  const { match, userState } = props;
+  const { match, userState, history } = props;
   let user = null;
   if (userState.userList) {
     user = props.userState.userList.find((e) => e._id === match.params.id);
@@ -65,7 +67,7 @@ const UserDetail = (props) => {
                     Email <span className="float-right">{user.email}</span>
                   </li>
                   <li>
-                    <div className="btn btn-primary w-100">
+                    <div className="btn btn-primary w-100" onClick={() => history.push(PATH.CHAT)}>
                       <i className="icon-chat" />
                       Messages
                     </div>

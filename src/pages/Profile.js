@@ -89,9 +89,9 @@ const Profile = (props) => {
                             Messages
                           </Link>
                           <Link
-                            to={PATH.CART}
+                            to={`${PATH.PROFILE_USER}/${userState.user._id}`}
                             className="btn btn-success btn-sm">
-                            My cart
+                            Preview
                           </Link>
                         </div>
                       </div>

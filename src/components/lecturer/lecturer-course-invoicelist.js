@@ -69,7 +69,6 @@ const LecturerInvoiceList = (props) => {
     const { search, status } = filterState;
     return list
       .filter(e => search === ''
-        || status === ''
         || e.course.name.toLowerCase().includes(search.toLowerCase())
         || e.lecturer.firstName.toLowerCase().includes(search.toLowerCase())
         || e.lecturer.lastName.toLowerCase().includes(search.toLowerCase()))
@@ -121,7 +120,7 @@ const LecturerInvoiceList = (props) => {
                     clearInterval(timer);
                     setTimer(setTimeout(() => handleFilterChange(_filter), 500));
                   }}
-                    />
+                />
                 <span className="kt-input-icon__icon kt-input-icon__icon--left">
                   <span>
                     <i className="icon-search" />

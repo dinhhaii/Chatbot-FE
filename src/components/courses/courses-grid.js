@@ -77,7 +77,7 @@ const CoursesGrid = (props) => {
                   <h3>{value.name}</h3>
                   <Link
                     to={`${PATH.PROFILE_USER}/${value.lecturer._id}`}
-                    className="mb-2 badge badge-success">
+                    className="mb-2 pt-2 badge badge-success">
                     {`${value.lecturer.firstName.toUpperCase()} ${value.lecturer.lastName.toUpperCase()}`}
                   </Link>
                   <p style={{ height: 120, maxHeight: 120, overflow: 'hidden' }}>{value.description}</p>

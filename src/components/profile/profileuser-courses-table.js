@@ -70,7 +70,7 @@ const LecturerCourseTable = (props) => {
   return (
     <div className="table-responsive" style={{ position: 'relative', height: 550 }}>
       <table
-        className="table table-striped kt-datatable__table pb-5 shadow scrollbar"
+        className="table table-hover kt-datatable__table pb-5 shadow scrollbar"
         style={{
           display: 'block',
           maxHeight: 500,
@@ -148,7 +148,7 @@ const LecturerCourseTable = (props) => {
                   style={{ width: headers[4].width }}>
                   <span style={{ width: `${100}px` }}>
                     <Rate
-                      defaultValue={rateAverage}
+                      defaultValue={rateAverage || 0}
                       disabled
                       style={{ fontSize: `${10}pt` }}
                     />

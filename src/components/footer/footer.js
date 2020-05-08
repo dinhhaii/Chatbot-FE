@@ -4,7 +4,6 @@ import { PATH } from '../../utils/constant';
 
 const Footer = (props) => {
   const location = useLocation();
-  console.log(location);
   const disabled = location.pathname.includes('chat') || location.pathname.includes('lesson-detail');
 
   return (

@@ -82,7 +82,7 @@ const CoursesList = (props) => {
                     <h3>{value.name}</h3>
                     <Link
                       to={`${PATH.PROFILE_USER}/${value.lecturer._id}`}
-                      className={`mb-2 badge ${getRandom([
+                      className={`mb-2 pt-2 badge ${getRandom([
                         'badge-success',
                         'badge-danger',
                         'badge-warning',

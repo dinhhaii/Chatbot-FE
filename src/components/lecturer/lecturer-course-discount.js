@@ -70,7 +70,7 @@ const LecturerCourseDiscount = (props) => {
             </button>
           </div>
         </div>
-        <div className="kt-portlet__body">
+        <div className="kt-portlet__body" style={{ maxHeight: 300, overflow: 'auto' }}>
           <div className="tab-content">
             <div className="tab-pane active" id="kt_widget4_tab1_content">
               <div className="kt-widget4">

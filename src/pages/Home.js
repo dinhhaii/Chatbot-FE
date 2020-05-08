@@ -24,6 +24,9 @@ const Home = (props) => {
     props.fetchSubjectListAction();
   }, []);
 
+  const { courseState, subjectState } = props;
+  const courseList = courseState.courseList.filter(item => item.status === 'approved');
+
   return (
     <div>
       <main>
@@ -35,10 +38,10 @@ const Home = (props) => {
             <span>
               <em />
             </span>
-            <h2>Popular Courses</h2>
+            <h2>New Courses</h2>
             <p>Choose many online video courses with new additions published every month</p>
           </div>
-          <CourseCarousel courseList={props.courseState.courseList} />
+          <CourseCarousel courseList={courseList} />
           <div className="container">
             <p className="btn_home_align">
               <Link to={PATH.COURSES} className="btn_1 rounded">
@@ -58,7 +61,7 @@ const Home = (props) => {
             <h2>Subjects</h2>
             <p />
           </div>
-          <Subject subjectList={props.subjectState.subjectList} />
+          <Subject subjectList={subjectState.subjectList} courseList={courseList} />
         </div>
 
         <CallSection />

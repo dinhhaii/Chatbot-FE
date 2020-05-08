@@ -17,6 +17,8 @@ import { getRandom } from '../../utils/helper';
 const CourseCarousel = (props) => {
   const { courseList, cartState } = props;
 
+  const courses = courseList.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate)).reverse().slice(0, 5);
+
   const addToCart = (course) => {
     // Map CartState to items
     const items = [];
@@ -63,7 +65,7 @@ const CourseCarousel = (props) => {
       slidesToScroll="auto"
       wrapAround
       transitionMode="scroll3d">
-      {courseList.map((course, index) => {
+      {courses.map((course, index) => {
         const rateAverage = course.feedback.reduce((total, num) => total + num.rate, 0) / course.feedback.length;
         return course.isDelete ? null : (
           <div className="item" key={index.toString()}>
@@ -86,7 +88,7 @@ const CourseCarousel = (props) => {
                 <h3>{course.name}</h3>
                 <Link
                   to={`${PATH.PROFILE_USER}/${course.lecturer._id}`}
-                  className={`mb-2 badge ${getRandom([
+                  className={`pt-2 mb-2 badge ${getRandom([
                     'badge-success',
                     'badge-danger',
                     'badge-warning',

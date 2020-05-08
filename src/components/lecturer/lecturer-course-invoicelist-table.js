@@ -32,7 +32,7 @@ const LecturerInvoiceListTable = (props) => {
           <td>
             <div className="kt-user-card-v2">
               <div className="kt-user-card-v2__pic">
-                <img src={invoice.course.imageURL} style={{ borderRadius: 0 }} alt="" />
+                <img src={invoice.course.imageURL} style={{ borderRadius: 0, width: '100%' }} alt="" />
               </div>
               <div className="kt-user-card-v2__details">
                 <Link
@@ -99,7 +99,7 @@ const LecturerInvoiceListTable = (props) => {
       className="table-responsive mb-3">
       <table
         className="table table-hover shadow"
-        style={{ maxHeight: `${500}px` }}>
+        style={{ maxHeight: 350, height: 350 }}>
         {/* HEAD */}
         <thead className="kt-datatable__head bg-light">
           <tr className="kt-datatable__row" style={{ left: `${0}px` }}>

@@ -53,7 +53,7 @@ const CourseReview = (props) => {
         <div className="row">
           <div className="col-lg-3">
             <div id="review_summary">
-              <h2 style={{ color: 'white', fontSize: `${30}pt` }}>{rateAverage}</h2>
+              <h2 style={{ color: 'white', fontSize: `${30}pt` }}>{rateAverage || 0 }</h2>
               <div>
                 <Rate
                   defaultValue={rateAverage}

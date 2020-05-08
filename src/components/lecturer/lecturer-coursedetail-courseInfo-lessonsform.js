@@ -2,7 +2,9 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
-import { Upload, Button, Progress, Tooltip } from 'antd';
+import {
+  Upload, Button, Progress, Tooltip, 
+} from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import ReactPlayer from 'react-player';
 import '../../utils/css/lecturer-coursedetail-lessonform.css';

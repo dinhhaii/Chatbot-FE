@@ -18,6 +18,7 @@ const Course = (props) => {
   const prevProps = usePrevious(props);
   const { courseState, location } = props;
   const dataPerPage = 4;
+  const courses = courseState.courseList.filter(item => item.status === 'approved');
 
   const [filter, setFilter] = useState({
     search: '',
@@ -50,16 +51,13 @@ const Course = (props) => {
 
   // DID UPDATE
   useEffect(() => {
-    if (
-      prevProps
-      && prevProps.courseState.courseList !== props.courseState.courseList
-    ) {
+    if (prevProps && prevProps.courseState.courseList !== props.courseState.courseList) {
       setPagination({
         indexFirst: 0,
         indexLast: dataPerPage,
         currentPage: 1,
-        totalPage: Math.ceil(courseState.courseList.length / dataPerPage),
-        data: handleFilter(courseState.courseList, filter).slice(0, dataPerPage),
+        totalPage: Math.ceil(courses.length / dataPerPage),
+        data: handleFilter(courses, filter).slice(0, dataPerPage),
       });
     }
   });
@@ -68,7 +66,7 @@ const Course = (props) => {
     const { indexFirst } = pagination.indexFirst;
     const indexLast = page * dataPerPage;
     const currentPage = page;
-    const data = handleFilter(courseState.courseList, filter).slice(indexFirst, indexLast);
+    const data = handleFilter(courses, filter).slice(indexFirst, indexLast);
 
     setPagination({
       ...pagination,
@@ -79,7 +77,7 @@ const Course = (props) => {
   };
 
   const handleChangeFilter = (_filter) => {
-    const data = handleFilter(courseState.courseList, _filter).slice(0, dataPerPage);
+    const data = handleFilter(courses, _filter).slice(0, dataPerPage);
     
     setPagination({
       ...pagination,

@@ -47,7 +47,7 @@ const LecturerCourseDiscountUpdate = (props) => {
       >
       <form onSubmit={handleSubmit}>
         <div className="form-group row">
-          <label htmlFor="selectIdCourseDiscount" className="col-2 col-form-label">
+          <label htmlFor="selectIdCourseDiscount" className="col-4 col-form-label">
             Course
           </label>
           <div className="col-8">
@@ -66,7 +66,7 @@ const LecturerCourseDiscountUpdate = (props) => {
         </div>
         
         <div className="form-group row">
-          <label htmlFor="codeDiscount" className="col-2 col-form-label">
+          <label htmlFor="codeDiscount" className="col-4 col-form-label">
             Code
           </label>
           <div className="col-8">
@@ -81,7 +81,7 @@ const LecturerCourseDiscountUpdate = (props) => {
           </div>
         </div>
         <div className="form-group row">
-          <label htmlFor="percentageDiscount" className="col-2 col-form-label">
+          <label htmlFor="percentageDiscount" className="col-4 col-form-label">
             Percentage
           </label>
           <div className="col-8">
@@ -97,7 +97,7 @@ const LecturerCourseDiscountUpdate = (props) => {
         </div>
 
         <div className="form-group row">
-          <label htmlFor="selectStatusDiscount" className="col-2 col-form-label">
+          <label htmlFor="selectStatusDiscount" className="col-4 col-form-label">
             Status
           </label>
           <div className="col-8">
