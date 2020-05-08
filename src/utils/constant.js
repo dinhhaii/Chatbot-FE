@@ -1,5 +1,5 @@
-export const SERVER_URL = 'http://localhost:3000';
-// export const SERVER_URL = 'https://cafocc-api.herokuapp.com';
+// export const SERVER_URL = 'http://localhost:3000';
+export const SERVER_URL = 'https://cafocc-api.herokuapp.com';
 export const PUBLISH_KEY_STRIPE = 'pk_test_bVMx06pYmPZ1mR7lj74RSrlf00TcSnax3B';
 export const AUTH_TOKEN = 'AUTH_TOKEN';
 export const FIREBASE_MESSAGE_REF = 'messages';
@@ -20,15 +20,22 @@ export const TAB = {
   INVOICES: 'invoices',
 };
 
+export const AUTH = {
+  LOGIN: 'login',
+  REGISTER: 'register',
+  FORGOTPASSWORD: 'forgotpassword',
+  CHANGEPASSWORD: 'changepassword',
+};
+
 export const PATH = {
   LOGIN: '/login',
   REGISTER: '/register',
   FORGOT_PASSWORD: '/forgot-password',
   AUTH: '/auth',
-  AUTH_LOGIN: '/auth/login',
-  AUTH_REGISTER: '/auth/register',
-  AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
-  AUTH_RESET_PASSWORD: '/auth/reset-password',
+  AUTH_LOGIN: `/auth?type=${AUTH.LOGIN}`,
+  AUTH_REGISTER: `/auth?type=${AUTH.REGISTER}`,
+  AUTH_FORGOT_PASSWORD: `/auth?type=${AUTH.FORGOTPASSWORD}`,
+  AUTH_RESET_PASSWORD: `/auth?type=${AUTH.CHANGEPASSWORD}`,
   PROFILE: '/profile',
   PROFILE_USER: '/profileuser',
   LECTURERS: '/lecturers',

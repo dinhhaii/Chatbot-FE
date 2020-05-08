@@ -4,7 +4,7 @@ import { PATH } from '../../utils/constant';
 
 const Footer = (props) => {
   const location = useLocation();
-  const disabled = location.pathname.includes('chat') || location.pathname.includes('lesson-detail');
+  const disabled = location.pathname.includes('chat') || location.pathname.includes('lesson-detail') || location.pathname.includes('auth');
 
   return (
     <footer style={{ display: disabled && 'none' }}>

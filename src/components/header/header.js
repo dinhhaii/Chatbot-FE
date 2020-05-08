@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/destructuring-assignment */
@@ -9,21 +10,17 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
 import { Badge } from 'antd';
-import {
-  fetchUser, setIsLogin, fetchUserSuccess, fetchUserList, 
-} from '../../actions/user';
-import {
-  AUTH_TOKEN, PATH, FIREBASE_MESSAGE_REF, FIREBASE_STATUS_REF, 
-} from '../../utils/constant';
+import { fetchUser, setIsLogin, fetchUserSuccess, fetchUserList } from '../../actions/user';
+import { AUTH_TOKEN, PATH, FIREBASE_MESSAGE_REF, FIREBASE_STATUS_REF } from '../../utils/constant';
 import { authorizeUser } from '../../api/user';
 import { showSearchBar, updateUnreadMessages, setStatusUser } from '../../actions/general';
 import { fetchCart } from '../../actions/cart';
-import Menu from './menu';
 import { updateStatusUser } from '../../utils/presence';
 import firebase from '../../utils/firebase';
+import Menu from './menu';
 
 const Header = (props) => {
-  const { userState, cartState, generalState, history } = props;
+  const { userState, cartState, generalState } = props;
   const [isDisplayedMenu, setIsDisplayedMenu] = useState(false);
   const database = firebase.database();
 
@@ -38,6 +35,7 @@ const Header = (props) => {
     authorizeUser(token)
       .then((response) => {
         const { data } = response;
+        console.log(response);
         if (data) {
           const { firstName, lastName, _id } = data;
           updateStatusUser(_id);
@@ -50,7 +48,6 @@ const Header = (props) => {
       })
       .catch((error) => {
         console.log(error);
-        history.push(PATH.LOGOUT);
       });
   }, []);
 
@@ -164,12 +161,12 @@ const Header = (props) => {
           ) : (
             <>
               <li>
-                <Link to={PATH.LOGIN} className="login">
+                <Link to={PATH.LOGIN}>
                   Login
                 </Link>
               </li>
               <li>
-                <Link to={PATH.REGISTER} className="login">
+                <Link to={PATH.REGISTER}>
                   Register
                 </Link>
               </li>

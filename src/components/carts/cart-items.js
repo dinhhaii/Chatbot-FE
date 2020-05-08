@@ -97,9 +97,9 @@ const CartItems = (props) => {
     <div className="col-lg-8">
       <div className="box_cart">
         <table className="table table-hover table-striped table-borderless cart-list shadow">
-          <thead style={{ paddingTop: 20 }}>
+          <thead>
             <tr>
-              {headers.map((value, index) => <th key={index.toString()}>{value}</th>)}
+              {headers.map((value, index) => <th key={index.toString()} style={{ paddingTop: 20 }}>{value}</th>)}
             </tr>
           </thead>
           <tbody>

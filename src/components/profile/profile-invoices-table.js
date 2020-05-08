@@ -38,7 +38,7 @@ const InvoiceTable = (props) => {
       className="table-responsive">
       <table
         className="table table-hover shadow"
-        style={{ display: 'block', maxHeight: `${500}px` }}>
+        style={{ display: 'block', maxHeight: 400, height: 400 }}>
         {/* HEAD */}
         <thead className="kt-datatable__head">
           <tr className="kt-datatable__row" style={{ left: `${0}px` }}>
