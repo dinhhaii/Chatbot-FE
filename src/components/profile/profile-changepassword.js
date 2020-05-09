@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -6,6 +7,7 @@ import { PATH } from '../../utils/constant';
 import { changePassword } from '../../actions/user';
 
 const ProfileChangePassword = (props) => {
+  const { setShowAside } = props;
   const [state, setState] = useState({
     currentpassword: '',
     password: '',
@@ -32,6 +34,11 @@ const ProfileChangePassword = (props) => {
           <div className="kt-portlet kt-portlet--height-fluid">
             <div className="kt-portlet__head">
               <div className="kt-portlet__head-label">
+                <Link
+                  onClick={() => setShowAside(true)}
+                  className="btn btn-clean btn-sm btn-icon btn-icon-md">
+                  <i className="icon-th-list-3" />
+                </Link>
                 <h3 className="kt-portlet__head-title">
                   Change Password
                   <small>change or reset your account password</small>

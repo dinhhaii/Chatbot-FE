@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
@@ -13,7 +13,7 @@ import firebase from '../../utils/firebase';
 import 'antd/dist/antd.css';
 
 const ProfileInformation = (props) => {
-  const { userState } = props;
+  const { userState, setShowAside } = props;
   const [isVerified, setIsVerified] = useState(false);
   const [state, setState] = useState({
     imageURL: userState.user.imageURL,
@@ -97,6 +97,11 @@ const ProfileInformation = (props) => {
             <div className="kt-portlet">
               <div className="kt-portlet__head">
                 <div className="kt-portlet__head-label">
+                  <Link
+                    onClick={() => setShowAside(true)}
+                    className="btn btn-clean btn-sm btn-icon btn-icon-md">
+                    <i className="icon-th-list-3" />
+                  </Link>
                   <h3 className="kt-portlet__head-title">
                     Personal Information
                     <small>update your personal informaiton</small>

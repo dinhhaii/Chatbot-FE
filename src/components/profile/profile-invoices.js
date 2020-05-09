@@ -1,8 +1,9 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable  react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Pagination } from 'antd';
@@ -13,7 +14,9 @@ import 'antd/dist/antd.css';
 
 const ProfileInvoices = (props) => {
   const prevProps = usePrevious(props);
-  const { invoiceState, userState, feedbackState } = props;
+  const {
+    invoiceState, userState, feedbackState, setShowAside, 
+  } = props;
   const dataPerPage = 5;
 
   const [filter, setFilter] = useState({
@@ -95,6 +98,11 @@ const ProfileInvoices = (props) => {
             <span className="kt-portlet__head-icon">
               <i className="icon-newspaper" />
             </span>
+            <Link
+              onClick={() => setShowAside(true)}
+              className="btn btn-clean btn-sm btn-icon btn-icon-md">
+              <i className="icon-th-list-3" />
+            </Link>
             <h3 className="kt-portlet__head-title">Invoices</h3>
           </div>
         </div>

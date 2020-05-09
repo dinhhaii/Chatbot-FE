@@ -15,6 +15,7 @@ import { TAB, PATH } from '../utils/constant';
 const Profile = (props) => {
   const { userState, location } = props;
   const [tabName, setTabName] = useState(TAB.PERSONAL_INFORMATION);
+  const [showAside, setShowAside] = useState(true);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -47,7 +48,7 @@ const Profile = (props) => {
             </button>
 
             <div
-              className="kt-grid__item kt-app__toggle kt-app__aside"
+              className={`kt-grid__item kt-app__toggle kt-app__aside ${showAside ? 'kt-app__aside--on' : ''}`}
               id="kt_user_profile_aside">
               <div className="kt-portlet ">
                 <div className="kt-portlet__head  kt-portlet__head--noborder">
@@ -56,10 +57,9 @@ const Profile = (props) => {
                   </div>
                   <div className="kt-portlet__head-toolbar">
                     <Link
-                      to="/"
-                      className="btn btn-clean btn-sm btn-icon btn-icon-md"
-                      data-toggle="dropdown">
-                      <i className="icon-dot-3" />
+                      onClick={() => setShowAside(false)}
+                      className="btn btn-clean btn-sm btn-icon btn-icon-md">
+                      <i className="icon-collapse-left" />
                     </Link>
                   </div>
                 </div>
@@ -86,7 +86,7 @@ const Profile = (props) => {
                         </div>
                         <div className="kt-widget__action">
                           <Link to={PATH.CHAT} className="btn btn-info btn-sm">
-                            Messages
+                            Chat
                           </Link>
                           <Link
                             to={`${PATH.PROFILE_USER}/${userState.user._id}`}
@@ -167,11 +167,9 @@ const Profile = (props) => {
               </div>
             </div>
 
-            {tabName === TAB.PERSONAL_INFORMATION ? (
-              <ProfileInformation />
-            ) : null}
-            {tabName === TAB.CHANGE_PASSWORD ? <ProfileChangePassword /> : null}
-            {tabName === TAB.INVOICES ? <ProfileInvoices /> : null}
+            {tabName === TAB.PERSONAL_INFORMATION && <ProfileInformation setShowAside={setShowAside} />}
+            {tabName === TAB.CHANGE_PASSWORD && <ProfileChangePassword setShowAside={setShowAside} />}
+            {tabName === TAB.INVOICES && <ProfileInvoices setShowAside={setShowAside} />}
           </div>
         </div>
       ) : null}

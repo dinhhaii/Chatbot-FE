@@ -1,11 +1,13 @@
 /* eslint-disable no-underscore-dangle */
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Rate } from 'antd';
 import { PATH } from '../../utils/constant';
 import 'antd/dist/antd.css';
 import { capitalize } from '../../utils/helper';
+import ReportModal from './lecturer-course-invoicelist-report';
+import FeedbackModal from './lecturer-course-invoicelist-feedback';
 
 const LecturerInvoiceListTable = (props) => {
   const headers = [
@@ -17,13 +19,17 @@ const LecturerInvoiceListTable = (props) => {
     { name: 'Duration' },
     { name: 'Accessible Days' },
     { name: 'Status', width: 'auto' },
+    { name: '' },
   ];
   const { data } = props;
-  
+  const [state, setState] = useState({
+    visibleReportModal: false,
+    visibleFeedbackModal: false,
+  });
+
   const showTableContent = () => {
     return data.map((invoice, index) => {
       const rateAverage = Math.round(invoice.feedback.reduce((total, num) => total + num.rate, 0) / invoice.feedback.length);
-
       return (
         <tr
           className="kt-datatable__row"
@@ -44,7 +50,7 @@ const LecturerInvoiceListTable = (props) => {
             </div>
           </td>
   
-          <td style={{ textAlign: 'center' }}>
+          <td className="text-nowrap" style={{ textAlign: 'center' }}>
             <span className="kt-font-bold">
               <Rate defaultValue={rateAverage} disabled />
             </span>
@@ -88,7 +94,32 @@ const LecturerInvoiceListTable = (props) => {
               </span>
             </span>
           </td>
-            
+          
+          <td>
+            <button 
+              className="btn btn-outline-primary"
+              onClick={() => {
+                if (invoice.status === 'reported') {
+                  setState({
+                    ...state, 
+                    visibleReportModal: true,
+                    courseName: invoice.course.name,
+                    reportMsg: invoice.reportMsg, 
+                  });
+                } else {
+                  setState({
+                    ...state, 
+                    visibleFeedbackModal: true,
+                    course: invoice.course,
+                    lecturer: invoice.lecturer,
+                    feedback: invoice.feedback, 
+                  });
+                }
+              }}
+              disabled={invoice.status !== 'reported' && invoice.feedback.length === 0}>
+              <i className="icon-eye pr-0" />
+            </button>
+          </td>
         </tr>
       );
     });
@@ -122,6 +153,9 @@ const LecturerInvoiceListTable = (props) => {
           {showTableContent()}
         </tbody>
       </table>
+
+      <ReportModal state={state} setState={setState} />
+      <FeedbackModal state={state} setState={setState} />
     </div>
   );
 };
