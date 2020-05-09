@@ -12,12 +12,18 @@ import bcrypt from 'bcryptjs';
 import * as actionTypes from '../utils/actionTypes';
 import { AUTH_TOKEN } from '../utils/constant';
 import { getUser, updateUser, getUserList } from '../api/user';
-import { getCourseList, getCourseLecturerList, getCourse, getCourseByLessonId, createCourse, updateCourse } from '../api/course';
-import { getInvoiceLearnerList, getInvoiceLecturerList, createInvoice, updateInvoice } from '../api/invoice';
+import {
+  getCourseList, getCourseLecturerList, getCourse, getCourseByLessonId, createCourse, updateCourse, 
+} from '../api/course';
+import {
+  getInvoiceLearnerList, getInvoiceLecturerList, createInvoice, updateInvoice, getInvoiceList, 
+} from '../api/invoice';
 import { getSubjectList } from '../api/subject';
 import { createDiscount, updateDiscount } from '../api/discount';
 import { showLoading, hideLoading } from '../actions/general';
-import { fetchUserSuccess, fetchUserFailed, setIsLogin, fetchUserListSuccess, fetchUserListFailed } from '../actions/user';
+import {
+  fetchUserSuccess, fetchUserFailed, setIsLogin, fetchUserListSuccess, fetchUserListFailed, 
+} from '../actions/user';
 import {
   fetchCourseListSuccess,
   fetchCourseListFailed,
@@ -33,6 +39,8 @@ import {
   fetchInvoiceLecturerListSuccess,
   fetchInvoiceLecturerListFailed,
   fetchInvoiceList,
+  fetchInvoiceListSuccess,
+  fetchInvoiceListFailed,
 } from '../actions/invoice';
 import { getLesson, createLesson, updateLesson } from '../api/lesson';
 import { fetchLessonSuccess, fetchLessonFailed } from '../actions/lesson';
@@ -46,6 +54,7 @@ function* rootSaga() {
   yield takeEvery(actionTypes.FETCH_USER, fetchUserSaga);
   yield takeLatest(actionTypes.CREATE_INVOICE, createInvoiceSaga);
   yield takeLatest(actionTypes.UPDATE_INVOICE, updateInvoiceSaga);
+  yield takeLatest(actionTypes.FETCH_INVOICE_LIST, fetchInvoiceListSaga);
   yield takeLatest(actionTypes.FETCH_CART, fetchCartSaga);
   yield takeLatest(actionTypes.UPDATE_CART, updateCartSaga);
   yield takeLatest(actionTypes.FETCH_LESSON, fetchLessonSaga);
@@ -259,7 +268,6 @@ function* fetchInvoiceLecturerListSaga({ _id }) {
   yield put(showLoading());
   try {
     const { data } = yield call(getInvoiceLecturerList, _id);
-    console.log(data);
     if (data) {
       yield put(fetchInvoiceLecturerListSuccess(data.filter(e => !e.isDelete)));
     } else {
@@ -516,7 +524,7 @@ function* createInvoiceSaga({ invoice }) {
     const { invoiceState } = yield select();
     console.log('create invoice', data);
     if (data) {
-      yield put(fetchInvoiceList([...invoiceState.invoiceList, data]));
+      yield put(fetchInvoiceListSuccess([...invoiceState.invoiceList, data]));
       toast.success('Created successfully!');
     } else {
       toast.error('Sorry, created failed!');
@@ -584,6 +592,26 @@ function* updateFeedbackSaga({ feedback }) {
   } catch (e) {
     console.log(e);
     toast.error('Sorry, updated failed!');
+  } finally {
+    yield delay(1000);
+    yield put(hideLoading());
+  }
+}
+
+function* fetchInvoiceListSaga() {
+  yield put(showLoading());
+  try {
+    const { data } = yield call(getInvoiceList);
+    if (data) {
+      yield put(fetchInvoiceListSuccess(data.filter(e => !e.isDelete)));
+    } else {
+      yield put(fetchInvoiceListFailed());
+      toast.error('Cannot fetch invoice list!');
+    }
+  } catch (e) {
+    console.log(e);
+    yield put(fetchInvoiceListFailed());
+    toast.error('Cannot fetch invoice list!');
   } finally {
     yield delay(1000);
     yield put(hideLoading());

@@ -33,7 +33,6 @@ const FeedbackModal = (props) => {
       const feedback = {
         _idCourse, _idUser, rate, content, _idInvoice,
       };
-      console.log("handleSubmit -> feedback", feedback);
       
       props.createFeedbackAction(feedback);
   

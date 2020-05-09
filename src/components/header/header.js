@@ -35,7 +35,6 @@ const Header = (props) => {
     authorizeUser(token)
       .then((response) => {
         const { data } = response;
-        console.log(response);
         if (data) {
           const { firstName, lastName, _id } = data;
           updateStatusUser(_id);

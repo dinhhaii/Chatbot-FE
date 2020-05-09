@@ -105,6 +105,7 @@ const CoursePurchase = (props) => {
             })}
           </div>
         )}
+        
         <Link onClick={() => addToCart(course)} className="btn_1 full-width">
           Add to cart
         </Link>
