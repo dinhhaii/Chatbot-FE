@@ -12,6 +12,8 @@ export const IMAGE_URL = {
     'https://cdn.pixabay.com/photo/2016/03/27/22/04/camera-1284459_1280.jpg',
   BACKGROUND_3: 
     'https://cdn.pixabay.com/photo/2015/05/31/15/07/business-792113_1280.jpg',
+  NO_AVATAR:
+    `${SERVER_URL}/images/no-avatar.png`,
 };
 
 export const TAB = {

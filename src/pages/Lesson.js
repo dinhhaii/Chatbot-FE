@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.css';
 import { Tabs } from 'antd';
 import { bindActionCreators } from 'redux';
@@ -15,19 +15,29 @@ import { fetchInvoiceList, updateInvoice } from '../actions/invoice';
 import { usePrevious } from '../utils/helper';
 
 const { TabPane } = Tabs;
+const TABLESSON = {
+  LESSONS: 'lessons',
+  COMMENTS: 'comments',
+};
 
 const LessonDetail = (props) => {
   const {
-    match, courseState, lessonState, invoiceState, userState, history, 
+    match, courseState, lessonState, invoiceState, userState, history, commentState, location,
   } = props;
 
+  const [tabKey, setTabKey] = useState(TABLESSON.LESSONS);
   const prevProps = usePrevious(props);
 
   useEffect(() => {
     props.fetchCourseByLessonAction(match.params.id);
     props.fetchLessonAction(match.params.id);
     props.fetchInvoiceListAction();
-  }, [match.params.id]);
+    const urlParams = new URLSearchParams(location.search);
+    const tab = urlParams.get('tab');
+    if (tab) {
+      setTabKey(tab);
+    }
+  }, [match.params.id, commentState.comment]);
 
   useEffect(() => {
     if (userState.user && courseState.course && invoiceState.invoiceList.length !== 0 
@@ -79,15 +89,16 @@ const LessonDetail = (props) => {
                     </div>
                   </div>
                   <div className="col-lg-4">
-                    <Tabs defaultActiveKey="1">
-                      <TabPane tab={<span>Lessons</span>} key="1">
+                    <Tabs
+                      activeKey={tabKey}
+                      onTabClick={key => setTabKey(key)}>
+                      <TabPane tab={<span>Lessons</span>} key={TABLESSON.LESSONS}>
                         <LessonsList lessons={courseState.course.lessons} idCourse={courseState.course._id} />
                       </TabPane>
-                      <TabPane tab={<span>Comments</span>} key="2">
-                        <LessonComment comments={lessonState.lesson.comments} />
+                      <TabPane tab={<span>Comments</span>} key={TABLESSON.COMMENTS}>
+                        <LessonComment idLesson={match.params.id} comments={lessonState.lesson.comments} />
                       </TabPane>
                     </Tabs>
-                    ,
                   </div>
                 </div>
               </div>
@@ -105,6 +116,7 @@ const mapStateToProps = (state) => {
     lessonState: state.lessonState,
     courseState: state.courseState,
     invoiceState: state.invoiceState,
+    commentState: state.commentState,
   };
 };
 

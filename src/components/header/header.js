@@ -102,6 +102,13 @@ const Header = (props) => {
           </Link>
         </div>
         <ul id="top_menu">
+          <li>
+            <Link
+              to="/lesson-detail/5e89eef8e0de0f0643c53f26?tab=comments"
+              style={{ fontSize: `${17}pt` }}>
+              TEST
+            </Link>
+          </li>
           {/* SEARCH  */}
           <li>
             <Link

@@ -49,6 +49,8 @@ import { fetchCartSuccess, fetchCartFailed, fetchUpdatedCartSuccess } from '../a
 import { getCart, updateCart } from '../api/cart';
 import { createFeedback, updateFeedback } from '../api/feedback';
 import { fetchFeedbackSuccess } from '../actions/feedback';
+import { createComment, updateComment } from '../api/comment';
+import { fetchCommentSuccess } from '../actions/comment';
 
 function* rootSaga() {
   yield takeEvery(actionTypes.FETCH_USER, fetchUserSaga);
@@ -71,6 +73,8 @@ function* rootSaga() {
   yield takeLatest(actionTypes.UPDATE_DISCOUNT, updateDiscountSaga);
   yield takeLatest(actionTypes.CREATE_FEEDBACK, createFeedbackSaga);
   yield takeLatest(actionTypes.UPDATE_FEEDBACK, updateFeedbackSaga);
+  yield takeLatest(actionTypes.CREATE_COMMENT, createCommentSaga);
+  yield takeLatest(actionTypes.UPDATE_COMMENT, updateCommentSaga);
   yield takeLatest(actionTypes.FETCH_COURSE_BY_LESSON, fetchCourseByLessonSaga);
   yield takeLatest(actionTypes.FETCH_COURSE_LIST, fetchCourseListSaga);
   yield takeLatest(actionTypes.FETCH_SUBJECT_LIST, fetchSubjectListSaga);
@@ -563,7 +567,6 @@ function* createFeedbackSaga({ feedback }) {
   yield put(showLoading());
   try {
     const { data } = yield call(createFeedback, feedback);
-    console.log(data);
     if (data) {
       yield put(fetchFeedbackSuccess(data));
       toast.success('Created successfully!');
@@ -612,6 +615,44 @@ function* fetchInvoiceListSaga() {
     console.log(e);
     yield put(fetchInvoiceListFailed());
     toast.error('Cannot fetch invoice list!');
+  } finally {
+    yield delay(1000);
+    yield put(hideLoading());
+  }
+}
+
+function* createCommentSaga({ comment }) {
+  yield put(showLoading());
+  try {
+    const { data } = yield call(createComment, comment);
+    if (data) {
+      yield put(fetchCommentSuccess(data));
+      toast.success('Created successfully!');
+    } else {
+      toast.error('Sorry, created failed!');
+    }
+  } catch (e) {
+    console.log(e);
+    toast.error('Sorry, created failed!');
+  } finally {
+    yield delay(1000);
+    yield put(hideLoading());
+  }
+}
+
+function* updateCommentSaga({ comment }) {
+  yield put(showLoading());
+  try {
+    const { data } = yield call(updateComment, comment);
+    if (data) {
+      yield put(fetchCommentSuccess(data));
+      toast.success('Updated successfully!');
+    } else {
+      toast.error('Sorry, updated failed!');
+    }
+  } catch (e) {
+    console.log(e);
+    toast.error('Sorry, updated failed!');
   } finally {
     yield delay(1000);
     yield put(hideLoading());
