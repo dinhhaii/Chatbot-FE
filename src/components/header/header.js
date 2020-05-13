@@ -93,7 +93,7 @@ const Header = (props) => {
         <div id="logo">
           <Link to="/">
             <img
-              src="img/logo.png"
+              src="/img/logo.png"
               width="149"
               height="42"
               data-retina="true"

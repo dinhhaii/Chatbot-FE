@@ -95,9 +95,6 @@ const ProfileInvoices = (props) => {
       <div className="kt-portlet kt-portlet--mobile">
         <div className="kt-portlet__head kt-portlet__head--lg">
           <div className="kt-portlet__head-label">
-            <span className="kt-portlet__head-icon">
-              <i className="icon-newspaper" />
-            </span>
             <Link
               onClick={() => setShowAside(true)}
               className="btn btn-clean btn-sm btn-icon btn-icon-md">

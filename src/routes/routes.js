@@ -14,7 +14,7 @@ import CourseDetail from '../pages/CourseDetail';
 import About from '../pages/About';
 import Contact from '../pages/Contact';
 import LecturerCourse from '../pages/LecturerCourse';
-import LessonDetail from '../pages/Lesson';
+import LessonDetail from '../pages/LessonDetail';
 import Cart from '../pages/Cart';
 import Profile from '../pages/Profile';
 import UserDetail from '../pages/UserProfile';
@@ -22,7 +22,6 @@ import LecturerCourseDetail from '../pages/LecturerCourseDetail';
 import Chat from '../pages/Chat';
 import Logout from '../components/auth/logout';
 import ChangePassword from '../components/auth/change-password';
-// import App from '../App';
 
 // Main routes
 const routes = [

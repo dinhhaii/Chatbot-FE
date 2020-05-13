@@ -37,13 +37,18 @@ const LessonDetail = (props) => {
     if (tab) {
       setTabKey(tab);
     }
+    if (!userState.isLogin) {
+      history.push('/');
+      toast.warn('Please login to access to this course!');
+    }
   }, [match.params.id, commentState.comment]);
 
   useEffect(() => {
     if (userState.user && courseState.course && invoiceState.invoiceList.length !== 0 
       && prevProps && prevProps.invoiceState.invoiceList !== invoiceState.invoiceList) {
       const invoices = invoiceState.invoiceList.filter(item => item.user._id === userState.user._id && item.course._id === courseState.course._id);
-      if (invoices.length === 0 || !invoices.some(val => val.status === 'success')) {
+
+      if (userState.user === null || invoices.length === 0 || !invoices.some(val => val.status === 'success')) {
         history.push('/');
         toast.warn("You haven't registered for this course");
       } else {
@@ -69,41 +74,50 @@ const LessonDetail = (props) => {
     }
   });
 
+  if (!(lessonState.lesson && courseState.course)) {
+    return null;
+  }
   return (
     <div>
       <main>
         <div className="bg-dark position-relative" style={{ height: 75 }}>
-          {lessonState.lesson && courseState.course && (
-            <div className="bg-white position-absolute" style={{ top: 75, right: 0, left: 0 }}>
-              <div className="container-fluid margin_60_35">
-                <div className="row">
-                  <div className="col-lg-8">
-                    <h2>{lessonState.lesson.name}</h2>
-                    <div>
-                      <ReactPlayer
-                        url={lessonState.lesson.lectureURL}
-                        controls
-                        width="100%"
-                        className="react-player-custom border border-success"
+          <div
+            className="bg-white position-absolute"
+            style={{ top: 75, right: 0, left: 0 }}>
+            <div className="container-fluid margin_60_35">
+              <div className="row">
+                <div className="col-lg-8">
+                  <h2>{lessonState.lesson.name}</h2>
+                  <div>
+                    <ReactPlayer
+                      url={lessonState.lesson.lectureURL}
+                      controls
+                      width="100%"
+                      className="react-player-custom border border-success"
+                    />
+                  </div>
+                </div>
+                <div className="col-lg-4">
+                  <Tabs activeKey={tabKey} onTabClick={(key) => setTabKey(key)}>
+                    <TabPane tab={<span>Lessons</span>} key={TABLESSON.LESSONS}>
+                      <LessonsList
+                        lessons={courseState.course.lessons}
+                        idCourse={courseState.course._id}
                       />
-                    </div>
-                  </div>
-                  <div className="col-lg-4">
-                    <Tabs
-                      activeKey={tabKey}
-                      onTabClick={key => setTabKey(key)}>
-                      <TabPane tab={<span>Lessons</span>} key={TABLESSON.LESSONS}>
-                        <LessonsList lessons={courseState.course.lessons} idCourse={courseState.course._id} />
-                      </TabPane>
-                      <TabPane tab={<span>Comments</span>} key={TABLESSON.COMMENTS}>
-                        <LessonComment idLesson={match.params.id} comments={lessonState.lesson.comments} />
-                      </TabPane>
-                    </Tabs>
-                  </div>
+                    </TabPane>
+                    <TabPane
+                      tab={<span>Comments</span>}
+                      key={TABLESSON.COMMENTS}>
+                      <LessonComment
+                        idLesson={match.params.id}
+                        comments={lessonState.lesson.comments}
+                      />
+                    </TabPane>
+                  </Tabs>
                 </div>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </main>
     </div>
@@ -116,6 +130,7 @@ const mapStateToProps = (state) => {
     lessonState: state.lessonState,
     courseState: state.courseState,
     invoiceState: state.invoiceState,
+    generalState: state.generalState,
     commentState: state.commentState,
   };
 };
