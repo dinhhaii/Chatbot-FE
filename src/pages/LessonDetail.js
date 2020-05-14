@@ -37,10 +37,6 @@ const LessonDetail = (props) => {
     if (tab) {
       setTabKey(tab);
     }
-    if (!userState.isLogin) {
-      history.push('/');
-      toast.warn('Please login to access to this course!');
-    }
   }, [match.params.id, commentState.comment]);
 
   useEffect(() => {

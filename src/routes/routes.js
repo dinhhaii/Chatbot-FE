@@ -5,7 +5,6 @@ import { PATH } from '../utils/constant';
 import Login from '../components/auth/login';
 import Register from '../components/auth/register';
 import ForgotPassword from '../components/auth/forgot-password';
-
 import Auth from '../pages/Auth';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';

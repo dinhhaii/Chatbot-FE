@@ -14,11 +14,11 @@ const Auth = ({ routes }) => {
               <div className="kt-login__wrapper">
                 <div className="kt-login__container">
                   <div className="kt-login__body">
-                    <div className="kt-login__logo">
+                    <div className="kt-login__logo" style={{ marginBottom: '2rem' }}>
                       <Link to="/">
                         <img
                           src="/img/logo-color.png"
-                          style={{ height: 80 }}
+                          style={{ height: 100 }}
                           alt=""
                         />
                       </Link>
