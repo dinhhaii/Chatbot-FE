@@ -23,10 +23,8 @@ const Auth = ({ routes }) => {
   return (
     <div className="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading">
       <div className="kt-grid kt-grid--ver kt-grid--root">
-        <div
-          className="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v6 kt-login--signin"
-          id="kt_login">
-          <div className="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--desktop kt-grid--ver-desktop kt-grid--hor-tablet-and-mobile">
+        <div className="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v6 kt-login--signin bg-dark" id="kt_login">
+          <div className="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--desktop kt-grid--ver-desktop kt-grid--hor-tablet-and-mobile" style={{ marginTop: 72 }}>
             <div className="kt-grid__item  kt-grid__item--order-tablet-and-mobile-2  kt-grid kt-grid--hor kt-login__aside">
               <div className="kt-login__wrapper">
                 <div className="kt-login__container">
@@ -34,7 +32,8 @@ const Auth = ({ routes }) => {
                     <div className="kt-login__logo">
                       <Link to="/">
                         <img
-                          src="assets/media/company-logos/logo-2.png"
+                          src="/img/logo-color.png"
+                          style={{ height: 80 }}
                           alt=""
                         />
                       </Link>
@@ -50,7 +49,7 @@ const Auth = ({ routes }) => {
               </div>
             </div>
             <div
-              className="kt-grid__item kt-grid__item--fluid kt-grid__item--center kt-grid kt-grid--ver kt-login__content"
+              className="d-sm-none d-xl-flex d-lg-flex kt-grid__item kt-grid__item--fluid kt-grid__item--center kt-grid kt-grid--ver kt-login__content"
               style={{ backgroundImage: `url("${IMAGE_URL.BACKGROUND_1}")` }}>
               <div className="kt-login__section">
                 <div className="kt-login__block" style={{ color: 'red' }}>
