@@ -1,16 +1,16 @@
+/* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import Header from './components/header/header';
 import Footer from './components/footer/footer';
 import Search from './components/search';
 import CustomLoader from './components/loader';
+import AuthRoute from './components/authRoutes';
 import routes from './routes/routes';
 import 'react-toastify/dist/ReactToastify.css';
-// import './utils/css/metronic/login-6.css';
-// import './utils/css/metronic/plugins.bundle.css';
-// import './utils/css/metronic/style.bundle.css';
+import RouteWithSubRoutes from './components/subRoutes';
 
 function CAFOCC() {
   return (
@@ -24,12 +24,19 @@ function CAFOCC() {
       />
       <Switch>
         {routes.map((route, index) => {
-          return (
-            <Route
+          return route.auth ? (
+            <AuthRoute
               key={index.toString()}
               path={route.path}
               exact={route.exact}
-              render={route.component}
+              component={route.component}
+            />
+          ) : (
+            <RouteWithSubRoutes
+              key={index.toString()}
+              path={route.path}
+              exact={route.exact}
+              component={route.component}
             />
           );
         })}

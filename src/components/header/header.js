@@ -37,12 +37,15 @@ const Header = (props) => {
         const { data } = response;
         if (data) {
           const { firstName, lastName, _id } = data;
-          updateStatusUser(_id);
-          props.setIsLoginAction();
           props.fetchUserListAction();
-          props.fetchCartAction(_id);
-          props.fetchUserSuccessAction({ user: data });
-          toast.success(`Hi, ${firstName} ${lastName}!`);
+          console.log(userState);
+          if (!userState.isLogin) {
+            updateStatusUser(_id);
+            props.setIsLoginAction();
+            props.fetchCartAction(_id);
+            props.fetchUserSuccessAction({ user: data });
+            toast.success(`Hi, ${firstName} ${lastName}!`);
+          }
         }
       })
       .catch((error) => {

@@ -1,25 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { IMAGE_URL, AUTH } from '../utils/constant';
+import React from 'react';
+import { Link, Switch } from 'react-router-dom';
+import { IMAGE_URL } from '../utils/constant';
 import '../utils/css/auth.css';
-import Login from '../components/auth/login';
-import Register from '../components/auth/register';
-import ChangePassword from '../components/auth/change-password';
-import ForgotPassword from '../components/auth/forgot-password';
+import RouteWithSubRoutes from '../components/subRoutes';
 
 const Auth = ({ routes }) => {
-  const [auth, setAuth] = useState(AUTH.LOGIN);
-  const location = useLocation();
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const type = urlParams.get('type');
-    console.log(type);
-    if (type) {
-      setAuth(type);
-    }
-  }, [location.search]);
-
   return (
     <div className="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading">
       <div className="kt-grid kt-grid--ver kt-grid--root">
@@ -39,10 +24,18 @@ const Auth = ({ routes }) => {
                       </Link>
                     </div>
 
-                    {auth === AUTH.LOGIN && <Login />}
-                    {auth === AUTH.REGISTER && <Register />}
-                    {auth === AUTH.FORGOTPASSWORD && <ForgotPassword />}
-                    {auth === AUTH.CHANGEPASSWORD && <ChangePassword />}
+                    <Switch>
+                      {routes.map((route, index) => {
+                        return (
+                          <RouteWithSubRoutes
+                            key={index.toString()}
+                            path={route.path}
+                            exact={route.exact}
+                            component={route.component}
+                          />
+                        );
+                      })}
+                    </Switch>
 
                   </div>
                 </div>

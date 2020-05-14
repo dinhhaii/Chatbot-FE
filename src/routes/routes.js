@@ -29,16 +29,19 @@ const routes = [
     path: '/',
     exact: true,
     component: () => <Home />,
+    auth: false,
   },
   {
     path: PATH.PROFILE,
     exact: false,
     component: () => <Profile />,
+    auth: true,
   },
   {
     path: `${PATH.PROFILE_USER}/:id`,
     exact: false,
     component: ({ match }) => <UserDetail match={match} />,
+    auth: false,
   },
   {
     path: PATH.AUTH,
@@ -89,56 +92,67 @@ const routes = [
     path: PATH.LECTURER_COURSE,
     exact: false,
     component: () => <LecturerCourse />,
+    auth: true,
   },
   {
     path: PATH.COURSES,
     exact: false,
     component: () => <Course />,
+    auth: false,
   },
   {
     path: `${PATH.COURSE_DETAIL}/:id`,
     exact: false,
     component: ({ match }) => <CourseDetail match={match} />,
+    auth: false,
   },
   {
     path: `${PATH.LESSON_DETAIL}/:id`,
     exact: false,
     component: () => <LessonDetail />,
+    auth: true,
   },
   {
     path: PATH.COURSE_EDIT,
     exact: false,
     component: () => <LecturerCourseDetail />,
+    auth: true,
   },
   {
     path: PATH.CHAT,
     exact: false,
     component: () => <Chat />,
+    auth: true,
   },
   {
     path: PATH.CONTACT,
     exact: false,
     component: () => <Contact />,
+    auth: false,
   },
   {
     path: PATH.CART,
     exact: false,
     component: () => <Cart />,
+    auth: false,
   },
   {
     path: PATH.ABOUT,
     exact: false,
     component: () => <About />,
+    auth: false,
   },
   {
     path: PATH.LOGOUT,
     exact: false,
     component: () => <Logout />,
+    auth: false,
   },
   {
     path: '',
     exact: false,
     component: () => <NotFound />,
+    auth: false,
   },
 ];
 
