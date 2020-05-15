@@ -78,3 +78,10 @@ export const fetchUserListFailed = () => {
     type: actionTypes.FETCH_USER_LIST_FAILED,
   };
 };
+
+export const setCountUnreadMessage = (data) => {
+  return {
+    type: actionTypes.SET_COUNT_UNREAD_MESSAGES,
+    data,
+  };
+};

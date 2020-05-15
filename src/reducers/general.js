@@ -3,12 +3,9 @@ import * as actionTypes from '../utils/actionTypes';
 const initialState = {
   isLoading: false,
   isSearching: false,
-  unreadMessages: {},
-  statusUser: {},
 };
 
 const generalState = (state = initialState, action) => {
-  const { data } = action;
   switch (action.type) {
     case actionTypes.SHOW_LOADING:
       return {
@@ -29,16 +26,6 @@ const generalState = (state = initialState, action) => {
       return {
         ...state,
         isSearching: false,
-      };
-    case actionTypes.UPDATE_UNREAD_MESSAGE:
-      return {
-        ...state,
-        unreadMessages: data,
-      };
-    case actionTypes.UPDATE_STATUS_USER:
-      return {
-        ...state,
-        statusUser: data,
       };
     default:
       return state;

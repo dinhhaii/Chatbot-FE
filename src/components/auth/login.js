@@ -13,10 +13,10 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Please enter valid email')
     .required('Email is required.'),
-  password: Yup.string()
-    .required('No password provided.') 
-    .min(8, 'Password is too short - should be 8 characters minimum.')
-    .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
+  // password: Yup.string()
+  //   .required('No password provided.') 
+  //   .min(8, 'Password is too short - should be 8 characters minimum.')
+  //   .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
 });
 
 const Login = (props) => {

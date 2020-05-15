@@ -7,7 +7,7 @@ import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
 import reducer from './reducers/index';
 import rootSaga from './sagas/index';
-import CAFOCC from './App';
+import Hacademy from './App';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 
@@ -23,7 +23,7 @@ sagaMiddleware.run(rootSaga);
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <CAFOCC />
+      <Hacademy />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

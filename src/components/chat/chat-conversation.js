@@ -11,20 +11,21 @@ import '../../utils/css/chat.css';
 import { FIREBASE_MESSAGE_REF, PATH } from '../../utils/constant';
 
 const Conversation = (props) => {
-  const { setShowAside, message, setMessage, userState, recipient, conversation, generalState } = props;
+  const { setShowAside, message, setMessage, userState, chatState } = props;
+  const { statusUser, recipient, conversations, unreadMessages } = chatState;
 
-  const userStatus = generalState.statusUser && recipient ? generalState.statusUser[recipient._id] : null;
+  const userStatus = statusUser && recipient ? statusUser[recipient._id] : null;
   const status = userStatus ? userStatus.status : 'offline';
+
   const scrollbar = useRef(null);
   const database = firebase.database();
   const messagesRef = database.ref(FIREBASE_MESSAGE_REF);
-  const unreadMessages = generalState.unreadMessages || null;
 
   useEffect(() => {
-    if (userState.user && recipient) {
+    if (userState.user && chatState.recipient) {
       scrollbar.current.scrollTop = scrollbar.current.scrollHeight;
     }
-  }, [conversation]);
+  }, [conversations]);
 
   const handleMessageChange = e => {
     setMessage({
@@ -40,6 +41,7 @@ const Conversation = (props) => {
         _idSender: userState.user._id,
         createdAt: firebase.database.ServerValue.TIMESTAMP,
       });
+
       setMessage({
         ...message,
         content: '',
@@ -48,18 +50,20 @@ const Conversation = (props) => {
   };
 
   const setReadMessage = () => {
-    unreadMessages[recipient._id].forEach(value => {
-      messagesRef.child(value).update({
-        seen: true,
+    if (unreadMessages && recipient && unreadMessages[recipient._id]) {
+      unreadMessages[recipient._id].forEach(value => {
+        messagesRef.child(value).update({
+          seen: true,
+        });
       });
-    });
+    }
   };
 
   return message._idRecipient && recipient && (
-    <div className="kt-grid__item kt-grid__item--fluid kt-app__content" id="kt_chat_content" style={{ zIndex: 99999 }}>
+    <div className="kt-grid__item kt-grid__item--fluid kt-app__content" id="kt_chat_content" style={{ zIndex: 100 }}>
       <div className="kt-chat">
         <div className="kt-portlet kt-portlet--head-lg kt-portlet--last chat-box">
-          <div className="kt-portlet__head" style={{ maxHeight: `${80}px`, height: `${10}%` }}>
+          <div className="kt-portlet__head pt-2" style={{ maxHeight: `${80}px`, height: `${10}%` }}>
             <div className="kt-chat__head ">
               {/* LEFT */}
               <div className="kt-chat__left">
@@ -90,17 +94,17 @@ const Conversation = (props) => {
           <div className="kt-portlet__body" style={{ height: `${70}%` }}>
             <div className="kt-scroll kt-scroll--pull h-100 overflowY-auto" ref={scrollbar}>
               <div className="kt-chat__messages h-100">
-                {conversation.map((item, index) => {
+                {conversations.map((item, index) => {
                   return item._idSender === userState.user._id ? <SentMessageCell key={index.toString()} message={item} /> : <ReceivedMessageCell key={index.toString()} message={item} recipient={recipient} />;
                 })}
               </div>
             </div>
           </div>
-          <div className="kt-portlet__foot" style={{ height: `${20}%` }}>
+          <div className="kt-portlet__foot" style={{ height: `${20}%`, padding: 10 }}>
             <div className="kt-chat__input">
               <div className="kt-chat__editor">
                 <textarea
-                  style={{ height: `${50}px` }}
+                  style={{ fontSize: '10pt', color: 'black', height: `${40}px` }}
                   placeholder="Type here..."
                   onKeyPress={e => {
                     if (e.which === 13 && !e.shiftKey) {
@@ -145,13 +149,12 @@ const Conversation = (props) => {
 const mapStateToProps = (state) => {
   return {
     userState: state.userState,
-    generalState: state.generalState,
+    chatState: state.chatState,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-  };
+  return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Conversation);

@@ -5,35 +5,38 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { capitalize, calculateTimeTilNow } from '../../utils/helper';
 import firebase from '../../utils/firebase';
-import '../../utils/css/chat.css';
 import { FIREBASE_MESSAGE_REF } from '../../utils/constant';
+import { setRecipient } from '../../actions/chat';
+import '../../utils/css/chat.css';
 
 const UserCell = (props) => {
-  const { user, message, setRecipient, setMessage, generalState } = props;
+  const { user, message, setMessage, chatState } = props;
   const database = firebase.database();
+  const messagesRef = database.ref(FIREBASE_MESSAGE_REF);
 
-  const unreadMessages = generalState.unreadMessages || null;
-  const userStatus = generalState.statusUser ? generalState.statusUser[user._id] : null;
+  const unreadMessages = chatState.unreadMessages || null;
+  const userStatus = chatState.statusUser ? chatState.statusUser[user._id] : null;
   const status = userStatus ? userStatus.status : 'offline';
   const timestamp = userStatus ? userStatus.lastOnline : null;
   const [lastOnline, setLastOnline] = useState(null);
 
   useEffect(() => {
     if (timestamp && lastOnline == null) {
-      console.log(timestamp);
       setLastOnline(calculateTimeTilNow(timestamp));
     }
   });
 
   const setReadMessage = () => {
-    const messagesRef = database.ref(FIREBASE_MESSAGE_REF);
-    unreadMessages[user._id].forEach(value => {
-      messagesRef.child(value).update({
-        seen: true,
+    if (unreadMessages && unreadMessages[user._id]) {
+      unreadMessages[user._id].forEach(value => {
+        messagesRef.child(value).update({
+          seen: true,
+        });
       });
-    });
+    }
   };
 
   return (
@@ -41,12 +44,13 @@ const UserCell = (props) => {
       style={{ margin: 0 }}
       className={`kt-widget__item user-cell ${user._id === message._idRecipient && 'selected'}`}
       onClick={() => {
-        setRecipient(user);
+        props.setRecipientAction(user);
         setMessage({ ...message, _idRecipient: user._id });
         setReadMessage();
         if (timestamp) {
           setLastOnline(calculateTimeTilNow(timestamp));
         }
+        console.log(message, chatState.recipient);
       }}>
       <span className="kt-media kt-media--circle">
         <img src={user.imageURL} alt="" />
@@ -73,12 +77,14 @@ const UserCell = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    generalState: state.generalState,
+    chatState: state.chatState,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    setRecipientAction: bindActionCreators(setRecipient, dispatch),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserCell);

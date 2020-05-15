@@ -4,95 +4,30 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { toast } from 'react-toastify';
 import { Badge } from 'antd';
-import { fetchUser, setIsLogin, fetchUserSuccess, fetchUserList } from '../../actions/user';
-import { AUTH_TOKEN, PATH, FIREBASE_MESSAGE_REF, FIREBASE_STATUS_REF } from '../../utils/constant';
-import { authorizeUser } from '../../api/user';
-import { showSearchBar, updateUnreadMessages, setStatusUser } from '../../actions/general';
-import { fetchCart } from '../../actions/cart';
-import { updateStatusUser } from '../../utils/presence';
-import firebase from '../../utils/firebase';
+import { PATH } from '../../utils/constant';
+import { showSearchBar } from '../../actions/general';
 import Menu from './menu';
 
 const Header = (props) => {
   const { userState, cartState, generalState } = props;
   const [isDisplayedMenu, setIsDisplayedMenu] = useState(false);
-  const database = firebase.database();
 
   const showMenuContent = () => {
     setIsDisplayedMenu(!isDisplayedMenu);
   };
 
-  useEffect(() => {
-    // AUTHORIZATION
-    const token = localStorage.getItem(AUTH_TOKEN);
-    
-    authorizeUser(token)
-      .then((response) => {
-        const { data } = response;
-        if (data) {
-          const { firstName, lastName, _id } = data;
-          props.fetchUserListAction();
-          console.log(userState);
-          if (!userState.isLogin) {
-            updateStatusUser(_id);
-            props.setIsLoginAction();
-            props.fetchCartAction(_id);
-            props.fetchUserSuccessAction({ user: data });
-            toast.success(`Hi, ${firstName} ${lastName}!`);
-          }
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (userState.user) {
-      props.fetchCartAction(userState.user._id);
-    }
-  }, [cartState.updatedCart]);
-
-  useEffect(() => {
-    database.ref(FIREBASE_STATUS_REF).on('value', snapshot => {
-      props.setStatusUserAction(snapshot.val());
-    });
-
-    database.ref(FIREBASE_MESSAGE_REF).on('value', snapshot => {
-      const countUnread = {};
-      userState.userList.forEach(item => {
-        const messages = snapshot.val();
-        const keys = Object.keys(messages);
-
-        for (const key of keys) {
-          const val = messages[key];
-          if (!countUnread[item._id]) {
-            countUnread[item._id] = [];
-          }
-          
-          if (val.seen === false && val._idSender === item._id && val._idRecipient === userState.user._id) {
-            countUnread[item._id].push(key);
-          }
-        }
-      });
-      props.updateUnreadMessageAction(countUnread);
-    });
-  }, [userState.userList]);
-
   return (
     <div>
       <header
-        className={
-          isDisplayedMenu
-            ? 'header fadeInDown sticky_menu_active'
-            : 'header fadeInDown'
-        }>
+        style={{ zIndex: 99 }}
+        className={isDisplayedMenu
+          ? 'header fadeInDown sticky_menu_active'
+          : 'header fadeInDown'}>
         <div id="logo">
           <Link to="/">
             <img
@@ -209,14 +144,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchUserAction: bindActionCreators(fetchUser, dispatch),
-    fetchUserSuccessAction: bindActionCreators(fetchUserSuccess, dispatch),
-    setIsLoginAction: bindActionCreators(setIsLogin, dispatch),
     showSearchBarAction: bindActionCreators(showSearchBar, dispatch),
-    fetchCartAction: bindActionCreators(fetchCart, dispatch),
-    updateUnreadMessageAction: bindActionCreators(updateUnreadMessages, dispatch),
-    setStatusUserAction: bindActionCreators(setStatusUser, dispatch),
-    fetchUserListAction: bindActionCreators(fetchUserList, dispatch),
   };
 };
 
