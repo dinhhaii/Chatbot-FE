@@ -10,7 +10,7 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
     <div
       id="main_menu"
       className={isDisplayedMenu ? 'show' : ''}
-      style={{ fontSize: `${15}pt` }}>
+      style={{ zIndex: 997, fontSize: `${15}pt` }}>
       
       <div className="container">
         <div className="row">

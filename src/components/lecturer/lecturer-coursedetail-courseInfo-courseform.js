@@ -1,22 +1,24 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { Progress } from 'antd';
+import { Tag, Input, Tooltip, Progress } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import firebase from 'firebase';
 import { toast } from 'react-toastify';
 import { fetchSubjectList } from '../../actions/subject';
 import { updateCourse } from '../../actions/course';
-import 'antd/dist/antd.css';
 import { usePrevious } from '../../utils/helper';
+import 'antd/dist/antd.css';
+import '../../utils/css/lecturer-coursedetail-courseCreate.css';
+
 
 const LecturerCourseDetailCourseForm = (props) => {
   const { selectedCourse } = props;
-  const prevProps = usePrevious(props);
-
-  const [course, setCourse] = useState({
+  const initCourse = {
     startDate: selectedCourse.startDate,
     _idLecturer: selectedCourse._idLecturer,
     name: selectedCourse.name,
@@ -26,10 +28,20 @@ const LecturerCourseDetailCourseForm = (props) => {
     duration: selectedCourse.duration,
     _idSubject: selectedCourse._idSubject,
     imageURL: selectedCourse.imageURL,
-  });
+    tags: selectedCourse.tags,
+  };
 
+  const prevProps = usePrevious(props);
+
+  const [course, setCourse] = useState(initCourse);
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [state, setState] = useState({
+    inputVisible: false,
+    inputValue: '',
+    editInputIndex: -1,
+    editInputValue: '',
+  });
 
   useEffect(() => {
     props.fetchSubjectListAction();
@@ -37,17 +49,7 @@ const LecturerCourseDetailCourseForm = (props) => {
 
   useEffect(() => {
     if (prevProps && prevProps.selectedCourse !== props.selectedCourse) {
-      setCourse({
-        startDate: selectedCourse.startDate,
-        _idLecturer: selectedCourse._idLecturer,
-        name: selectedCourse.name,
-        description: selectedCourse.description,
-        price: selectedCourse.price,
-        accessibleDays: selectedCourse.accessibleDays,
-        duration: selectedCourse.duration,
-        _idSubject: selectedCourse._idSubject,
-        imageURL: selectedCourse.imageURL,
-      });
+      setCourse(initCourse);
     }
   });
 
@@ -56,7 +58,8 @@ const LecturerCourseDetailCourseForm = (props) => {
     e.preventDefault();
     setProgress(1);
     const storage = firebase.storage();
-    const newCourse = { ...course, _idCourse: selectedCourse._id };
+    const tags = course.tags.join(',');
+    const newCourse = { ...course, _idCourse: selectedCourse._id, tags };
     if (image !== course.imageURL) {
       const task = storage.ref(`images/${image.name}`).put(image);
       task.on(
@@ -99,6 +102,50 @@ const LecturerCourseDetailCourseForm = (props) => {
         [name]: value,
       });
     }
+  };
+
+  const showInput = () => {
+    setState({ ...state, inputVisible: true });
+  };
+
+  const handleClose = removedTag => {
+    const tags = course.tags.filter(tag => tag !== removedTag);
+    setCourse({ ...course, tags });
+  };
+
+  const handleInputChange = e => {
+    setState({ ...state, inputValue: e.target.value });
+  };
+
+  const handleInputConfirm = () => {
+    const { inputValue } = state;
+    let { tags } = course;
+    if (inputValue && tags.indexOf(inputValue) === -1) {
+      tags = [...tags, inputValue];
+    }
+    setCourse({ ...course, tags });
+    setState({
+      ...state,
+      inputVisible: false,
+      inputValue: '',
+    });
+  };
+
+  const handleEditInputChange = e => {
+    setState({ ...state, editInputValue: e.target.value });
+  };
+
+  const handleEditInputConfirm = () => {
+    const { tags } = course;
+    const { editInputIndex, editInputValue } = state;
+    const newTags = [...tags];
+    newTags[editInputIndex] = editInputValue;
+    setCourse({ ...course, tags });
+    setState({
+      ...state,
+      editInputIndex: -1,
+      editInputValue: '',
+    });
   };
 
   return (
@@ -162,7 +209,7 @@ const LecturerCourseDetailCourseForm = (props) => {
                 </label>
                 <div className="col-10">
                   <select
-                    className="custom-select form-control"
+                    className="form-control"
                     id="selectSubject"
                     name="_idSubject"
                     value={course._idSubject}
@@ -249,6 +296,71 @@ const LecturerCourseDetailCourseForm = (props) => {
               />
             </div>
           </div>
+
+          <div className="form-group row">
+            <label htmlFor="descriptionCourse" className="col-2 col-form-label">
+              Tags
+            </label>
+            <div className="col-10">
+              {course.tags && (
+                <div>
+                  {course.tags.map((tag, index) => {
+                    if (state.editInputIndex === index) {
+                      return (
+                        <Input
+                          key={index.toString()}
+                          size="small"
+                          className="form-control tag-input"
+                          value={state.editInputValue}
+                          onChange={handleEditInputChange}
+                          onBlur={handleEditInputConfirm}
+                          onPressEnter={handleEditInputConfirm}
+                        />
+                      );
+                    }
+
+                    const isLongTag = tag.length > 10;
+
+                    const tagElem = (
+                      <Tag
+                        className="edit-tag"
+                        key={tag}
+                        closable={index !== 0}
+                        onClose={() => handleClose(tag)}>
+                        <span
+                          onDoubleClick={e => {
+                            if (index !== 0) {
+                              setState({ ...state, editInputIndex: index, editInputValue: tag });
+                              e.preventDefault();
+                            }
+                          }}>
+                          {isLongTag ? `${tag.slice(0, 10)}...` : tag}
+                        </span>
+                      </Tag>
+                    );
+                    return isLongTag ? (<Tooltip title={tag} key={tag}>{tagElem}</Tooltip>) : (tagElem);
+                  })}
+
+                  {state.inputVisible && (
+                  <Input
+                    type="text"
+                    size="small"
+                    className="form-control tag-input"
+                    value={state.inputValue}
+                    onChange={handleInputChange}
+                    onBlur={handleInputConfirm}
+                    onPressEnter={handleInputConfirm}
+                    />
+                  )}
+                  {!state.inputVisible && (
+                  <Tag className="site-tag-plus" onClick={showInput}>
+                    <PlusOutlined /> New Tag
+                  </Tag>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="kt-portlet__foot">
@@ -263,17 +375,7 @@ const LecturerCourseDetailCourseForm = (props) => {
                   type="reset"
                   className="btn btn-secondary w-25"
                   onClick={() => {
-                    setCourse({
-                      startDate: selectedCourse.startDate,
-                      _idLecturer: selectedCourse._idLecturer,
-                      name: selectedCourse.name,
-                      description: selectedCourse.description,
-                      price: selectedCourse.price,
-                      accessibleDays: selectedCourse.accessibleDays,
-                      duration: selectedCourse.duration,
-                      _idSubject: selectedCourse._idSubject,
-                      imageURL: selectedCourse.imageURL,
-                    });
+                    setCourse(initCourse);
                   }}
                   disabled={progress !== 0}>
                   Reset

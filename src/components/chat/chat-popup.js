@@ -1,12 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { withRouter, Link } from 'react-router-dom';
 
 const ChatPopup = props => {
   return (
-    <div className="modal fade- modal-sticky-bottom-right" id="kt_chat_modal" role="dialog" data-backdrop="false">
+    <div className="modal fade- modal-sticky-bottom-right d-block" id="kt_chat_modal" role="dialog" data-backdrop="false" style={{ zIndex: 996, fontSize: '9pt' }}>
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="kt-chat">
@@ -82,9 +81,10 @@ const ChatPopup = props => {
                   </div>
                 </div>
               </div>
-              <div className="kt-portlet__body">
+              <div className="kt-portlet__body" style={{ maxHeight: 300 }}>
                 <div className="kt-scroll kt-scroll--pull" data-height="410" data-mobile-height="225">
                   <div className="kt-chat__messages kt-chat__messages--solid">
+                    {/* XOAAAA */}
                     <div className="kt-chat__message kt-chat__message--success">
                       <div className="kt-chat__user">
                         <span className="kt-media kt-media--circle kt-media--sm">
@@ -181,6 +181,8 @@ const ChatPopup = props => {
                         Ok!
                       </div>
                     </div>
+
+                    {/* xoassss */}
                   </div>
                 </div>
               </div>

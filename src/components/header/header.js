@@ -24,7 +24,7 @@ const Header = (props) => {
   return (
     <div>
       <header
-        style={{ zIndex: 99 }}
+        style={{ zIndex: 998 }}
         className={isDisplayedMenu
           ? 'header fadeInDown sticky_menu_active'
           : 'header fadeInDown'}>

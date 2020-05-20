@@ -37,6 +37,7 @@ import Footer from './components/footer/footer';
 import Search from './components/search';
 import CustomLoader from './components/loader';
 import AuthRoute from './components/authRoutes';
+// import ChatPopup from './components/chat/chat-popup';
 import RouteWithSubRoutes from './components/subRoutes';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -162,6 +163,7 @@ function Hacademy(props) {
       <CustomLoader />
       <Search />
       <Header />
+      {/* <ChatPopup /> */}
       <ToastContainer
         position={toast.POSITION.BOTTOM_CENTER}
         style={{ zIndex: 999 }}

@@ -1,29 +1,42 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { Progress } from 'antd';
 import firebase from 'firebase';
 import { toast } from 'react-toastify';
+import { Tag, Input, Tooltip, Progress } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { SERVER_URL } from '../../utils/constant';
 import { fetchSubjectList } from '../../actions/subject';
-import 'antd/dist/antd.css';
 import { createCourse } from '../../actions/course';
+import '../../utils/css/lecturer-coursedetail-courseCreate.css';
+import 'antd/dist/antd.css';
+
+
+const initCourse = {
+  startDate: new Date(),
+  _idLecturer: '',
+  _idSubject: '',
+  name: '',
+  description: '',
+  price: '',
+  accessibleDays: '',
+  duration: '',
+  imageURL: `${SERVER_URL}/images/no-avatar.png`,
+  tags: [],
+};
 
 const LecturerCourseDetailCourseCreateForm = (props) => {
   const { userState } = props;
-  const [course, setCourse] = useState({
-    startDate: new Date(),
-    _idLecturer: '',
-    name: '',
-    description: '',
-    price: '',
-    accessibleDays: '',
-    duration: '',
-    _idSubject: '',
-    imageURL: `${SERVER_URL}/images/no-avatar.png`,
+  const [course, setCourse] = useState(initCourse);
+  const [state, setState] = useState({
+    inputVisible: false,
+    inputValue: '',
+    editInputIndex: -1,
+    editInputValue: '',
   });
 
   const [image, setImage] = useState(null);
@@ -38,9 +51,10 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const storage = firebase.storage();
-    const newCourse = { ...course, _idLecturer: userState.user._id };
+    const tags = course.tags.join(',');
+    const newCourse = { ...course, _idLecturer: userState.user._id, tags };
 
-    if (image !== course.imageURL) {
+    if (image && image !== course.imageURL) {
       const task = storage.ref(`images/${image.name}`).put(image);
       task.on(
         'state_changed',
@@ -82,6 +96,51 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
       });
     }
   };
+
+  const showInput = () => {
+    setState({ ...state, inputVisible: true });
+  };
+
+  const handleClose = removedTag => {
+    const tags = course.tags.filter(tag => tag !== removedTag);
+    setCourse({ ...course, tags });
+  };
+
+  const handleInputChange = e => {
+    setState({ ...state, inputValue: e.target.value });
+  };
+
+  const handleInputConfirm = () => {
+    const { inputValue } = state;
+    let { tags } = course;
+    if (inputValue && tags.indexOf(inputValue) === -1) {
+      tags = [...tags, inputValue];
+    }
+    setCourse({ ...course, tags });
+    setState({
+      ...state,
+      inputVisible: false,
+      inputValue: '',
+    });
+  };
+
+  const handleEditInputChange = e => {
+    setState({ ...state, editInputValue: e.target.value });
+  };
+
+  const handleEditInputConfirm = () => {
+    const { tags } = course;
+    const { editInputIndex, editInputValue } = state;
+    const newTags = [...tags];
+    newTags[editInputIndex] = editInputValue;
+    setCourse({ ...course, tags });
+    setState({
+      ...state,
+      editInputIndex: -1,
+      editInputValue: '',
+    });
+  };
+
   return (
     <div className="kt-portlet">
       <div className="kt-portlet__head">
@@ -149,7 +208,7 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
                 </label>
                 <div className="col-10">
                   <select
-                    className="custom-select form-control"
+                    className="form-control"
                     id="selectSubject"
                     name="_idSubject"
                     value={course._idSubject}
@@ -234,7 +293,72 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
               />
             </div>
           </div>
+
+          <div className="form-group row">
+            <label htmlFor="descriptionCourse" className="col-2 col-form-label">
+              Tags
+            </label>
+            <div className="col-10">
+              <div>
+                {course.tags.map((tag, index) => {
+                  if (state.editInputIndex === index) {
+                    return (
+                      <Input
+                        key={index.toString()}
+                        size="small"
+                        className="form-control tag-input"
+                        value={state.editInputValue}
+                        onChange={handleEditInputChange}
+                        onBlur={handleEditInputConfirm}
+                        onPressEnter={handleEditInputConfirm}
+                      />
+                    );
+                  }
+
+                  const isLongTag = tag.length > 10;
+
+                  const tagElem = (
+                    <Tag
+                      className="edit-tag"
+                      key={tag}
+                      closable={index !== 0}
+                      onClose={() => handleClose(tag)}>
+                      <span
+                        onDoubleClick={e => {
+                          if (index !== 0) {
+                            setState({ ...state, editInputIndex: index, editInputValue: tag });
+                            e.preventDefault();
+                          }
+                        }}>
+                        {isLongTag ? `${tag.slice(0, 10)}...` : tag}
+                      </span>
+                    </Tag>
+                  );
+                  return isLongTag ? (<Tooltip title={tag} key={tag}>{tagElem}</Tooltip>) : (tagElem);
+                })}
+
+                {state.inputVisible && (
+                  <Input
+                    type="text"
+                    size="small"
+                    className="form-control tag-input"
+                    value={state.inputValue}
+                    onChange={handleInputChange}
+                    onBlur={handleInputConfirm}
+                    onPressEnter={handleInputConfirm}
+                  />
+                )}
+                {!state.inputVisible && (
+                  <Tag className="site-tag-plus" onClick={showInput}>
+                    <PlusOutlined /> New Tag
+                  </Tag>
+                )}
+              </div>
+
+            </div>
+          </div>
         </div>
+        
 
         <div className="kt-portlet__foot">
           <div className="kt-form__actions">
@@ -247,19 +371,7 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
                 <button
                   type="reset"
                   className="btn btn-secondary w-25"
-                  onClick={() => {
-                    setCourse({
-                      startDate: new Date(),
-                      _idLecturer: '',
-                      name: '',
-                      description: '',
-                      price: '',
-                      accessibleDays: '',
-                      duration: '',
-                      _idSubject: '',
-                      imageURL: `${SERVER_URL}/images/no-avatar.png`,
-                    });
-                  }}>
+                  onClick={() => setCourse(initCourse)}>
                   Reset
                 </button>
               </div>
