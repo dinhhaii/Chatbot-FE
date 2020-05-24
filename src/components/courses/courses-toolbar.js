@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
@@ -7,9 +8,7 @@ import 'antd/dist/antd.css';
 
 const { Search } = Input;
 
-const CourseToolBar = ({
-  viewMode, setViewMode, filter, setFilter, handleChangeFilter, 
-}) => {
+const CourseToolBar = ({ viewMode, setViewMode, filter, setFilter, handleChangeFilter }) => {
   const [timer, setTimer] = useState(null);
 
   return (

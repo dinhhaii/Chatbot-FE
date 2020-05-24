@@ -13,15 +13,14 @@ const Footer = (props) => {
           <div className="col-lg-5 col-md-12 p-r-5">
             <p>
               <img
-                src="img/logo.png"
-                width="149"
-                height="42"
+                src="img/logo-color-text.png"
+                height="80"
                 data-retina="true"
                 alt=""
               />
             </p>
             <p>
-              Description here
+              Lorem ipsum dolor sit amet, at sit dicat putent admodum, putant definitiones ad mei. Duo quas iisque persius cu, ne iudico corrumpit mel, at duo suas meliore. Usu dicam aeterno ut, te unum melius minimum quo.
             </p>
             <div className="follow_us">
               <ul>
@@ -67,7 +66,7 @@ const Footer = (props) => {
               <li>
                 <Link to="/">
                   <i className="ti-mobile" />
-                  +84 987 654 321
+                  +84 987-654-321
                 </Link>
               </li>
               <li>

@@ -1,10 +1,11 @@
 /* eslint-disable object-curly-newline */
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Tabs } from 'antd';
 import UserCell from './chat-userlist-cell';
 import '../../utils/css/chat.css'; 
-import { capitalize } from '../../utils/helper';
+import { capitalize, usePrevious } from '../../utils/helper';
 
 const { TabPane } = Tabs;
 const TABCONTACT = {
@@ -13,9 +14,20 @@ const TABCONTACT = {
 };
 
 const ChatUserList = (props) => {
-  const { showAside, setShowAside, message, setMessage, userList } = props;
+  const { showAside, setShowAside, message, setMessage, chatState } = props;
+  const prevProps = usePrevious(props);
+  const [userList, setUserList] = useState(props.userList);
   const [tabKey, setTabKey] = useState(TABCONTACT.RECENT);
-  
+  const [timer, setTimer] = useState(null);
+  const [search, setSearch] = useState('');
+  const recentList = chatState.recentList ? [...chatState.recentList] : null;
+
+  useEffect(() => {
+    if (prevProps && prevProps.userList !== props.userList) {
+      setUserList(props.userList);
+    }
+  });
+
   return (
     <div 
       className={`kt-grid__item kt-app__toggle kt-app__aside kt-app__aside--lg kt-app__aside--fit ${showAside && 'kt-app__aside--on'}`}
@@ -38,6 +50,17 @@ const ChatUserList = (props) => {
                 name="search"
                 className="form-control"
                 placeholder="Search"
+                value={search}
+                onChange={e => {
+                  const keywords = e.target.value;
+                  setSearch(keywords);
+                  clearInterval(timer);
+                  setTimer(setTimeout(() => {
+                    setUserList(props.userList.filter(item => {
+                      return keywords === '' || `${item.firstName} ${item.lastName}`.toLowerCase().includes(keywords); 
+                    }));
+                  }, 500));
+                }}
                 aria-describedby="basic-addon1"
               />
             </div>
@@ -50,7 +73,19 @@ const ChatUserList = (props) => {
                   <TabPane 
                     tab={<span>{capitalize(TABCONTACT.RECENT)}</span>} 
                     key={TABCONTACT.RECENT}>
-                    <div></div>
+                    {recentList && recentList.reverse().map((id, index) => {
+                      const user = userList.find(item => item._id === id);
+                      if (user) {
+                        return (
+                          <UserCell 
+                            key={index.toString()}
+                            user={user}
+                            message={message}
+                            setMessage={setMessage} />
+                        );
+                      }
+                      return null;
+                    })}
                   </TabPane>
                   <TabPane
                     tab={<span>{capitalize(TABCONTACT.CONTACTS)}</span>}
@@ -76,6 +111,7 @@ const ChatUserList = (props) => {
 const mapStateToProps = (state) => {
   return {
     userState: state.userState,
+    chatState: state.chatState,
   };
 };
 

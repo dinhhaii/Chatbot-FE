@@ -34,3 +34,10 @@ export const setPopupChat = (data) => {
     data,
   };
 };
+
+export const setRecentList = (data) => {
+  return {
+    type: actionTypes.SET_RECENT_LIST,
+    data,
+  };
+};

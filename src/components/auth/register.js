@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline */
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
@@ -179,9 +179,9 @@ const Register = (props) => {
                   disabled={isSubmitting}>
                   Sign Up
                 </button>
-                <Link to={PATH.LOGIN} className="btn btn-outline-brand btn-pill">
+                <button onClick={() => props.history.push(PATH.LOGIN)} className="btn btn-outline-brand btn-pill">
                   Cancel
-                </Link>
+                </button>
               </div>
             </form>
           </div>

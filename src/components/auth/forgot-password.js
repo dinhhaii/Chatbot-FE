@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
@@ -78,12 +78,9 @@ const ForgotPassword = (props) => {
                   disabled={isSubmitting}>
                   Request
                 </button>
-                <Link
-                  to={PATH.LOGIN}
-                  id="kt_login_forgot_cancel"
-                  className="btn btn-outline-brand btn-pill">
+                <button onClick={() => props.history.push(PATH.LOGIN)} className="btn btn-outline-brand btn-pill">
                   Cancel
-                </Link>
+                </button>
               </div>
             </form>
           </div>

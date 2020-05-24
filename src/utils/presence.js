@@ -13,6 +13,11 @@ export const updateStatusUser = (_id) => {
         status: 'offline',
         lastOnline: firebase.database.ServerValue.TIMESTAMP,
       });
+
+      connection.set({
+        status: 'online',
+      });
+      
       document.onvisibilitychange = e => {
         if (document.visibilityState === 'hidden') {
           connection.set({

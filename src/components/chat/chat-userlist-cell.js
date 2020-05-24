@@ -50,7 +50,6 @@ const UserCell = (props) => {
         if (timestamp) {
           setLastOnline(calculateTimeTilNow(timestamp));
         }
-        console.log(message, chatState.recipient);
       }}>
       <span className="kt-media kt-media--circle">
         <img src={user.imageURL} alt="" />

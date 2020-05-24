@@ -6,6 +6,7 @@ const initialState = {
   recipient: null,
   conversations: [],
   isDisplayedPopupChat: false,
+  recentList: null,
 };
 
 const generalState = (state = initialState, action) => {
@@ -35,6 +36,11 @@ const generalState = (state = initialState, action) => {
       return {
         ...state,
         isDisplayedPopupChat: data,
+      };
+    case actionTypes.SET_RECENT_LIST:
+      return {
+        ...state,
+        recentList: data,
       };
     default:
       return state;

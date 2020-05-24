@@ -14,6 +14,7 @@ import {
   setRecipient,
   setUnreadMessages,
   setStatusUser,
+  setRecentList,
 } from './actions/chat';
 import {
   fetchUser,
@@ -89,25 +90,43 @@ function Hacademy(props) {
 
     messagesRef.on('value', (snapshot) => {
       const unreadMessages = {}; // { idUser: [Array of unread messages] }
-      userState.userList.forEach((user) => {
-        const messages = snapshot.val();
+      const recentUsers = new Set();
+      const messages = snapshot.val();
 
-        for (const key of Object.keys(messages)) {
-          const val = messages[key];
-          if (!unreadMessages[user._id]) {
-            unreadMessages[user._id] = [];
-          }
-
-          if (
-            val.seen === false &&
-            val._idSender === user._id &&
-            val._idRecipient === userState.user._id
-          ) {
-            unreadMessages[user._id].push(key);
+      if (messages) {
+        if (userState.user) {
+          for (const key of Object.keys(messages)) {
+            const val = messages[key];
+            if (val._idSender === userState.user._id) {
+              recentUsers.delete(val._idRecipient);
+              recentUsers.add(val._idRecipient);
+            } else if (val._idRecipient === userState.user._id) {
+              recentUsers.delete(val._idSender);
+              recentUsers.add(val._idSender);
+            }
           }
         }
-      });
-      props.setUnreadMessagesAction(unreadMessages);
+
+        userState.userList.forEach((user) => {
+          for (const key of Object.keys(messages)) {
+            const val = messages[key];
+            if (!unreadMessages[user._id]) {
+              unreadMessages[user._id] = [];
+            }
+
+            if (
+              val.seen === false &&
+              val._idSender === user._id &&
+              val._idRecipient === userState.user._id
+            ) {
+              unreadMessages[user._id].push(key);
+            }
+          }
+        });
+
+        props.setUnreadMessagesAction(unreadMessages);
+        props.setRecentListAction(recentUsers);
+      }
     });
   }, [userState.userList]);
 
@@ -115,47 +134,49 @@ function Hacademy(props) {
   useEffect(() => {
     messagesRef.on('value', (snapshot) => {
       const messages = snapshot.val();
+      if (messages) {
+        if (userState.user && chatState.recipient) {
+          const conversations = messages
+            ? Object.values(messages)
+                .map((value) => {
+                  return { ...value, id: value.key };
+                })
+                .filter((messageItem) => {
+                  return (
+                    (messageItem._idSender === userState.user._id &&
+                      messageItem._idRecipient === chatState.recipient._id) ||
+                    (messageItem._idRecipient === userState.user._id &&
+                      messageItem._idSender === chatState.recipient._id)
+                  );
+                })
+            : [];
 
-      if (userState.user && chatState.recipient) {
-        const conversations = messages
-          ? Object.values(messages)
-              .map((value) => {
-                return { ...value, id: value.key };
-              })
-              .filter((messageItem) => {
-                return (
-                  (messageItem._idSender === userState.user._id &&
-                    messageItem._idRecipient === chatState.recipient._id) ||
-                  (messageItem._idRecipient === userState.user._id &&
-                    messageItem._idSender === chatState.recipient._id)
+          const keys = messages ? Object.keys(messages) : [];
+          conversations.forEach((item, index) => {
+            item.id = keys[index];
+          });
+
+          props.setConversationsAction([...conversations]);
+        } else {
+          const countUnread = {};
+          if (userState.user) {
+            userState.userList.forEach((item) => {
+              if (item) {
+                const count = Object.values(messages).reduce(
+                  (initVal, val) =>
+                    val._idSender === item._id &&
+                    val._idRecipient === userState.user._id
+                      ? initVal + 1
+                      : initVal,
+                  0,
                 );
-              })
-          : [];
-
-        const keys = messages ? Object.keys(messages) : [];
-        conversations.forEach((item, index) => {
-          item.id = keys[index];
-        });
-
-        props.setConversationsAction([...conversations]);
-      } else {
-        const countUnread = {};
-        userState.userList.forEach((item) => {
-          if (item) {
-            const count = Object.values(messages).reduce(
-              (initVal, val) =>
-                val._idSender === item._id &&
-                val._idRecipient === userState.user._id
-                  ? initVal + 1
-                  : initVal,
-              0,
-            );
-            countUnread[item._id] = count;
+                countUnread[item._id] = count;
+              }
+            });
           }
-        });
-
-        props.setCountUnreadMessagesAction(countUnread);
-        props.setConversationsAction([]);
+          props.setCountUnreadMessagesAction(countUnread);
+          props.setConversationsAction([]);
+        }
       }
     });
   }, [chatState.recipient, userState.user]);
@@ -219,6 +240,7 @@ const mapDispatchToProps = (dispatch) => {
     setConversationsAction: bindActionCreators(setConversations, dispatch),
     setRecipientAction: bindActionCreators(setRecipient, dispatch),
     setUnreadMessagesAction: bindActionCreators(setUnreadMessages, dispatch),
+    setRecentListAction: bindActionCreators(setRecentList, dispatch),
   };
 };
 
