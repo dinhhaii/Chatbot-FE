@@ -141,15 +141,17 @@ function Hacademy(props) {
       } else {
         const countUnread = {};
         userState.userList.forEach((item) => {
-          const count = Object.values(messages).reduce(
-            (initVal, val) =>
-              val._idSender === item._id &&
-              val._idRecipient === userState.user._id
-                ? initVal + 1
-                : initVal,
-            0,
-          );
-          countUnread[item._id] = count;
+          if (item) {
+            const count = Object.values(messages).reduce(
+              (initVal, val) =>
+                val._idSender === item._id &&
+                val._idRecipient === userState.user._id
+                  ? initVal + 1
+                  : initVal,
+              0,
+            );
+            countUnread[item._id] = count;
+          }
         });
 
         props.setCountUnreadMessagesAction(countUnread);

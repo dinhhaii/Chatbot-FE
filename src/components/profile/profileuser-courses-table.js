@@ -113,7 +113,7 @@ const LecturerCourseTable = (props) => {
                   style={{ width: headers[0].width }}>
                   <div className="kt-user-card-v2">
                     <div className="kt-user-card-v2__pic">
-                      <img src={element.imageURL} alt="" />
+                      <img style={{ borderRadius: 0, height: '100%' }} src={element.imageURL} alt="" />
                     </div>
                     <div className="kt-user-card-v2__details">
                       <Link
@@ -132,7 +132,7 @@ const LecturerCourseTable = (props) => {
                 </td>
 
                 <td
-                  className="kt-datatable__cell"
+                  className="kt-datatable__cell text-nowrap"
                   style={{ width: headers[2].width }}>
                   <span className="kt-font-bold">{element.duration}</span>
                 </td>

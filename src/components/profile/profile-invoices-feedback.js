@@ -40,6 +40,7 @@ const FeedbackModal = (props) => {
         ...state,
         rate: 0,
         content: '',
+        visibleFeedbackModal: false,
       });
     }
   };
@@ -63,7 +64,7 @@ const FeedbackModal = (props) => {
           <label htmlFor="rate">
             Rate:
           </label>
-          <Rate className="ml-5" allowClear defaultValue={0} onChange={handleRateChange} name="rate" id="rate" />
+          <Rate className="ml-5" value={state.rate} allowClear defaultValue={0} onChange={handleRateChange} name="rate" id="rate" />
         </div>
         <div className="form-group">
           <label htmlFor="content">
@@ -75,6 +76,7 @@ const FeedbackModal = (props) => {
               type="text"
               id="content"
               name="content"
+              value={state.content}
               onChange={handleChange}
             />
           </div>

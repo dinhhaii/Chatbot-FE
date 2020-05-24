@@ -36,6 +36,7 @@ const ReportModal = (props) => {
     setState({
       ...state,
       reportMsg: '',
+      visibleReportModal: false,
     });
   };
 

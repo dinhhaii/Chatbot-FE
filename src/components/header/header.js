@@ -14,7 +14,7 @@ import { showSearchBar } from '../../actions/general';
 import Menu from './menu';
 
 const Header = (props) => {
-  const { userState, cartState, generalState } = props;
+  const { userState, cartState, chatState } = props;
   const [isDisplayedMenu, setIsDisplayedMenu] = useState(false);
 
   const showMenuContent = () => {
@@ -48,9 +48,9 @@ const Header = (props) => {
             </Link>
           </li>
           {/* MESSENGER  */}
-          {userState.user && generalState.unreadMessages && (
+          {userState.user && chatState.unreadMessages && (
           <li>
-            <Badge count={Object.values(generalState.unreadMessages).flat().length}>
+            <Badge count={Object.values(chatState.unreadMessages).flat().length}>
               <Link
                 to={PATH.CHAT}
                 style={{ fontSize: `${17}pt`, marginRight: 10 }}>
@@ -138,7 +138,7 @@ const mapStateToProps = (state) => {
   return {
     userState: state.userState,
     cartState: state.cartState,
-    generalState: state.generalState,
+    chatState: state.chatState,
   };
 };
 

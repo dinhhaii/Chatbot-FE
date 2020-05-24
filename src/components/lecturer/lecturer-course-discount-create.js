@@ -46,7 +46,7 @@ const LecturerCourseDiscountCreate = (props) => {
           </label>
           <div className="col-8">
             <select
-              className="custom-select form-control"
+              className="form-control"
               id="selectIdCourseDiscount"
               name="_idCourse"
               value={discount._idCourse}
@@ -96,7 +96,7 @@ const LecturerCourseDiscountCreate = (props) => {
           </label>
           <div className="col-8">
             <select
-              className="custom-select form-control"
+              className="form-control"
               id="selectStatusDiscount"
               name="status"
               value={discount.status}

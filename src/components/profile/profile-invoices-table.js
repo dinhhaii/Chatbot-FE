@@ -152,6 +152,7 @@ const InvoiceTable = (props) => {
                       onClick={() => { 
                         setState({
                           ...state,
+                          _idInvoice: element.invoice._id,
                           courseName: element.course.name, 
                           visibleReportModal: true,
                         });

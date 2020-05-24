@@ -60,7 +60,7 @@ const LecturerCourseDetailCourseForm = (props) => {
     const storage = firebase.storage();
     const tags = course.tags.join(',');
     const newCourse = { ...course, _idCourse: selectedCourse._id, tags };
-    if (image !== course.imageURL) {
+    if (image && image !== course.imageURL) {
       const task = storage.ref(`images/${image.name}`).put(image);
       task.on(
         'state_changed',

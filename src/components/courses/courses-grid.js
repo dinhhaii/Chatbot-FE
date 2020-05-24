@@ -17,42 +17,47 @@ const CoursesGrid = (props) => {
   const addToCart = (course) => {
     // Map CartState to items
     const items = [];
-    cartState.cart.items.forEach(element => {
-      if (!element.course.isDelete) {
-        if (element.discount) {
-          const discount = element.course.discountList.find(value => value._id === element.discount._id && value.status !== 'expired'); 
-          items.push({
-            _idCourse: element.course._id,
-            _idDiscount: discount ? discount._id : null,
-          });
-        } else {
-          const availableDiscount = element.course.discountList.find(value => value.status === 'available');
-          items.push({
-            _idCourse: element.course._id,
-            _idDiscount: availableDiscount ? availableDiscount._id : null,
-          });
+    if (cartState.cart) {
+      cartState.cart.items.forEach(element => {
+        if (!element.course.isDelete) {
+          if (element.discount) {
+            const discount = element.course.discountList.find(value => value._id === element.discount._id && value.status !== 'expired'); 
+            items.push({
+              _idCourse: element.course._id,
+              _idDiscount: discount ? discount._id : null,
+            });
+          } else {
+            const availableDiscount = element.course.discountList.find(value => value.status === 'available');
+            items.push({
+              _idCourse: element.course._id,
+              _idDiscount: availableDiscount ? availableDiscount._id : null,
+            });
+          }
         }
-      }
-    });
-    // Add new course to Cart
-    if (cartState.cart.items.find(value => value.course._id === course._id)) {
-      toast.warn('The course is already in cart.');
-    } else {
-      const availableDiscount = course.discount.find(value => value.status === 'available');
-      items.push({
-        _idCourse: course._id,
-        _idDiscount: availableDiscount ? availableDiscount._id : null,
       });
-    }
+      // Add new course to Cart
+      if (cartState.cart.items.find(value => value.course._id === course._id)) {
+        toast.warn('The course is already in cart.');
+      } else {
+        const availableDiscount = course.discount.find(value => value.status === 'available');
+        items.push({
+          _idCourse: course._id,
+          _idDiscount: availableDiscount ? availableDiscount._id : null,
+        });
+      }
 
-    // Update Data
-    const updateData = {
-      _idCart: cartState.cart._id,
-      items,
-    };
-    props.updateCartAction(updateData);
+      // Update Data
+      const updateData = {
+        _idCart: cartState.cart._id,
+        items,
+      };
+      props.updateCartAction(updateData);
+    }
   };
 
+  if (data.length === 0 || !data) {
+    return <div className="text-center m-5">No courses were found.</div>;
+  }
   return (
     <div className="row">
       {data.map((value, index) => {

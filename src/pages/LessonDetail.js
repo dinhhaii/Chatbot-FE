@@ -92,6 +92,10 @@ const LessonDetail = (props) => {
                       className="react-player-custom border border-success"
                     />
                   </div>
+                  <div className="mt-5">
+                    <h4>Description</h4>
+                    <p>{lessonState.lesson.description}</p>
+                  </div>
                 </div>
                 <div className="col-lg-4">
                   <Tabs activeKey={tabKey} onTabClick={(key) => setTabKey(key)}>

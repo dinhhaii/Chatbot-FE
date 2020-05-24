@@ -56,10 +56,10 @@ const Register = (props) => {
           registerUser(firstName, lastName, email, password, role)
             .then((response) => {
               const { data } = response;
-              if (data) {
+              if (!data.error) {
                 toast.success('Register successfully!');
               } else {
-                toast.error('Register failed!');
+                toast.warn(data.error);
               }
             })
             .catch((error) => {

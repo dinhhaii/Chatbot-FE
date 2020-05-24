@@ -14,9 +14,7 @@ import 'antd/dist/antd.css';
 
 const ProfileInvoices = (props) => {
   const prevProps = usePrevious(props);
-  const {
-    invoiceState, userState, feedbackState, setShowAside, 
-  } = props;
+  const { invoiceState, userState, feedbackState, setShowAside } = props;
   const dataPerPage = 5;
 
   const [filter, setFilter] = useState({
@@ -47,7 +45,7 @@ const ProfileInvoices = (props) => {
         totalPage: Math.ceil(
           invoiceState.invoiceLearnerList.length / dataPerPage,
         ),
-        data: invoiceState.invoiceLearnerList.slice(0, dataPerPage),
+        data: invoiceState.invoiceLearnerList.reverse().slice(0, dataPerPage),
       });
     }
   });
@@ -56,7 +54,7 @@ const ProfileInvoices = (props) => {
     const indexFirst = (page - 1) * dataPerPage;
     const indexLast = page * dataPerPage;
     const currentPage = page;
-    const data = handleFilter(invoiceState.invoiceLearnerList, filter)
+    const data = handleFilter(invoiceState.invoiceLearnerList.reverse(), filter)
       .slice(indexFirst, indexLast);
 
     setPagination({
@@ -78,7 +76,7 @@ const ProfileInvoices = (props) => {
   };
 
   const handleFilterChange = filterState => {
-    const data = handleFilter(invoiceState.invoiceLearnerList, filterState);
+    const data = handleFilter(invoiceState.invoiceLearnerList.reverse(), filterState);
     setPagination({
       ...pagination,
       indexFirst: 0,

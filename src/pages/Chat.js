@@ -17,7 +17,7 @@ const Chat = (props) => {
     seen: false,
   });
 
-  const userList = userState.user && userState.userList && userState.userList.filter(item => item._id !== userState.user._id);
+  const userList = userState.user && userState.userList && userState.userList.filter(item => item.role !== 'admin' && item._id !== userState.user._id);
 
   return (
     <div

@@ -1,0 +1,15 @@
+.react-confirm-alert-body {
+    width: 500px;
+}
+
+.item-cart {
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cart-footer td{
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+}

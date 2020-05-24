@@ -17,7 +17,7 @@ import { getRandom } from '../../utils/helper';
 const CourseCarousel = (props) => {
   const { courseList, cartState } = props;
 
-  const courses = courseList.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate)).reverse().slice(0, 5);
+  const courses = courseList.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5);
 
   const addToCart = (course) => {
     // Map CartState to items

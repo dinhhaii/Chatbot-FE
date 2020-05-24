@@ -17,7 +17,7 @@ const Course = (props) => {
   const [viewMode, setViewMode] = useState('grid');
   const prevProps = usePrevious(props);
   const { courseState, location } = props;
-  const dataPerPage = 4;
+  const dataPerPage = 8;
   const courses = courseState.courseList.filter(item => item.status === 'approved');
 
   const [filter, setFilter] = useState({

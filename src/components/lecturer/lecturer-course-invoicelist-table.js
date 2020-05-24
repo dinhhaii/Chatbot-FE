@@ -29,7 +29,9 @@ const LecturerInvoiceListTable = (props) => {
 
   const showTableContent = () => {
     return data.map((invoice, index) => {
-      const rateAverage = Math.round(invoice.feedback.reduce((total, num) => total + num.rate, 0) / invoice.feedback.length);
+      const fb = invoice.feedback.find(item => item._idInvoice === invoice._id);
+      const rate = fb ? fb.rate : 0;
+
       return (
         <tr
           className="kt-datatable__row"
@@ -52,7 +54,7 @@ const LecturerInvoiceListTable = (props) => {
   
           <td className="text-nowrap" style={{ textAlign: 'center' }}>
             <span className="kt-font-bold">
-              <Rate defaultValue={rateAverage} disabled />
+              <Rate defaultValue={rate} disabled />
             </span>
           </td>
 

@@ -11,6 +11,7 @@ import { showLoading, hideLoading } from '../../actions/general';
 import { makePayment } from '../../api/payment';
 import { updateCart } from '../../actions/cart';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import '../../utils/css/cart-payment.css';
 
 const CartPayment = (props) => {
   const { userState, cartState, setCurrentStep } = props;
@@ -28,33 +29,38 @@ const CartPayment = (props) => {
     e.preventDefault();
     confirmAlert({
       title: 'Are you sure you pay for these courses?',
+      
       message: (
-        <table className="table table-hover table-borderless cart-list" style={{ fontFamily: 'Poppins' }}>
-          <tbody>
-            {cartState.cart && cartState.cart.items.map((item, index) => {
-              const price = item.discount ? ((item.course.price * (100 - item.discount.percentage)) / 100).toFixed(2) : item.course.price;
-              return (
-                <tr key={index.toString()}>
-                  <td>
-                    <div className="thumb_cart" style={{ borderRadius: 0 }}>
-                      <img src={item.course.imageURL} alt="" />
-                    </div>
-                    <span className="item_cart">{item.course.name}</span>
-                  </td>
-                  <td className="text-center">
-                    <strong>${price}</strong>
-                  </td>
-                </tr>
-              );
-            })}
-            <tr style={{ borderTop: '1px solid gray' }}>
-              <td className="text-center"><h4>Total</h4></td>
-              <td className="text-center">
-                <h4>${total}</h4>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div style={{ height: 400, overflow: 'auto' }}>
+          <table className="table table-hover table-borderless cart-list" style={{ fontFamily: 'Poppins' }}>
+            <tbody>
+              {cartState.cart && cartState.cart.items.map((item, index) => {
+                const price = item.discount ? ((item.course.price * (100 - item.discount.percentage)) / 100).toFixed(2) : item.course.price;
+                return (
+                  <tr key={index.toString()}>
+                    <td>
+                      <div className="thumb_cart" style={{ borderRadius: 0 }}>
+                        <img src={item.course.imageURL} alt="" />
+                      </div>
+                      <span className="item_cart text-nowrap">{item.course.name}</span>
+                    </td>
+                    <td className="text-center">
+                      <strong>${price}</strong>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            <tfoot className="cart-footer">
+              <tr style={{ borderTop: '1px solid gray' }}>
+                <td className="text-center"><h4>Total</h4></td>
+                <td className="text-center">
+                  <h4>${total}</h4>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       ),
       buttons: [
         {

@@ -46,7 +46,7 @@ const ProfileInformation = (props) => {
     e.preventDefault();
     const storage = firebase.storage();
 
-    if (image !== state.imageURL) {
+    if (image && image !== state.imageURL) {
       const task = storage.ref(`images/${image.name}`).put(image);
       task.on(
         'state_changed',

@@ -1,18 +1,58 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-// import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toast } from 'react-toastify';
 import LessonsList from '../components/lessons/lessons-list';
 import CourseReview from '../components/courses/courses-review';
 import CourseDescription from '../components/courses/courses-description';
 import CoursePurchase from '../components/courses/courses-purchase';
 import { PATH } from '../utils/constant';
-import { capitalize } from '../utils/helper';
+import { capitalize, usePrevious } from '../utils/helper';
+import { fetchInvoiceList, updateInvoice } from '../actions/invoice';
 
 const CourseDetail = (props) => {
-  const { match, courseState } = props;
+  const { match, courseState, invoiceState, userState } = props;
+  const prevProps = usePrevious(props);
+
+  const [isRegistered, setIsRegistered] = useState(false);
   const course = courseState.courseList.find((e) => e._id === match.params.id);
+
+  useEffect(() => {
+    props.fetchInvoiceListAction();
+  }, []);
+
+  useEffect(() => {
+    if (userState.user && course && invoiceState.invoiceList.length !== 0 
+      && prevProps && prevProps.invoiceState.invoiceList !== invoiceState.invoiceList) {
+      const invoices = invoiceState.invoiceList.filter(item => item.user._id === userState.user._id && item.course._id === course._id);
+        
+      if (userState.user !== null && invoices.length !== 0 && invoices.some(val => val.status === 'success')) {
+        invoices.forEach(invoice => {
+          if (invoice.status === 'success') {
+            const createdDate = new Date(invoice.createdAt).getTime();
+            const accessibleDay = course.accessibleDays * 86400000;
+  
+            const date = createdDate + accessibleDay;
+            const currentDate = new Date().getTime();
+            if (currentDate < date) {
+              setIsRegistered(true);
+            } else {
+              toast.warn('Your course has expired to access.');
+              props.updateInvoiceAction({
+                _idInvoice: invoice._id,
+                status: 'canceled',
+              });
+            }
+          }
+        });
+      }
+    }
+  });
+
   return (
     <div>
       {course ? (
@@ -47,7 +87,7 @@ const CourseDetail = (props) => {
                   <LessonsList lessons={course.lessons} />
                   <CourseReview feedback={course.feedback} />
                 </div>
-                <CoursePurchase course={course} />
+                <CoursePurchase course={course} isRegistered={isRegistered} />
               </div>
             </div>
           </div>
@@ -61,11 +101,15 @@ const mapStateToProps = (state) => {
   return {
     userState: state.userState,
     courseState: state.courseState,
+    invoiceState: state.invoiceState,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    fetchInvoiceListAction: bindActionCreators(fetchInvoiceList, dispatch),
+    updateInvoiceAction: bindActionCreators(updateInvoice, dispatch),
+  };
 };
 
 export default connect(
