@@ -9,7 +9,7 @@ const CustomLoader = ({ generalState }) => {
   return (
     <div
       style={{
-        backgroundImage: 'url(\'img/bg-black70.png\')',
+        backgroundImage: 'url(/img/bg-black70.png)',
         display: `${generalState.isLoading ? 'block' : 'none'}`,
         position: 'fixed',
         zIndex: 998,

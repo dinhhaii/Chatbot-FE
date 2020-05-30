@@ -34,20 +34,22 @@ const Course = (props) => {
     data: [],
   });
 
-  // DID MOUNT
   useEffect(() => {
-    props.fetchCourseListAction();
     const urlParams = new URLSearchParams(location.search);
     const searchParam = urlParams.get('search');
     const subjectParam = urlParams.get('subject');
-    if (searchParam) {
-      setFilter({ ...filter, search: searchParam });
-    }
     if (subjectParam) {
       filter.subject.push(subjectParam);
       setFilter({ ...filter });
     }
-  }, []);
+
+    if (searchParam) {
+      setFilter({ ...filter, search: searchParam });
+      props.fetchCourseListAction({ search: searchParam });
+    } else {
+      props.fetchCourseListAction(filter);
+    }
+  }, [location.search]);
 
   // DID UPDATE
   useEffect(() => {
@@ -86,17 +88,7 @@ const Course = (props) => {
   };
 
   const handleFilter = (list, _filter) => {
-    return list
-      .filter((e) => _filter.subject.length === 0 || _filter.subject.some(name => name === e.subject.name))
-      .filter((e) => {
-        const search = _filter.search.toLowerCase();
-        return search === ''
-        || e.name.toLowerCase().includes(search)
-        || e.subject.name.toLowerCase().includes(search)
-        || e.lecturer.firstName.toLowerCase().includes(search)
-        || e.lecturer.lastName.toLowerCase().includes(search)
-        || e.description.toLowerCase().includes(search);
-      });
+    return list.filter((e) => _filter.subject.length === 0 || _filter.subject.some(name => name === e.subject.name));
   };
 
   

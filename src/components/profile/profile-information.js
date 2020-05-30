@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
 import { Progress } from 'antd';
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { requestVerificationEmail } from '../../api/user';
 import { showLoading, hideLoading } from '../../actions/general';
 import { updateUser } from '../../actions/user';
@@ -227,12 +229,10 @@ const ProfileInformation = (props) => {
                           Bio
                         </label>
                         <div className="col-lg-9 col-xl-6">
-                          <textarea
-                            style={{ height: 400 }}
-                            className="form-control"
-                            name="bio"
-                            value={state.bio}
-                            onChange={handleChangle}
+                          <CKEditor
+                            editor={ClassicEditor}
+                            data={state.bio}
+                            onChange={(event, editor) => setState({ ...state, bio: editor.getData() })}
                           />
                         </div>
                       </div>
@@ -249,8 +249,8 @@ const ProfileInformation = (props) => {
                           className="btn btn-success w-25 mr-5">
                           Save
                         </button>
-                        <button 
-                          type="reset" 
+                        <button
+                          type="reset"
                           className="btn btn-secondary w-25"
                           onClick={() => setState({
                             imageURL: userState.user.imageURL,

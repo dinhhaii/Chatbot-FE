@@ -11,14 +11,14 @@ const Footer = (props) => {
       <div className="container margin_120_95">
         <div className="row">
           <div className="col-lg-5 col-md-12 p-r-5">
-            <p>
+            <Link to="/">
               <img
-                src="img/logo-color-text.png"
+                src="/img/logo-color-text.png"
                 height="80"
                 data-retina="true"
                 alt=""
               />
-            </p>
+            </Link>
             <p>
               Lorem ipsum dolor sit amet, at sit dicat putent admodum, putant definitiones ad mei. Duo quas iisque persius cu, ne iudico corrumpit mel, at duo suas meliore. Usu dicam aeterno ut, te unum melius minimum quo.
             </p>

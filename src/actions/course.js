@@ -1,9 +1,10 @@
 /* eslint-disable object-curly-newline */
 import * as actionTypes from '../utils/actionTypes';
 
-export const fetchCourseList = () => {
+export const fetchCourseList = (props) => {
   return {
     type: actionTypes.FETCH_COURSE_LIST,
+    props
   };
 };
 

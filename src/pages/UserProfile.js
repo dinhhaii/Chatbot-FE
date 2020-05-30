@@ -6,9 +6,10 @@ import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import ReactHtmlParser from 'react-html-parser';
 import { fetchUserList } from '../actions/user';
-import LecturerCourseTable from '../components/profile/profileuser-courses-table';
 import { PATH } from '../utils/constant';
+import LecturerCourseTable from '../components/profile/profileuser-courses-table';
 
 const UserDetail = (props) => {
   useEffect(() => {
@@ -84,7 +85,7 @@ const UserDetail = (props) => {
                   <p>{`${user.firstName.toUpperCase()} ${user.lastName.toUpperCase()}'s bio`}</p>
                 </div>
                 <div className="wrapper_indent">
-                  <p>{user.bio}</p>
+                  {ReactHtmlParser(user.bio)}
                 </div>
                 <hr className="styled_2" />
                 {user.role === 'lecturer' ? (

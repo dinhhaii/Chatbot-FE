@@ -13,7 +13,7 @@ import { IMAGE_URL } from '../../utils/constant';
 const CourseReview = (props) => {
   let { feedback } = props;
   feedback = feedback.filter((e) => !e.isDelete);
-  const rateAverage = feedback.reduce((total, num) => total + num.rate, 0) / feedback.length;
+  const rateAverage = (feedback.reduce((total, num) => total + num.rate, 0) / feedback.length).toFixed(1);
 
   useEffect(() => {
     props.fetchUserListAction();

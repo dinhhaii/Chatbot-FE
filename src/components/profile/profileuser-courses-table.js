@@ -5,21 +5,22 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Rate } from 'antd';
+import { Rate, Spin } from 'antd';
 import { toast } from 'react-toastify';
 import { PATH } from '../../utils/constant';
 import { fetchCourseLecturerList } from '../../actions/course';
-import '../../utils/css/scrollbar.css';
 import { updateCart } from '../../actions/cart';
+import '../../utils/css/scrollbar.css';
+import 'antd/dist/antd.css';
 
 const LecturerCourseTable = (props) => {
-  const { courseState, fetchCourseLecturerListAction, user, cartState } = props;
+  const { courseState, fetchCourseLecturerListAction, user, cartState, userState } = props;
   useEffect(() => {
     fetchCourseLecturerListAction(user._id);
   }, []);
 
   const headers = [
-    { name: 'Name', width: `${200}px` },
+    { name: 'Name', width: `${300}px` },
     { name: 'Price', width: `${80}px` },
     { name: 'Duration', width: `${80}px` },
     { name: 'Accessible Days', width: `${150}px` },
@@ -98,7 +99,7 @@ const LecturerCourseTable = (props) => {
         <tbody
           className="kt-datatable__body ps ps--active-y"
           style={{ maxHeight: `${447}px` }}>
-          {data.map((element, index) => {
+          {data && data.length !== 0 ? data.map((element, index) => {
             const rateAverage = element.feedback.reduce((total, num) => total + num.rate, 0) / element.feedback.length;
             if (element.isDelete) {
               return null;
@@ -144,7 +145,7 @@ const LecturerCourseTable = (props) => {
                 </td>
 
                 <td
-                  className="kt-datatable__cell text-nowrap"
+                  className="kt-datatable__cell text-nowrap text-center"
                   style={{ width: headers[4].width }}>
                   <span style={{ width: `${100}px` }}>
                     <Rate
@@ -154,18 +155,19 @@ const LecturerCourseTable = (props) => {
                     />
                   </span>
                 </td>
-
-                <td
-                  className="kt-datatable__cell"
-                  style={{ width: headers[5].width }}>
-                  <button className="btn btn-outline-dark" onClick={() => addToCart(element)}>
-                    <i className="icon-cart" />
-                    Add to cart
-                  </button>
-                </td>
+                {userState.user && userState.user.role === 'learner' && (
+                  <td
+                    className="kt-datatable__cell"
+                    style={{ width: headers[5].width }}>
+                    <button className="btn btn-outline-dark" onClick={() => addToCart(element)}>
+                      <i className="icon-cart" />
+                      Add to cart
+                    </button>
+                  </td>
+                )}
               </tr>
             );
-          })}
+          }) : <tr className="text-center m-4"><td colSpan={headers.length}><Spin /></td></tr>}
         </tbody>
       </table>
     </div>
@@ -174,6 +176,7 @@ const LecturerCourseTable = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    userState: state.userState,
     courseState: state.courseState,
     cartState: state.cartState,
   };

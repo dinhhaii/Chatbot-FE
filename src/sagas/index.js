@@ -208,12 +208,12 @@ function* fetchUserSaga({ email, password }) {
   }
 }
 
-function* fetchCourseListSaga() {
+function* fetchCourseListSaga({ props }) {
   yield put(showLoading());
   try {
-    const { data } = yield call(getCourseList);
+    const { data } = yield call(getCourseList, props);
     if (data) {
-      yield put(fetchCourseListSuccess(data.filter(e => !e.isDelete)));
+      yield put(fetchCourseListSuccess(data));
     } else {
       yield put(fetchCourseListFailed());
       toast.error('Cannot fetch courses list!');
