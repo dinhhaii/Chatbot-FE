@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { bindActionCreators } from 'redux';
-
 import { fetchCart } from './actions/cart';
 import {
   setConversations,
@@ -32,14 +31,13 @@ import { updateStatusUser } from './utils/presence';
 import firebase from './utils/firebase';
 import routes from './routes/routes';
 import { authorizeUser } from './api/user';
-
 import Header from './components/header/header';
 import Footer from './components/footer/footer';
 import Search from './components/search';
 import CustomLoader from './components/loader';
 import AuthRoute from './components/authRoutes';
-// import ChatPopup from './components/chat/chat-popup';
 import RouteWithSubRoutes from './components/subRoutes';
+// import ChatPopup from './components/chat/chat-popup';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -115,9 +113,9 @@ function Hacademy(props) {
             }
 
             if (
-              val.seen === false &&
-              val._idSender === user._id &&
-              val._idRecipient === userState.user._id
+              val.seen === false
+              && val._idSender === user._id
+              && val._idRecipient === userState.user._id
             ) {
               unreadMessages[user._id].push(key);
             }
@@ -138,17 +136,17 @@ function Hacademy(props) {
         if (userState.user && chatState.recipient) {
           const conversations = messages
             ? Object.values(messages)
-                .map((value) => {
-                  return { ...value, id: value.key };
-                })
-                .filter((messageItem) => {
-                  return (
-                    (messageItem._idSender === userState.user._id &&
-                      messageItem._idRecipient === chatState.recipient._id) ||
-                    (messageItem._idRecipient === userState.user._id &&
-                      messageItem._idSender === chatState.recipient._id)
-                  );
-                })
+              .map((value) => {
+                return { ...value, id: value.key };
+              })
+              .filter((messageItem) => {
+                return (
+                  (messageItem._idSender === userState.user._id
+                      && messageItem._idRecipient === chatState.recipient._id)
+                    || (messageItem._idRecipient === userState.user._id
+                      && messageItem._idSender === chatState.recipient._id)
+                );
+              })
             : [];
 
           const keys = messages ? Object.keys(messages) : [];
@@ -163,11 +161,10 @@ function Hacademy(props) {
             userState.userList.forEach((item) => {
               if (item) {
                 const count = Object.values(messages).reduce(
-                  (initVal, val) =>
-                    val._idSender === item._id &&
-                    val._idRecipient === userState.user._id
-                      ? initVal + 1
-                      : initVal,
+                  (initVal, val) => (val._idSender === item._id
+                    && val._idRecipient === userState.user._id
+                    ? initVal + 1
+                    : initVal),
                   0,
                 );
                 countUnread[item._id] = count;
