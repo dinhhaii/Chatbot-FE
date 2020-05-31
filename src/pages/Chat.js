@@ -23,7 +23,7 @@ const Chat = (props) => {
     <div
       className="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor bg-dark"
       id="kt_content"
-      style={{ paddingTop: `${75}px` }}>
+      style={{ paddingTop: `${75}px`, fontFamily: 'Noto Sans' }}>
       <div className="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
         {userState.user && (
           <div className="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">

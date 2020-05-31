@@ -36,9 +36,10 @@ import Footer from './components/footer/footer';
 import Search from './components/search';
 import CustomLoader from './components/loader';
 import AuthRoute from './components/authRoutes';
+import Role from './components/role';
 import RouteWithSubRoutes from './components/subRoutes';
+import { setRole } from './actions/general';
 // import ChatPopup from './components/chat/chat-popup';
-
 import 'react-toastify/dist/ReactToastify.css';
 
 function Hacademy(props) {
@@ -55,7 +56,7 @@ function Hacademy(props) {
       .then((response) => {
         const { data } = response;
         if (data) {
-          const { firstName, lastName, _id } = data;
+          const { firstName, lastName, _id, role } = data;
           props.fetchUserListAction();
 
           if (!userState.isLogin && _id) {
@@ -64,6 +65,11 @@ function Hacademy(props) {
             props.fetchCartAction(_id);
             props.fetchUserSuccessAction({ user: data });
             toast.success(`Hi, ${firstName} ${lastName}!`);
+            if (!role) {
+              props.setRoleAction(true);
+            } else {
+              props.setRoleAction(false);
+            }
           }
         }
       })
@@ -113,9 +119,9 @@ function Hacademy(props) {
             }
 
             if (
-              val.seen === false
-              && val._idSender === user._id
-              && val._idRecipient === userState.user._id
+              val.seen === false &&
+              val._idSender === user._id &&
+              val._idRecipient === userState.user._id
             ) {
               unreadMessages[user._id].push(key);
             }
@@ -136,17 +142,17 @@ function Hacademy(props) {
         if (userState.user && chatState.recipient) {
           const conversations = messages
             ? Object.values(messages)
-              .map((value) => {
-                return { ...value, id: value.key };
-              })
-              .filter((messageItem) => {
-                return (
-                  (messageItem._idSender === userState.user._id
-                      && messageItem._idRecipient === chatState.recipient._id)
-                    || (messageItem._idRecipient === userState.user._id
-                      && messageItem._idSender === chatState.recipient._id)
-                );
-              })
+                .map((value) => {
+                  return { ...value, id: value.key };
+                })
+                .filter((messageItem) => {
+                  return (
+                    (messageItem._idSender === userState.user._id &&
+                      messageItem._idRecipient === chatState.recipient._id) ||
+                    (messageItem._idRecipient === userState.user._id &&
+                      messageItem._idSender === chatState.recipient._id)
+                  );
+                })
             : [];
 
           const keys = messages ? Object.keys(messages) : [];
@@ -161,10 +167,11 @@ function Hacademy(props) {
             userState.userList.forEach((item) => {
               if (item) {
                 const count = Object.values(messages).reduce(
-                  (initVal, val) => (val._idSender === item._id
-                    && val._idRecipient === userState.user._id
-                    ? initVal + 1
-                    : initVal),
+                  (initVal, val) =>
+                    val._idSender === item._id &&
+                    val._idRecipient === userState.user._id
+                      ? initVal + 1
+                      : initVal,
                   0,
                 );
                 countUnread[item._id] = count;
@@ -183,6 +190,7 @@ function Hacademy(props) {
       <CustomLoader />
       <Search />
       <Header />
+      <Role />
       {/* <ChatPopup /> */}
       <ToastContainer
         position={toast.POSITION.BOTTOM_CENTER}
@@ -238,6 +246,7 @@ const mapDispatchToProps = (dispatch) => {
     setRecipientAction: bindActionCreators(setRecipient, dispatch),
     setUnreadMessagesAction: bindActionCreators(setUnreadMessages, dispatch),
     setRecentListAction: bindActionCreators(setRecentList, dispatch),
+    setRoleAction: bindActionCreators(setRole, dispatch),
   };
 };
 

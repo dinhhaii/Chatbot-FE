@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { useRef, useEffect } from 'react';
 import moment from 'moment';
 
@@ -42,3 +43,12 @@ export function calculateTimeTilNow(time) {
   if (minutes !== 0) return `${minutes}m`;
   return `${seconds}s`;
 }
+
+export const paramsToObject = (entries) => {
+  const result = {};
+  for (const entry of entries) {
+    const [key, value] = entry;
+    result[key] = value;
+  }
+  return result;
+};

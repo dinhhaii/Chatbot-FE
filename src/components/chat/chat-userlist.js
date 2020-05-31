@@ -2,10 +2,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Tabs } from 'antd';
+import { Tabs, Spin } from 'antd';
 import UserCell from './chat-userlist-cell';
-import '../../utils/css/chat.css'; 
 import { capitalize, usePrevious } from '../../utils/helper';
+import '../../utils/css/chat.css'; 
+import 'antd/dist/antd.css';
 
 const { TabPane } = Tabs;
 const TABCONTACT = {
@@ -73,6 +74,7 @@ const ChatUserList = (props) => {
                   <TabPane 
                     tab={<span>{capitalize(TABCONTACT.RECENT)}</span>} 
                     key={TABCONTACT.RECENT}>
+                    {recentList && recentList.length === 0 && <div className="text-center">No recent contacts</div>}
                     {recentList && recentList.reverse().map((id, index) => {
                       const user = userList.find(item => item._id === id);
                       if (user) {
@@ -90,13 +92,14 @@ const ChatUserList = (props) => {
                   <TabPane
                     tab={<span>{capitalize(TABCONTACT.CONTACTS)}</span>}
                     key={TABCONTACT.CONTACTS}>
-                    {userList.map((user, index) => (
-                      <UserCell 
-                        key={index.toString()}
-                        user={user}
-                        message={message}
-                        setMessage={setMessage} />
-                    ))}
+                    {userList.length === 0 ? <div className="text-center"><Spin /> </div>
+                      : userList.map((user, index) => (
+                        <UserCell 
+                          key={index.toString()}
+                          user={user}
+                          message={message}
+                          setMessage={setMessage} />
+                      ))}
                   </TabPane>
                 </Tabs>
                 

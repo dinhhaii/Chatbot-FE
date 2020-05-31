@@ -93,3 +93,4 @@ export const SET_STATUS_USER = 'SET_STATUS_USER';
 export const SET_RECIPIENT = 'SET_RECIPIENT';
 export const SET_CONVERSATIONS = 'SET_CONVERSATIONS';
 export const SET_POPUP_CHAT = 'SET_POPUP_CHAT';
+export const IS_SET_ROLE = 'IS_SET_ROLE';

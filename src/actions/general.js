@@ -23,3 +23,10 @@ export const hideSearchBar = () => {
     type: actionTypes.HIDE_SEARCHBAR,
   };
 };
+
+export const setRole = (data) => {
+  return {
+    type: actionTypes.IS_SET_ROLE,
+    data,
+  };
+};

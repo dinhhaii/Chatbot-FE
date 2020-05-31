@@ -76,7 +76,7 @@ const Header = (props) => {
           {userState.isLogin ? (
             <>
               <li>
-                <Link to={PATH.PROFILE} className="d-none d-md-inline d-lg-inline d-xl-inline" style={{ fontSize: `${14}pt` }}>
+                <Link to={PATH.PROFILE} className="d-none d-md-inline d-lg-inline d-xl-inline" style={{ fontFamily: 'Arial', fontSize: `${14}pt` }}>
                   {userState.user
                     ? `${userState.user.firstName} ${userState.user.lastName}`
                     : ''}

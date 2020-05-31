@@ -1,25 +1,30 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/destructuring-assignment */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { PATH } from '../../utils/constant';
-import { fetchUser } from '../../actions/user';
+import queryString from 'query-string';
+import { PATH, SERVER_URL, AUTH_TOKEN } from '../../utils/constant';
+import { fetchUser, fetchUserSuccess } from '../../actions/user';
 import ErrorInput from '../error-input';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Please enter valid email')
     .required('Email is required.'),
-  // password: Yup.string()
-  //   .required('No password provided.') 
-  //   .min(8, 'Password is too short - should be 8 characters minimum.')
-  //   .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
+  password: Yup.string()
+    .required('No password provided.') 
+    .min(8, 'Password is too short - should be 8 characters minimum.')
+    .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
 });
 
 const Login = (props) => {
+  const { history, location } = props;
+
   const initialValues = {
     email: '',
     password: '',
@@ -30,6 +35,22 @@ const Login = (props) => {
       props.history.push('/');
     }
   });
+
+  useEffect(() => {
+    const params = queryString.parse(location.search);
+    if (Object.keys(params).length !== 0) {
+      const { token } = params;
+      delete params.token;
+
+      const data = {
+        user: { ...params },
+        token,
+      };
+      localStorage.setItem(AUTH_TOKEN, token);
+      props.fetchUserSuccessAction(data);
+      history.push('/');
+    }
+  }, []);
 
   return (
     <div className="kt-login__signin">
@@ -99,15 +120,14 @@ const Login = (props) => {
       <div>
         <div className="kt-login__actions">
           <button
-            className={`btn btn-brand btn-pill btn-elevate btn-facebook btn-custom ${
-              props.generalState.isLoading ? 'disabled' : ''
-            }`}>
+            className="btn btn-brand btn-pill btn-elevate btn-facebook btn-custom"
+            disabled={props.generalState.isLoading}>
             <i className="icon-facebook" /> Facebook
           </button>
           <button
-            className={`btn btn-brand btn-pill btn-elevate btn-google btn-custom ${
-              props.generalState.isLoading ? 'disabled' : ''
-            }`}>
+            onClick={() => window.location.replace(`${SERVER_URL}/user/google`)}
+            className="btn btn-brand btn-pill btn-elevate btn-google btn-custom" 
+            disabled={props.generalState.isLoading}>
             <i className="icon-google" /> Google
           </button>
         </div>
@@ -139,6 +159,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchUserAction: bindActionCreators(fetchUser, dispatch),
+    fetchUserSuccessAction: bindActionCreators(fetchUserSuccess, dispatch),
   };
 };
 
