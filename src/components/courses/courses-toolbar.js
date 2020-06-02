@@ -5,6 +5,7 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Input } from 'antd';
 import 'antd/dist/antd.css';
+import { PATH } from '../../utils/constant';
 
 const { Search } = Input;
 
@@ -21,7 +22,7 @@ const CourseToolBar = ({ viewMode, setViewMode, filter, setFilter, handleChangeF
               onPressEnter={(e) => {
                 const { value } = e.target;
                 if (value) {
-                  history.push(`/courses?search=${value}`)
+                  history.push(`/courses?search=${value}`);
                 }
               }}
               onChange={e => setFilter({ ...filter, search: e.target.value })}
@@ -50,7 +51,7 @@ const CourseToolBar = ({ viewMode, setViewMode, filter, setFilter, handleChangeF
                   search: '',
                   subject: [],
                 });
-
+                history.push(PATH.COURSES);
                 handleChangeFilter();
               }}><i className="icon-arrows-cw" />
             </div>

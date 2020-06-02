@@ -2,6 +2,8 @@ export const SERVER_URL = 'http://localhost:3000';
 // export const SERVER_URL = 'https://hacademy-api.herokuapp.com';
 export const PUBLISH_KEY_STRIPE = 'pk_test_bVMx06pYmPZ1mR7lj74RSrlf00TcSnax3B';
 export const AUTH_TOKEN = 'AUTH_TOKEN';
+export const APP_ID = '291773038524316';
+export const PAGE_ID = '103199398091895';
 
 export const FIREBASE_MESSAGE_REF = 'messages';
 export const FIREBASE_STATUS_REF = 'status';

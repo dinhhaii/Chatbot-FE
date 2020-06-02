@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { bindActionCreators } from 'redux';
+import MessengerCustomerChat from 'react-messenger-customer-chat';
 import { fetchCart } from './actions/cart';
 import {
   setConversations,
@@ -26,6 +27,8 @@ import {
   AUTH_TOKEN,
   FIREBASE_MESSAGE_REF,
   FIREBASE_STATUS_REF,
+  PAGE_ID,
+  APP_ID,
 } from './utils/constant';
 import { updateStatusUser } from './utils/presence';
 import firebase from './utils/firebase';
@@ -191,6 +194,11 @@ function Hacademy(props) {
       <Search />
       <Header />
       <Role />
+      <MessengerCustomerChat
+        pageId={PAGE_ID}
+        appId={APP_ID}
+        htmlRef={window.location.pathname}
+      />
       {/* <ChatPopup /> */}
       <ToastContainer
         position={toast.POSITION.BOTTOM_CENTER}

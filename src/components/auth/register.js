@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { PATH } from '../../utils/constant';
+import { PATH, SERVER_URL } from '../../utils/constant';
 import { registerUser } from '../../api/user';
 import { showLoading, hideLoading } from '../../actions/general';
 import ErrorInput from '../error-input';
@@ -191,11 +191,17 @@ const Register = (props) => {
       <hr className="hr-text" data-content="OR" />
       <div>
         <div className="kt-login__actions">
-          <button className="btn btn-brand btn-pill btn-elevate btn-facebook btn-custom">
-            Facebook
+          <button
+            onClick={() => window.location.replace(`${SERVER_URL}/user/facebook`)}
+            className="btn btn-brand btn-pill btn-elevate btn-facebook btn-custom"
+            disabled={props.generalState.isLoading}>
+            <i className="icon-facebook" /> Facebook
           </button>
-          <button className="btn btn-brand btn-pill btn-elevate btn-google btn-custom">
-            Google
+          <button
+            onClick={() => window.location.replace(`${SERVER_URL}/user/google`)}
+            className="btn btn-brand btn-pill btn-elevate btn-google btn-custom" 
+            disabled={props.generalState.isLoading}>
+            <i className="icon-google" /> Google
           </button>
         </div>
       </div>

@@ -120,6 +120,7 @@ const Login = (props) => {
       <div>
         <div className="kt-login__actions">
           <button
+            onClick={() => window.location.replace(`${SERVER_URL}/user/facebook`)}
             className="btn btn-brand btn-pill btn-elevate btn-facebook btn-custom"
             disabled={props.generalState.isLoading}>
             <i className="icon-facebook" /> Facebook
