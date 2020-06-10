@@ -132,20 +132,22 @@ const Profile = (props) => {
                             </span>
                           </span>
                         </Link>
-                        <Link
-                          className={`kt-widget__item ${
-                            tabName === TAB.CHANGE_PASSWORD
-                              ? 'kt-widget__item--active'
-                              : ''
-                          }`}
-                          onClick={() => setTabName(TAB.CHANGE_PASSWORD)}>
-                          <span className="kt-widget__section">
-                            <span className="icon-shield" />
-                            <span className="kt-widget__desc">
-                              Change Password
+                        {userState.user && userState.user.type === 'google' && userState.user.type === 'facebook' && (
+                          <Link
+                            className={`kt-widget__item ${
+                              tabName === TAB.CHANGE_PASSWORD
+                                ? 'kt-widget__item--active'
+                                : ''
+                            }`}
+                            onClick={() => setTabName(TAB.CHANGE_PASSWORD)}>
+                            <span className="kt-widget__section">
+                              <span className="icon-shield" />
+                              <span className="kt-widget__desc">
+                                Change Password
+                              </span>
                             </span>
-                          </span>
-                        </Link>
+                          </Link>
+                        )}
                         {userState.user.role === 'learner' ? (
                           <Link
                             className={`kt-widget__item ${

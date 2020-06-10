@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CoursesGrid from '../components/courses/courses-grid';
@@ -127,11 +127,12 @@ const Course = (props) => {
             <div className="col-lg-9">
               {viewMode === 'grid' ? <CoursesGrid data={pagination.data} /> : <CoursesList data={pagination.data} />}
               <p className="text-center">
-                <Link
+                <button
                   onClick={() => choosePage(pagination.currentPage + 1)}
-                  className="btn_1 rounded add_top_30">
+                  className="btn_1 rounded add_top_30"
+                  disabled={pagination.totalPage === pagination.currentPage}>
                   Load more
-                </Link>
+                </button>
               </p>
             </div>
           </div>
