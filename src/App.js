@@ -121,12 +121,14 @@ function Hacademy(props) {
               unreadMessages[user._id] = [];
             }
 
-            if (
-              val.seen === false &&
-              val._idSender === user._id &&
-              val._idRecipient === userState.user._id
-            ) {
-              unreadMessages[user._id].push(key);
+            if (userState.user) {
+              if (
+                val.seen === false &&
+                val._idSender === user._id &&
+                val._idRecipient === userState.user._id
+              ) {
+                unreadMessages[user._id].push(key);
+              }
             }
           }
         });
