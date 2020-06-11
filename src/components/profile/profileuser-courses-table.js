@@ -25,7 +25,7 @@ const LecturerCourseTable = (props) => {
     { name: 'Duration', width: `${80}px` },
     { name: 'Accessible Days', width: `${150}px` },
     { name: 'Rate', width: `${200}px` },
-    { name: '', width: `${100}px` },
+    userState.user && userState.user.role === 'learner' ? { name: '', width: `${100}px` } : undefined,
   ];
   const data = courseState.courseLecturerList;
 
