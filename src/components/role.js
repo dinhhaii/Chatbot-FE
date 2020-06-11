@@ -10,6 +10,13 @@ const Role = (props) => {
   if (!userState.user && !userState.isLogin) {
     return null;
   }
+
+  if (userState.user) {
+    if (userState.user.role !== '') {
+      return null;
+    }
+  }
+
   return (
     <div
       className="bg-dark"

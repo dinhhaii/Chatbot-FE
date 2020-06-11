@@ -33,32 +33,25 @@ const Login = (props) => {
 
   const [isChecked, setIsChecked] = useState(false);
 
-
   useEffect(() => {
-    if (isChecked && $('#email').val() !== '') {
-      localStorage.email = $('#email').val();
-    }
-
     if (props.userState.isLogin) {
+      if (localStorage.getItem('checkbox') === 'false') {
+        localStorage.removeItem('email');
+        localStorage.removeItem('password');
+        localStorage.removeItem('checkbox');
+      } else {
+        localStorage.setItem('email', props.userState.user.email);
+        console.log(localStorage);
+      }
+
       props.history.push('/');
     }
   });
 
   useEffect(() => {
-    if (localStorage.checkbox && localStorage.email !== '') {
+    if (localStorage.getItem('checkbox') === 'true' && localStorage.getItem('email') !== '') {
       setIsChecked(true);
-      initialValues.email = localStorage.email;
-    }
-
-    console.log(localStorage.checkbox);
-
-    // LOG RA FALSE NHUNG KHONG CHAY IF!!
-
-    if (!localStorage.checkbox) {
-      console.log('asdasd');
-      localStorage.removeItem('email');
-      localStorage.removeItem('password');
-      localStorage.removeItem('checkbox');
+      initialValues.email = localStorage.getItem('email');
     }
 
     const params = queryString.parse(location.search);
@@ -121,7 +114,7 @@ const Login = (props) => {
               </div>
               <div className="kt-login__extra">
                 <label className="kt-checkbox">
-                  <input type="checkbox" checked={isChecked} onChange={() => { setIsChecked(!isChecked); localStorage.checkbox = !isChecked; }} name="remember" />
+                  <input type="checkbox" checked={isChecked} onChange={() => { setIsChecked(!isChecked); localStorage.checkbox = !isChecked; console.log(localStorage.checkbox); }} name="remember" />
                   Remember me
                   <span />
                 </label>
