@@ -1,13 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import queryString from 'query-string';
+import $ from 'jquery';
 import { PATH, SERVER_URL, AUTH_TOKEN } from '../../utils/constant';
 import { fetchUser, fetchUserSuccess } from '../../actions/user';
 import ErrorInput from '../error-input';
@@ -17,7 +18,7 @@ const validationSchema = Yup.object().shape({
     .email('Please enter valid email')
     .required('Email is required.'),
   password: Yup.string()
-    .required('No password provided.') 
+    .required('No password provided.')
     .min(8, 'Password is too short - should be 8 characters minimum.')
     .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
 });
@@ -25,18 +26,41 @@ const validationSchema = Yup.object().shape({
 const Login = (props) => {
   const { history, location } = props;
 
-  const initialValues = {
+  let initialValues = {
     email: '',
     password: '',
   };
 
+  const [isChecked, setIsChecked] = useState(false);
+
+
   useEffect(() => {
+    if (isChecked && $('#email').val() !== '') {
+      localStorage.email = $('#email').val();
+    }
+
     if (props.userState.isLogin) {
       props.history.push('/');
     }
   });
 
   useEffect(() => {
+    if (localStorage.checkbox && localStorage.email !== '') {
+      setIsChecked(true);
+      initialValues.email = localStorage.email;
+    }
+
+    console.log(localStorage.checkbox);
+
+    // LOG RA FALSE NHUNG KHONG CHAY IF!!
+
+    if (!localStorage.checkbox) {
+      console.log('asdasd');
+      localStorage.removeItem('email');
+      localStorage.removeItem('password');
+      localStorage.removeItem('checkbox');
+    }
+
     const params = queryString.parse(location.search);
     if (Object.keys(params).length !== 0) {
       const { token } = params;
@@ -57,14 +81,14 @@ const Login = (props) => {
       <div className="kt-login__head">
         <h3 className="kt-login__title">Sign In</h3>
       </div>
-      <Formik 
+      <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values) => {
           props.fetchUserAction(values.email, values.password);
         }}>
         {({
-          values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, 
+          values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting,
         }) => (
           <div className="kt-login__form">
             <form className="kt-form" onSubmit={handleSubmit}>
@@ -73,6 +97,7 @@ const Login = (props) => {
                   className={`form-control ${touched.email && errors.email && 'is-invalid'} ${touched.email && !errors.email && 'is-valid'}`}
                   type="text"
                   name="email"
+                  id="email"
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -86,6 +111,7 @@ const Login = (props) => {
                   className={`form-control ${touched.password && errors.password && 'is-invalid'} ${touched.password && !errors.password && 'is-valid'}`}
                   type="password"
                   name="password"
+                  id="password"
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -95,7 +121,7 @@ const Login = (props) => {
               </div>
               <div className="kt-login__extra">
                 <label className="kt-checkbox">
-                  <input type="checkbox" name="remember" />
+                  <input type="checkbox" checked={isChecked} onChange={() => { setIsChecked(!isChecked); localStorage.checkbox = !isChecked; }} name="remember" />
                   Remember me
                   <span />
                 </label>
@@ -127,7 +153,7 @@ const Login = (props) => {
           </button>
           <button
             onClick={() => window.location.replace(`${SERVER_URL}/user/google`)}
-            className="btn btn-brand btn-pill btn-elevate btn-google btn-custom" 
+            className="btn btn-brand btn-pill btn-elevate btn-google btn-custom"
             disabled={props.generalState.isLoading}>
             <i className="icon-google" /> Google
           </button>
