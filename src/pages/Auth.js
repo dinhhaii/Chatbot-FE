@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Switch } from 'react-router-dom';
 import { IMAGE_URL } from '../utils/constant';
-import '../utils/css/Auth.css';
+import '../utils/css/auth.css';
 import RouteWithSubRoutes from '../components/subRoutes';
 
 const Auth = ({ routes }) => {
