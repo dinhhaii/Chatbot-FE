@@ -8,7 +8,6 @@ import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import queryString from 'query-string';
-import $ from 'jquery';
 import { PATH, SERVER_URL, AUTH_TOKEN } from '../../utils/constant';
 import { fetchUser, fetchUserSuccess } from '../../actions/user';
 import ErrorInput from '../error-input';
@@ -26,7 +25,7 @@ const validationSchema = Yup.object().shape({
 const Login = (props) => {
   const { history, location } = props;
 
-  let initialValues = {
+  const initialValues = {
     email: '',
     password: '',
   };
