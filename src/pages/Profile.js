@@ -110,12 +110,6 @@ const Profile = (props) => {
                             {userState.user.email}
                           </span>
                         </div>
-                        <div className="kt-widget__info">
-                          <span className="kt-widget__label">Account:</span>
-                          <span className="kt-widget__data">
-                            {capitalize(userState.user.type)}
-                          </span>
-                        </div>
                       </div>
                       <div className="kt-widget__items">
                         <Link
@@ -132,7 +126,7 @@ const Profile = (props) => {
                             </span>
                           </span>
                         </Link>
-                        {userState.user && userState.user.type === 'google' && userState.user.type === 'facebook' && (
+                        {userState.user && userState.user.idFacebook === '' && (
                           <Link
                             className={`kt-widget__item ${
                               tabName === TAB.CHANGE_PASSWORD

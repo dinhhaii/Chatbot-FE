@@ -20,7 +20,7 @@ const Footer = (props) => {
               />
             </Link>
             <p>
-              Lorem ipsum dolor sit amet, at sit dicat putent admodum, putant definitiones ad mei. Duo quas iisque persius cu, ne iudico corrumpit mel, at duo suas meliore. Usu dicam aeterno ut, te unum melius minimum quo.
+              Updating...
             </p>
             <div className="follow_us">
               <ul>
