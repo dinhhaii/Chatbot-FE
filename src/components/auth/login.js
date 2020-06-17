@@ -55,8 +55,12 @@ const Login = (props) => {
 
     const params = queryString.parse(location.search);
     if (Object.keys(params).length !== 0) {
-      const { token } = params;
+      const { token, previousPath } = params;
       delete params.token;
+
+      if (previousPath) {
+        delete params.previousPath;
+      }
 
       const data = {
         user: { ...params },
@@ -64,7 +68,11 @@ const Login = (props) => {
       };
       localStorage.setItem(AUTH_TOKEN, token);
       props.fetchUserSuccessAction(data);
-      history.push('/');
+      if (previousPath) {
+        history.push(previousPath);
+      } else {
+        history.push('/');
+      }
     }
   }, []);
 

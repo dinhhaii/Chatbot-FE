@@ -6,7 +6,6 @@ const Footer = (props) => {
   const location = useLocation();
   const disabled = location.pathname.includes('chat') || location.pathname.includes('lesson-detail') || location.pathname.includes('auth');
 
-  console.log(props);
   return (
     <footer style={{ display: disabled && 'none' }}>
       <div className="container margin_120_95">
