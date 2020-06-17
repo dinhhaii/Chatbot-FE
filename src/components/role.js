@@ -11,10 +11,8 @@ const Role = (props) => {
     return null;
   }
 
-  if (userState.user) {
-    if (userState.user.role !== '') {
-      return null;
-    }
+  if (userState.user && userState.user.role) {
+    return null;
   }
 
   return (
