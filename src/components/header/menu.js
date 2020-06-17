@@ -11,7 +11,7 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
       id="main_menu"
       className={isDisplayedMenu ? 'show' : ''}
       style={{ zIndex: 997, fontSize: `${15}pt` }}>
-      
+
       <div className="container">
         <div className="row">
           <h2 style={{ color: 'white' }}>
@@ -41,9 +41,9 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
                     </Link>
                   </li>
                   )}
-                  
+
                 </ul>
-              
+
               </div>
             )}
             <div className="col-md-4">
@@ -94,11 +94,6 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/" onClick={showMenuContent}>
-                    <i className="icon-puzzle" /> Setting
-                  </Link>
-                </li>
-                <li>
                   <Link to={PATH.ABOUT} onClick={showMenuContent}>
                     <i className="icon-home" /> About
                   </Link>
@@ -111,19 +106,9 @@ const Menu = ({ isDisplayedMenu, userState, showMenuContent }) => {
           <ul>
             <li>Follow us</li>
             <li>
-              <Link to="https://facebook.com">
+              <a href="https://www.facebook.com/Hacademy-103199398091895/" rel="noopener noreferrer" target="_blank">
                 <i className="ti-facebook" />
-              </Link>
-            </li>
-            <li>
-              <Link to="https://www.google.com.vn">
-                <i className="ti-google" />
-              </Link>
-            </li>
-            <li>
-              <Link to="https://instagram.com">
-                <i className="ti-instagram" />
-              </Link>
+              </a>
             </li>
           </ul>
           {userState.isLogin && (

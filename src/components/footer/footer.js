@@ -6,6 +6,7 @@ const Footer = (props) => {
   const location = useLocation();
   const disabled = location.pathname.includes('chat') || location.pathname.includes('lesson-detail') || location.pathname.includes('auth');
 
+  console.log(props);
   return (
     <footer style={{ display: disabled && 'none' }}>
       <div className="container margin_120_95">
@@ -20,25 +21,20 @@ const Footer = (props) => {
               />
             </Link>
             <p>
-              Lorem ipsum dolor sit amet, at sit dicat putent admodum, putant definitiones ad mei. Duo quas iisque persius cu, ne iudico corrumpit mel, at duo suas meliore. Usu dicam aeterno ut, te unum melius minimum quo.
+              Hacademy is a site which supports you on your learning path.
+              Here we have over 100 lecturers from the highest ranked universities
+              all around the world therefore, you don&apos;t
+              have to worry about the quality of courses.
+              Do not hesitate to take any course here at Hacademy.
+              We truly hope to be parts of your knowledge!
             </p>
             <div className="follow_us">
               <ul>
                 <li>Follow us</li>
                 <li>
-                  <Link to="facebook.com">
+                  <a href="https://www.facebook.com/Hacademy-103199398091895/" rel="noopener noreferrer" target="_blank">
                     <i className="ti-facebook" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to="google.com.vn">
-                    <i className="ti-google" />
-                  </Link>
-                </li>
-                <li>
-                  <Link to="instagram.com">
-                    <i className="ti-instagram" />
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -46,12 +42,12 @@ const Footer = (props) => {
           <div className="col-lg-3 col-md-6 ml-lg-auto">
             <h5>Useful links</h5>
             <ul className="links">
-              <li>
+              {/* <li>
                 <Link to={PATH.LOGIN}>Login</Link>
               </li>
               <li>
                 <Link to={PATH.REGISTER}>Register</Link>
-              </li>
+              </li> */}
               <li>
                 <Link to={PATH.ABOUT}>About</Link>
               </li>
@@ -76,7 +72,7 @@ const Footer = (props) => {
                 </Link>
               </li>
             </ul>
-            <div id="newsletter">
+            {/* <div id="newsletter">
               <h6>Newsletter</h6>
               <div id="message-newsletter" />
               <form
@@ -96,23 +92,13 @@ const Footer = (props) => {
                   <input type="submit" value="Submit" id="submit-newsletter" />
                 </div>
               </form>
-            </div>
+            </div> */}
           </div>
         </div>
         {/* <!--/row--> */}
         <hr />
         <div className="row">
-          <div className="col-md-8">
-            <ul id="additional_links">
-              <li>
-                <Link to="/">Terms and conditions</Link>
-              </li>
-              <li>
-                <Link to="/">Privacy</Link>
-              </li>
-            </ul>
-          </div>
-          <div className="col-md-4">
+          <div className="col-md-12">
             <div id="copy">© 2020 DHTC</div>
           </div>
         </div>

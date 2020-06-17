@@ -13,16 +13,16 @@ import * as actionTypes from '../utils/actionTypes';
 import { AUTH_TOKEN } from '../utils/constant';
 import { getUser, updateUser, getUserList } from '../api/user';
 import {
-  getCourseList, getCourseLecturerList, getCourse, getCourseByLessonId, createCourse, updateCourse, 
+  getCourseList, getCourseLecturerList, getCourse, getCourseByLessonId, createCourse, updateCourse,
 } from '../api/course';
 import {
-  getInvoiceLearnerList, getInvoiceLecturerList, createInvoice, updateInvoice, getInvoiceList, 
+  getInvoiceLearnerList, getInvoiceLecturerList, createInvoice, updateInvoice, getInvoiceList,
 } from '../api/invoice';
 import { getSubjectList } from '../api/subject';
 import { createDiscount, updateDiscount } from '../api/discount';
 import { showLoading, hideLoading } from '../actions/general';
 import {
-  fetchUserSuccess, fetchUserFailed, setIsLogin, fetchUserListSuccess, fetchUserListFailed, 
+  fetchUserSuccess, fetchUserFailed, setIsLogin, fetchUserListSuccess, fetchUserListFailed,
 } from '../actions/user';
 import {
   fetchCourseListSuccess,
@@ -111,7 +111,6 @@ function* updateUserSaga({ user }) {
   const { data } = yield call(updateUser, {
     _idUser: userState.user._id,
     password: userState.user.password,
-    type: userState.user.type,
     ...user,
   });
   if (data) {
@@ -133,7 +132,6 @@ function* changePasswordSaga({ currentPassword, password, rpassword }) {
       const { data } = yield call(updateUser, {
         _idUser: user._id,
         password,
-        type: user.type,
       });
       if (data) {
         yield put(fetchUserSuccess({ user: data }));
@@ -150,21 +148,20 @@ function* changePasswordSaga({ currentPassword, password, rpassword }) {
 }
 
 function* changePasswordWithoutConfirmSaga({
-  id, token, password, rpassword, 
+  id, token, password, rpassword,
 }) {
   yield put(showLoading());
   try {
     const response = yield call(getUserList);
     const userList = response.data;
-    
-    const { email, type } = userList.find(item => item._id === id);
-    
+
+    const { email } = userList.find(item => item._id === id);
+
     if (bcrypt.compareSync(`${email}-reset`, token)) {
       if (password === rpassword) {
         const { data } = yield call(updateUser, {
           _idUser: id,
           password,
-          type,
         });
         if (data) {
           toast.success('You changed password successfully!');
