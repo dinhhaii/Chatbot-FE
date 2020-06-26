@@ -28,8 +28,7 @@ const CourseCarousel = (props) => {
       if (!element.course.isDelete) {
         if (element.discount) {
           const discount = element.course.discountList.find(
-            (value) =>
-              value._id === element.discount._id && value.status !== 'expired',
+            (value) => value._id === element.discount._id && value.status !== 'expired',
           );
           items.push({
             _idCourse: element.course._id,
@@ -70,15 +69,13 @@ const CourseCarousel = (props) => {
   if (courses && courses.length !== 0) {
     return (
       <Carousel
-        withoutControls={false}
+        withoutControls
         slidesToShow={3}
         slidesToScroll="auto"
         wrapAround
         transitionMode="scroll3d">
         {courses.map((course, index) => {
-          const rateAverage =
-            course.feedback.reduce((total, num) => total + num.rate, 0) /
-            course.feedback.length;
+          const rateAverage = course.feedback.reduce((total, num) => total + num.rate, 0) / course.feedback.length;
           return course.isDelete ? null : (
             <div className="item" key={index.toString()}>
               <div className="box_grid">

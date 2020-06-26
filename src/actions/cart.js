@@ -35,3 +35,11 @@ export const updateCart = (cart) => {
     cart,
   };
 };
+
+export const addToCart = (idUser, _idCourse) => {
+  return {
+    type: actionTypes.ADD_TO_CART,
+    idUser,
+    _idCourse,
+  };
+};

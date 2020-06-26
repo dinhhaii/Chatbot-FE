@@ -46,7 +46,7 @@ import { getLesson, createLesson, updateLesson } from '../api/lesson';
 import { fetchLessonSuccess, fetchLessonFailed } from '../actions/lesson';
 import { fetchDiscountSuccess } from '../actions/discount';
 import { fetchCartSuccess, fetchCartFailed, fetchUpdatedCartSuccess } from '../actions/cart';
-import { getCart, updateCart } from '../api/cart';
+import { getCart, updateCart, addToCart } from '../api/cart';
 import { createFeedback, updateFeedback } from '../api/feedback';
 import { fetchFeedbackSuccess } from '../actions/feedback';
 import { createComment, updateComment } from '../api/comment';
@@ -59,6 +59,7 @@ function* rootSaga() {
   yield takeLatest(actionTypes.FETCH_INVOICE_LIST, fetchInvoiceListSaga);
   yield takeLatest(actionTypes.FETCH_CART, fetchCartSaga);
   yield takeLatest(actionTypes.UPDATE_CART, updateCartSaga);
+  yield takeLatest(actionTypes.ADD_TO_CART, addToCartSaga);
   yield takeLatest(actionTypes.FETCH_LESSON, fetchLessonSaga);
   yield takeLatest(actionTypes.CREATE_LESSON, createLessonSaga);
   yield takeLatest(actionTypes.UPDATE_LESSON, updateLessonSaga);
@@ -646,6 +647,25 @@ function* updateCommentSaga({ comment }) {
       toast.success('Updated successfully!');
     } else {
       toast.error('Sorry, updated failed!');
+    }
+  } catch (e) {
+    console.log(e);
+    toast.error('Sorry, updated failed!');
+  } finally {
+    yield delay(1000);
+    yield put(hideLoading());
+  }
+}
+
+function* addToCartSaga({ idUser, _idCourse }) {
+  yield put(showLoading());
+  try {
+    const { data } = yield call(addToCart, idUser, _idCourse);
+    if (!data.error) {
+      yield put(fetchUpdatedCartSuccess(data.items));
+      toast.success('Add to cart successfully!');
+    } else {
+      toast.error('Sorry, add to cart failed!');
     }
   } catch (e) {
     console.log(e);

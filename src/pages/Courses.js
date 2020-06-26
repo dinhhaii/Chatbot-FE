@@ -10,6 +10,7 @@ import '../utils/css/courses.css';
 import CourseHelp from '../components/courses/courses-help';
 import CourseToolBar from '../components/courses/courses-toolbar';
 import CourseFilter from '../components/courses/courses-filter';
+import CourseSuggestion from '../components/courses/courses-suggestion';
 import { usePrevious } from '../utils/helper';
 import { fetchCourseList } from '../actions/course';
 
@@ -122,6 +123,7 @@ const Course = (props) => {
                 setFilter={setFilter}
                 handleChangeFilter={handleChangeFilter}
               />
+              <CourseSuggestion courses={courses} />
             </aside>
 
             <div className="col-lg-9">
