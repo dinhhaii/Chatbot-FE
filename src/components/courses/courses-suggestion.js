@@ -38,8 +38,7 @@ const CourseSuggestion = (props) => {
                   </Link>
                   {discount 
                     ? <div className="price">${Math.floor(course.price * (100 - discount.percentage) / 100)} <del style={{ color: 'red', fontSize: '10pt' }}>${course.price}</del></div>
-                    : <div className="price">${course.price}</div>
-                  }
+                    : <div className="price">${course.price}</div>}
                 </figure>
                 <div className="wrapper">
                   <h3>{course.name}</h3>

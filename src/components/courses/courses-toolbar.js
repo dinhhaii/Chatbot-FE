@@ -9,7 +9,7 @@ import { PATH } from '../../utils/constant';
 
 const { Search } = Input;
 
-const CourseToolBar = ({ viewMode, setViewMode, filter, setFilter, handleChangeFilter, history }) => {
+const CourseToolBar = ({ viewMode, setViewMode, filter, setFilter, handleChangeFilter, history, initFilter }) => {
 
   return (
     <div className="filters_listing sticky_horizontal">
@@ -47,12 +47,9 @@ const CourseToolBar = ({ viewMode, setViewMode, filter, setFilter, handleChangeF
             <div
               className="layout_view"
               onClick={() => {
-                setFilter({
-                  search: '',
-                  subject: [],
-                });
+                setFilter(initFilter);
                 history.push(PATH.COURSES);
-                handleChangeFilter();
+                handleChangeFilter(initFilter);
               }}><i className="icon-arrows-cw" />
             </div>
           </li>

@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-underscore-dangle */
@@ -7,54 +8,12 @@ import { Rate } from 'antd';
 import 'antd/dist/antd.css';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { toast } from 'react-toastify';
 import { getRandom } from '../../utils/helper';
 import { PATH } from '../../utils/constant';
-import { updateCart } from '../../actions/cart';
+import { updateCart, addToCart } from '../../actions/cart';
 
 const CoursesList = (props) => {
-  const { data, cartState } = props;
-
-  const addToCart = (course) => {
-    // Map CartState to items
-    const items = [];
-    if (cartState.cart) {
-      cartState.cart.items.forEach(element => {
-        if (!element.course.isDelete) {
-          if (element.discount) {
-            const discount = element.course.discountList.find(value => value._id === element.discount._id && value.status !== 'expired'); 
-            items.push({
-              _idCourse: element.course._id,
-              _idDiscount: discount ? discount._id : null,
-            });
-          } else {
-            const availableDiscount = element.course.discountList.find(value => value.status === 'available');
-            items.push({
-              _idCourse: element.course._id,
-              _idDiscount: availableDiscount ? availableDiscount._id : null,
-            });
-          }
-        }
-      });
-      // Add new course to Cart
-      if (cartState.cart.items.find(value => value.course._id === course._id)) {
-        toast.warn('The course is already in cart.');
-      } else {
-        const availableDiscount = course.discount.find(value => value.status === 'available');
-        items.push({
-          _idCourse: course._id,
-          _idDiscount: availableDiscount ? availableDiscount._id : null,
-        });
-      }
-
-      // Update Data
-      const updateData = {
-        _idCart: cartState.cart._id,
-        items,
-      };
-      props.updateCartAction(updateData);
-    }
-  };
+  const { data, userState } = props;
   
   if (data.length === 0 || !data) {
     return <div className="text-center m-5">No courses were found.</div>;
@@ -62,7 +21,8 @@ const CoursesList = (props) => {
   return (
     <div>
       {data.map((value, index) => {
-        const rateAverage = value.feedback.reduce((total, num) => total + num.rate, 0) / value.feedback.length;
+        const rateAverage = parseFloat((value.feedback.reduce((total, num) => total + num.rate, 0) / value.feedback.length).toFixed(1));
+        const discount = value.discount.find(item => item.status === 'available');
 
         if (!value.isDelete) {
           return (
@@ -82,7 +42,9 @@ const CoursesList = (props) => {
                 <div className="col-lg-7">
                   <div className="wrapper">
                     <Link href="#0" class="wish_bt" />
-                    <div className="price">${value.price}</div>
+                    {discount 
+                      ? <div className="price">${Math.floor(value.price * (100 - discount.percentage) / 100)} <del style={{ color: 'red', fontSize: '10pt' }}>${value.price}</del></div>
+                      : <div className="price">${value.price}</div>}
                     <small>{value.subject.name}</small>
                     <h3>{value.name}</h3>
                     <Link
@@ -95,10 +57,11 @@ const CoursesList = (props) => {
                       ])}`}>
                       {`${value.lecturer.firstName.toUpperCase()} ${value.lecturer.lastName.toUpperCase()}`}
                     </Link>
-                    <p style={{ height: 100, maxHeight: 100, overflow: 'hidden' }}>{value.description}</p>
+                    <p className="description-2">{value.description}</p>
                     <Rate
                       defaultValue={rateAverage}
                       style={{ padding: 0 }}
+                      allowHalf
                       disabled
                     />
                   </div>
@@ -107,7 +70,19 @@ const CoursesList = (props) => {
                       <i className="icon_clock_alt" /> {value.duration}
                     </li>
                     <li>
-                      <Link onClick={() => addToCart(value)}>Add to cart</Link>
+                      {userState.user && userState.user.role === 'learner' ? (
+                        <Link onClick={() => {
+                          if (userState.user) {
+                            props.addToCartAction(userState.user._id, value._id);
+                          }
+                        }}>
+                          Add to cart
+                        </Link>
+                      ) : (
+                        <Link to={`${PATH.COURSE_DETAIL}/${value._id}`}>
+                          Preview
+                        </Link>
+                      )}
                     </li>
                   </ul>
                 </div>
@@ -123,13 +98,14 @@ const CoursesList = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    cartState: state.cartState,
+    userState: state.userState,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCartAction: bindActionCreators(updateCart, dispatch),
+    addToCartAction: bindActionCreators(addToCart, dispatch),
   };
 };
 

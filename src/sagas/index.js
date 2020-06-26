@@ -663,7 +663,7 @@ function* addToCartSaga({ idUser, _idCourse }) {
     const { data } = yield call(addToCart, idUser, _idCourse);
     if (!data.error) {
       yield put(fetchUpdatedCartSuccess(data.items));
-      toast.success('Add to cart successfully!');
+      toast.success('Added successfully!');
     } else {
       toast.error('Sorry, add to cart failed!');
     }

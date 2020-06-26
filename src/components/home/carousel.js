@@ -8,63 +8,17 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Carousel from 'nuka-carousel';
 import { Rate, Spin } from 'antd';
-import { toast } from 'react-toastify';
-import { updateCart } from '../../actions/cart';
+import { updateCart, addToCart } from '../../actions/cart';
 import { PATH } from '../../utils/constant';
 import { getRandom } from '../../utils/helper';
 import 'antd/dist/antd.css';
 
 const CourseCarousel = (props) => {
-  const { courseList, cartState, userState } = props;
+  const { courseList, userState } = props;
 
   const courses = courseList
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 5);
-
-  const addToCart = (course) => {
-    // Map CartState to items
-    const items = [];
-    cartState.cart.items.forEach((element) => {
-      if (!element.course.isDelete) {
-        if (element.discount) {
-          const discount = element.course.discountList.find(
-            (value) => value._id === element.discount._id && value.status !== 'expired',
-          );
-          items.push({
-            _idCourse: element.course._id,
-            _idDiscount: discount ? discount._id : null,
-          });
-        } else {
-          const availableDiscount = element.course.discountList.find(
-            (value) => value.status === 'available',
-          );
-          items.push({
-            _idCourse: element.course._id,
-            _idDiscount: availableDiscount ? availableDiscount._id : null,
-          });
-        }
-      }
-    });
-    // Add new course to Cart
-    if (cartState.cart.items.find((value) => value.course._id === course._id)) {
-      toast.warn('The course is already in cart.');
-    } else {
-      const availableDiscount = course.discount.find(
-        (value) => value.status === 'available',
-      );
-      items.push({
-        _idCourse: course._id,
-        _idDiscount: availableDiscount ? availableDiscount._id : null,
-      });
-    }
-
-    // Update Data
-    const updateData = {
-      _idCart: cartState.cart._id,
-      items,
-    };
-    props.updateCartAction(updateData);
-  };
 
   if (courses && courses.length !== 0) {
     return (
@@ -75,7 +29,7 @@ const CourseCarousel = (props) => {
         wrapAround
         transitionMode="scroll3d">
         {courses.map((course, index) => {
-          const rateAverage = course.feedback.reduce((total, num) => total + num.rate, 0) / course.feedback.length;
+          const rateAverage = parseFloat((course.feedback.reduce((total, num) => total + num.rate, 0) / course.feedback.length).toFixed(1));
           return course.isDelete ? null : (
             <div className="item" key={index.toString()}>
               <div className="box_grid">
@@ -110,13 +64,14 @@ const CourseCarousel = (props) => {
                     ])}`}>
                     {`${course.lecturer.firstName.toUpperCase()} ${course.lecturer.lastName.toUpperCase()}`}
                   </Link>
-                  <p style={{ height: 100, overflow: 'hidden' }}>
+                  <p className="description">
                     {course.description}
                   </p>
                   <div className="rating">
                     <Rate
                       defaultValue={rateAverage}
                       style={{ padding: 0 }}
+                      allowHalf
                       disabled
                     />
                   </div>
@@ -127,7 +82,13 @@ const CourseCarousel = (props) => {
                   </li>
                   <li>
                     {userState.user && userState.user.role === 'learner' ? (
-                      <Link onClick={() => addToCart(course)}>Add to cart</Link>
+                      <Link onClick={() => {
+                        if (userState.user) {
+                          props.addToCartAction(userState.user._id, course._id);
+                        }
+                      }}>
+                        Add to cart
+                      </Link>
                     ) : (
                       <Link to={`${PATH.COURSE_DETAIL}/${course._id}`}>
                         Preview
@@ -155,6 +116,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCartAction: bindActionCreators(updateCart, dispatch),
+    addToCartAction: bindActionCreators(addToCart, dispatch),
   };
 };
 

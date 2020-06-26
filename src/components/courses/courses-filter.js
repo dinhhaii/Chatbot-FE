@@ -1,6 +1,7 @@
+/* eslint-disable react/jsx-boolean-value */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {
   Checkbox, Slider, Rate, Radio, 
 } from 'antd';
@@ -15,6 +16,7 @@ const CourseFilter = ({
   subjectState,
   fetchSubjectListAction,
   handleChangeFilter,
+  history,
 }) => {
   useEffect(() => {
     fetchSubjectListAction();
@@ -28,9 +30,9 @@ const CourseFilter = ({
     } else {
       subject.splice(subject.indexOf(value), 1);
     }
-    const _filter = { ...filter, subject };
-    setFilter(_filter);
-    handleChangeFilter(_filter);
+
+    setFilter({ ...filter, subject });
+    handleChangeFilter({ ...filter, subject });
   };
 
   return (
@@ -45,9 +47,12 @@ const CourseFilter = ({
       </Link>
       <div className="collapse show" id="collapseFilters">
         <div className="filter_type mt-4">
-          <Radio.Group>
-            <Radio value="popular">Popular Courses</Radio>
-            <Radio value="latest">Latest Courses</Radio>
+          <Radio.Group
+            onChange={(e) => {
+              history.push(`?popular=${e.target.value}`);
+            }}>
+            <Radio value={0}>Latest Courses</Radio>
+            <Radio value={1}>Popular Courses</Radio>
           </Radio.Group>
         </div>
         <div className="filter_type">
@@ -57,7 +62,12 @@ const CourseFilter = ({
               if (!value.isDelete) {
                 return (
                   <li key={index.toString()}>
-                    <Checkbox value={value.name} onChange={handleChange} checked={filter.subject.some(name => name === value.name)}>
+                    <Checkbox
+                      value={value.name}
+                      onChange={handleChange}
+                      checked={filter.subject.some(
+                        (name) => name === value.name,
+                      )}>
                       {value.name}
                     </Checkbox>
                   </li>
@@ -72,21 +82,44 @@ const CourseFilter = ({
           <h6>Price</h6>
           <Slider
             marks={{
-              0: '$0', 50: '$250', 100: '$500', 
+              0: '$0',
+              50: '$250',
+              100: '$500',
             }}
-            defaultValue={[0, 100]}
             step={10}
-            range 
-            onChange={() => {}} />
+            range
+            defaultValue={[0, 100]}
+            tipFormatter={value => `$${value * 5}`}
+            onAfterChange={(value) => {
+              setFilter({ ...filter, price: value });
+              handleChangeFilter({ ...filter, price: value });
+            }}
+          />
         </div>
 
         <div className="filter_type">
           <h6>Ratings</h6>
-          <Radio.Group>
-            <Radio value={4.5}><Rate defaultValue={4.5} allowHalf disabled /> <i className="icon-up-open" /></Radio>
-            <Radio value={4}><Rate defaultValue={4} allowHalf disabled /> <i className="icon-up-open" /></Radio>
-            <Radio value={3.5}><Rate defaultValue={3.5} allowHalf disabled /> <i className="icon-up-open" /></Radio>
-            <Radio value={3}><Rate defaultValue={3} allowHalf disabled /> <i className="icon-up-open" /></Radio>
+          <Radio.Group
+            onChange={(e) => {
+              setFilter({ ...filter, rate: e.target.value });
+              handleChangeFilter({ ...filter, rate: e.target.value });
+            }}>
+            <Radio value={4.5}>
+              <Rate defaultValue={4.5} allowHalf disabled />{' '}
+              <i className="icon-up-open" />
+            </Radio>
+            <Radio value={4}>
+              <Rate defaultValue={4} allowHalf disabled />{' '}
+              <i className="icon-up-open" />
+            </Radio>
+            <Radio value={3.5}>
+              <Rate defaultValue={3.5} allowHalf disabled />{' '}
+              <i className="icon-up-open" />
+            </Radio>
+            <Radio value={3}>
+              <Rate defaultValue={3} allowHalf disabled />{' '}
+              <i className="icon-up-open" />
+            </Radio>
           </Radio.Group>
         </div>
       </div>
@@ -106,4 +139,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CourseFilter);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CourseFilter));

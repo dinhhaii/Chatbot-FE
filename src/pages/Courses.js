@@ -6,13 +6,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CoursesGrid from '../components/courses/courses-grid';
 import CoursesList from '../components/courses/courses-list';
-import '../utils/css/courses.css';
 import CourseHelp from '../components/courses/courses-help';
 import CourseToolBar from '../components/courses/courses-toolbar';
 import CourseFilter from '../components/courses/courses-filter';
 import CourseSuggestion from '../components/courses/courses-suggestion';
 import { usePrevious } from '../utils/helper';
 import { fetchCourseList } from '../actions/course';
+import '../utils/css/courses.css';
 
 const Course = (props) => {
   const [viewMode, setViewMode] = useState('grid');
@@ -21,11 +21,15 @@ const Course = (props) => {
   const dataPerPage = 8;
   const courses = courseState.courseList.filter(item => item.status === 'approved');
 
-  const [filter, setFilter] = useState({
+  const initFilter = {
     search: '',
     subject: [],
-    rate: 0,
-  });
+    rate: null,
+    popular: 0,
+    price: [0, 100],
+  };
+
+  const [filter, setFilter] = useState(initFilter);
 
   const [pagination, setPagination] = useState({
     indexFirst: 0,
@@ -39,17 +43,21 @@ const Course = (props) => {
     const urlParams = new URLSearchParams(location.search);
     const searchParam = urlParams.get('search');
     const subjectParam = urlParams.get('subject');
-    if (subjectParam) {
-      filter.subject.push(subjectParam);
-      setFilter({ ...filter });
-    }
+    const popularParam = urlParams.get('popular');
+    const priceParam = urlParams.get('price');
+    const rateParam = urlParams.get('rate');
 
-    if (searchParam) {
-      setFilter({ ...filter, search: searchParam });
-      props.fetchCourseListAction({ search: searchParam });
-    } else {
-      props.fetchCourseListAction(filter);
-    }
+    const newFilter = {
+      ...filter,
+      subject: (subjectParam && [...filter.subject, subjectParam]) || [],
+      search: searchParam || '',
+      popular: popularParam,
+      price: priceParam || [0, 100],
+      rate: rateParam || null,
+    };
+    console.log(newFilter.popular);
+    setFilter(newFilter);
+    props.fetchCourseListAction(newFilter);
   }, [location.search]);
 
   // DID UPDATE
@@ -89,7 +97,27 @@ const Course = (props) => {
   };
 
   const handleFilter = (list, _filter) => {
-    return list.filter((e) => _filter.subject.length === 0 || _filter.subject.some(name => name === e.subject.name));
+    const { subject, rate, price } = _filter;
+    let result = price[0] !== 0 && price[1] !== 100 
+      ? list.sort((a, b) => a.price - b.price)
+      : list;
+    result = rate
+      ? result.sort((a,b) => {
+        const rateA = a.feedback.reduce((total, num) => total + num.rate, 0) / a.feedback.length;
+        const rateB = b.feedback.reduce((total, num) => total + num.rate, 0) / b.feedback.length;
+        return rateB - rateA;
+      })
+      : result;
+    return result
+      .filter((e) => subject.length === 0 || subject.some(name => name === e.subject.name))
+      .filter((e) => e.price >= price[0] * 5 && e.price <= price[1] * 5)
+      .filter((e) => {
+        if (!rate) {
+          return true;
+        }
+        const rateAverage = e.feedback.reduce((total, num) => total + num.rate, 0) / e.feedback.length;
+        return rateAverage >= rate;
+      })
   };
 
   
@@ -113,6 +141,7 @@ const Course = (props) => {
           filter={filter}
           setFilter={setFilter}
           handleChangeFilter={handleChangeFilter}
+          initFilter={initFilter}
         />
 
         <div className="container margin_60_35">
