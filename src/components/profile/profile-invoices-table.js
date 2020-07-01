@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PATH } from '../../utils/constant';
 import { updateInvoice } from '../../actions/invoice';
-import { capitalize } from '../../utils/helper';
+import { capitalize, formatDateToString2 } from '../../utils/helper';
 import ReportModal from './profile-invoices-report';
 import FeedbackModal from './profile-invoices-feedback';
 
@@ -15,7 +15,7 @@ const InvoiceTable = (props) => {
     { name: 'Price' },
     { name: 'Pay Day' },
     { name: 'Duration' },
-    { name: 'Accessible Days' },
+    { name: 'Expired' },
     { name: 'Status' },
     { name: 'Lecturer' },
     { name: 'Feedback', width: 120 },
@@ -60,6 +60,10 @@ const InvoiceTable = (props) => {
           className="kt-datatable__body ps ps--active-y"
           style={{ maxHeight: `${447}px` }}>
           {data.map((element, index) => {
+            const createdDate = new Date(element.invoice.createdAt).getTime();
+            const accessibleDay = element.course.accessibleDays * 86400000;
+            const expiredDate = new Date(createdDate + accessibleDay);
+
             return (
               <tr
                 className="kt-datatable__row"
@@ -86,11 +90,11 @@ const InvoiceTable = (props) => {
                   </span>
                 </td>
 
-                <td className="kt-datatable__cell text-center text-nowrap">
-                  <span className="kt-font-bold">{element.invoice.payDay.substr(0, 10)}</span>
+                <td className="kt-datatable__cell text-center">
+                  <span className="kt-font-bold">{formatDateToString2(element.invoice.payDay)}</span>
                 </td>
 
-                <td className="kt-datatable__cell">
+                <td className="kt-datatable__cell text-nowrap">
                   <span className="kt-font-bold">
                     {element.course.duration}
                   </span>
@@ -98,7 +102,7 @@ const InvoiceTable = (props) => {
 
                 <td className="kt-datatable__cell text-center">
                   <span className="kt-font-bold">
-                    {element.course.accessibleDays}
+                    {formatDateToString2(expiredDate)}
                   </span>
                 </td>
 

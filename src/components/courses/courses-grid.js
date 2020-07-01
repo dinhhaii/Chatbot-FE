@@ -12,7 +12,7 @@ import { PATH } from '../../utils/constant';
 import { updateCart, addToCart } from '../../actions/cart';
 
 const CoursesGrid = (props) => {
-  const { data, userState } = props;
+  const { data, userState, invoiceState } = props;
 
   if (data.length === 0 || !data) {
     return <div className="text-center m-5">No courses were found.</div>;
@@ -21,7 +21,6 @@ const CoursesGrid = (props) => {
     <div className="row">
       {data.map((value, index) => {
         const rateAverage = parseFloat((value.feedback.reduce((total, num) => total + num.rate, 0) / value.feedback.length).toFixed(1));
-        console.log(index, rateAverage);
         const discount = value.discount.find(item => item.status === 'available');
         if (!value.isDelete) {
           return (
@@ -62,21 +61,33 @@ const CoursesGrid = (props) => {
                   <li>
                     <i className="icon_clock_alt" /> {value.duration}
                   </li>
-                  <li>
-                    {userState.user && userState.user.role === 'learner' ? (
-                      <Link onClick={() => {
-                        if (userState.user) {
-                          props.addToCartAction(userState.user._id, value._id);
-                        }
-                      }}>
-                        Add to cart
-                      </Link>
-                    ) : (
-                      <Link to={`${PATH.COURSE_DETAIL}/${value._id}`}>
+                  {userState.user && userState.user.role === 'learner' ? (
+                    <li>
+                      {invoiceState.invoiceLearnerList.some(item => item.invoice.status !== 'canceled' && item.course._id === value._id) 
+                        ? (
+                          <Link className="preview-btn">
+                            <i className="icon-check-1" /> Purchased
+                          </Link>
+                        )
+                        : (
+                          <Link onClick={() => {
+                            if (userState.user) {
+                              props.addToCartAction(userState.user._id, value._id);
+                            }
+                          }}>
+                            Add to cart
+                          </Link>
+                        )}
+                    </li>
+                  ) : (
+                    <li>
+                      <Link
+                        className="preview-btn" 
+                        to={`${PATH.COURSE_DETAIL}/${value._id}`}>
                         Preview
                       </Link>
-                    )}
-                  </li>
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
@@ -92,6 +103,7 @@ const mapStateToProps = (state) => {
   return {
     cartState: state.cartState,
     userState: state.userState,
+    invoiceState: state.invoiceState,
   };
 };
 

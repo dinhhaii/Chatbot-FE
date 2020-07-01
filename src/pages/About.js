@@ -86,7 +86,7 @@ const About = () => {
               <p>
                 We have the amazing and hard-working support team, if you have any
                 problem during you session of using our site, please don&apos;t hesitate
-                to contact us.{' '}
+                to contact us.
               </p>
             </Link>
           </div>
@@ -141,7 +141,7 @@ const About = () => {
           <h2>Our founders</h2>
           <p>When two brilliant minds collaborate.</p>
         </div>
-        <Carousel style={{ textAlign: 'center' }}>
+        <Carousel style={{ textAlign: 'center' }} slideIndex={0}>
           <div>
             <a href="#0">
               <div className="title">

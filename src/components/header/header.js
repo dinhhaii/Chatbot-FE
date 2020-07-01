@@ -61,15 +61,22 @@ const Header = (props) => {
           )}
           {/* CART  */}
           {userState.user && userState.user.role === 'learner' && (
-            <li>
-              <Badge count={cartState.cart ? cartState.cart.items.length : 0} style={{ backgroundColor: '#52c41a' }}>
-                <Link
-                  to={PATH.CART}
-                  style={{ fontSize: `${17}pt`, marginRight: 10 }}>
-                  <i className="icon-cart" />
+            <>
+              <li>
+                <Badge count={cartState.cart ? cartState.cart.items.length : 0} style={{ backgroundColor: '#52c41a' }}>
+                  <Link
+                    to={PATH.CART}
+                    style={{ fontSize: `${17}pt`, marginRight: 10 }}>
+                    <i className="icon-cart" />
+                  </Link>
+                </Badge>
+              </li>  
+              <li>
+                <Link to={`${PATH.PROFILE}?tab=invoices`} className="d-none d-md-inline d-lg-inline d-xl-inline" style={{ fontFamily: 'Arial', fontSize: `${14}pt` }}>
+                  <i className="icon-box" />
                 </Link>
-              </Badge>
-            </li>  
+              </li>
+            </>
           )}
           
 

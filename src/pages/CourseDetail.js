@@ -39,6 +39,7 @@ const CourseDetail = (props) => {
             const date = createdDate + accessibleDay;
             const currentDate = new Date().getTime();
             if (currentDate < date) {
+              console.log('hi');
               setIsRegistered(true);
             } else {
               toast.warn('Your course has expired to access.');

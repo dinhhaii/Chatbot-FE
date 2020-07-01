@@ -76,6 +76,7 @@ const mapStateToProps = (state) => {
     courseState: state.courseState,
     subjectState: state.subjectState,
     userState: state.userState,
+    invoiceState: state.invoiceState
   };
 };
 

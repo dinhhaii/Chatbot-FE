@@ -13,7 +13,7 @@ import { PATH } from '../../utils/constant';
 import { updateCart, addToCart } from '../../actions/cart';
 
 const CoursesList = (props) => {
-  const { data, userState } = props;
+  const { data, userState, invoiceState } = props;
   
   if (data.length === 0 || !data) {
     return <div className="text-center m-5">No courses were found.</div>;
@@ -69,21 +69,33 @@ const CoursesList = (props) => {
                     <li>
                       <i className="icon_clock_alt" /> {value.duration}
                     </li>
-                    <li>
-                      {userState.user && userState.user.role === 'learner' ? (
-                        <Link onClick={() => {
-                          if (userState.user) {
-                            props.addToCartAction(userState.user._id, value._id);
-                          }
-                        }}>
-                          Add to cart
-                        </Link>
-                      ) : (
-                        <Link to={`${PATH.COURSE_DETAIL}/${value._id}`}>
+                    {userState.user && userState.user.role === 'learner' ? (
+                      <li>
+                        {invoiceState.invoiceLearnerList.some(item => item.invoice.status !== 'canceled' && item.course._id === value._id) 
+                          ? (
+                            <Link className="preview-btn">
+                              <i className="icon-check-1" /> Purchased
+                            </Link>
+                          )
+                          : (
+                            <Link onClick={() => {
+                              if (userState.user) {
+                                props.addToCartAction(userState.user._id, value._id);
+                              }
+                            }}>
+                              Add to cart
+                            </Link>
+                          )}
+                      </li>
+                    ) : (
+                      <li>
+                        <Link
+                          className="preview-btn" 
+                          to={`${PATH.COURSE_DETAIL}/${value._id}`}>
                           Preview
                         </Link>
-                      )}
-                    </li>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </div>
@@ -99,6 +111,7 @@ const CoursesList = (props) => {
 const mapStateToProps = (state) => {
   return {
     userState: state.userState,
+    invoiceState: state.invoiceState,
   };
 };
 

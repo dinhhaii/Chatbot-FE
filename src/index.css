@@ -29,3 +29,8 @@ code {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.preview-btn {
+  background-color: #662d91 !important;
+  color: white !important; 
+}

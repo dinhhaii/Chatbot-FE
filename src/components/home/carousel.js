@@ -2,7 +2,8 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -12,13 +13,20 @@ import { updateCart, addToCart } from '../../actions/cart';
 import { PATH } from '../../utils/constant';
 import { getRandom } from '../../utils/helper';
 import 'antd/dist/antd.css';
+import { fetchInvoiceLearnerList } from '../../actions/invoice';
 
 const CourseCarousel = (props) => {
-  const { courseList, userState } = props;
+  const { courseList, userState, invoiceState } = props;
 
   const courses = courseList
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 5);
+
+  useEffect(() => {
+    if (userState.user) {
+      props.fetchInvoiceLearnerListAction(props.userState.user._id);
+    }
+  }, [userState.user]);
 
   if (courses && courses.length !== 0) {
     return (
@@ -80,21 +88,33 @@ const CourseCarousel = (props) => {
                   <li>
                     <i className="icon_clock_alt" /> {course.duration}
                   </li>
-                  <li>
-                    {userState.user && userState.user.role === 'learner' ? (
-                      <Link onClick={() => {
-                        if (userState.user) {
-                          props.addToCartAction(userState.user._id, course._id);
-                        }
-                      }}>
-                        Add to cart
-                      </Link>
-                    ) : (
-                      <Link to={`${PATH.COURSE_DETAIL}/${course._id}`}>
+                  {userState.user && userState.user.role === 'learner' ? (
+                    <li>
+                      {invoiceState.invoiceLearnerList.some(value => value.invoice.status !== 'canceled' && value.course._id === course._id) 
+                        ? (
+                          <Link className="preview-btn">
+                            <i className="icon-check-1" /> Purchased
+                          </Link>
+                        )
+                        : (
+                          <Link onClick={() => {
+                            if (userState.user) {
+                              props.addToCartAction(userState.user._id, course._id);
+                            }
+                          }}>
+                            Add to cart
+                          </Link>
+                        )}
+                    </li>
+                  ) : (
+                    <li>
+                      <Link
+                        className="preview-btn" 
+                        to={`${PATH.COURSE_DETAIL}/${course._id}`}>
                         Preview
                       </Link>
-                    )}
-                  </li>
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
@@ -110,6 +130,7 @@ const mapStateToProps = (state) => {
   return {
     cartState: state.cartState,
     userState: state.userState,
+    invoiceState: state.invoiceState,
   };
 };
 
@@ -117,6 +138,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateCartAction: bindActionCreators(updateCart, dispatch),
     addToCartAction: bindActionCreators(addToCart, dispatch),
+    fetchInvoiceLearnerListAction: bindActionCreators(fetchInvoiceLearnerList, dispatch),
   };
 };
 

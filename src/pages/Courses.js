@@ -13,11 +13,12 @@ import CourseSuggestion from '../components/courses/courses-suggestion';
 import { usePrevious } from '../utils/helper';
 import { fetchCourseList } from '../actions/course';
 import '../utils/css/courses.css';
+import { fetchInvoiceLearnerList } from '../actions/invoice';
 
 const Course = (props) => {
   const [viewMode, setViewMode] = useState('grid');
   const prevProps = usePrevious(props);
-  const { courseState, location } = props;
+  const { courseState, location, userState } = props;
   const dataPerPage = 8;
   const courses = courseState.courseList.filter(item => item.status === 'approved');
 
@@ -40,6 +41,12 @@ const Course = (props) => {
   });
 
   useEffect(() => {
+    if (userState.user) {
+      props.fetchInvoiceLearnerListAction(props.userState.user._id);
+    }
+  }, [userState.user]);
+
+  useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchParam = urlParams.get('search');
     const subjectParam = urlParams.get('subject');
@@ -55,7 +62,7 @@ const Course = (props) => {
       price: priceParam || [0, 100],
       rate: rateParam || null,
     };
-    console.log(newFilter.popular);
+
     setFilter(newFilter);
     props.fetchCourseListAction(newFilter);
   }, [location.search]);
@@ -102,7 +109,7 @@ const Course = (props) => {
       ? list.sort((a, b) => a.price - b.price)
       : list;
     result = rate
-      ? result.sort((a,b) => {
+      ? result.sort((a, b) => {
         const rateA = a.feedback.reduce((total, num) => total + num.rate, 0) / a.feedback.length;
         const rateB = b.feedback.reduce((total, num) => total + num.rate, 0) / b.feedback.length;
         return rateB - rateA;
@@ -117,7 +124,7 @@ const Course = (props) => {
         }
         const rateAverage = e.feedback.reduce((total, num) => total + num.rate, 0) / e.feedback.length;
         return rateAverage >= rate;
-      })
+      });
   };
 
   
@@ -177,12 +184,14 @@ const Course = (props) => {
 const mapStateToProps = (state) => {
   return {
     courseState: state.courseState,
+    userState: state.userState,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchCourseListAction: bindActionCreators(fetchCourseList, dispatch),
+    fetchInvoiceLearnerListAction: bindActionCreators(fetchInvoiceLearnerList, dispatch),
   };
 };
 
