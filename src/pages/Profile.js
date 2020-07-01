@@ -20,7 +20,7 @@ const Profile = (props) => {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tab = urlParams.get('tab');
-    console.log(tab);
+
     if (tab) {
       setTabName(tab);
     }
@@ -126,22 +126,20 @@ const Profile = (props) => {
                             </span>
                           </span>
                         </Link>
-                        {userState.user && userState.user.idFacebook === '' && (
-                          <Link
-                            className={`kt-widget__item ${
-                              tabName === TAB.CHANGE_PASSWORD
-                                ? 'kt-widget__item--active'
-                                : ''
-                            }`}
-                            onClick={() => setTabName(TAB.CHANGE_PASSWORD)}>
-                            <span className="kt-widget__section">
-                              <span className="icon-shield" />
-                              <span className="kt-widget__desc">
-                                Change Password
-                              </span>
+                        <Link
+                          className={`kt-widget__item ${
+                            tabName === TAB.CHANGE_PASSWORD
+                              ? 'kt-widget__item--active'
+                              : ''
+                          }`}
+                          onClick={() => setTabName(TAB.CHANGE_PASSWORD)}>
+                          <span className="kt-widget__section">
+                            <span className="icon-shield" />
+                            <span className="kt-widget__desc">
+                              Change Password
                             </span>
-                          </Link>
-                        )}
+                          </span>
+                        </Link>
                         {userState.user.role === 'learner' ? (
                           <Link
                             className={`kt-widget__item ${

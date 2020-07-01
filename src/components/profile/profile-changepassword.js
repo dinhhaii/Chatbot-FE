@@ -7,7 +7,7 @@ import { PATH } from '../../utils/constant';
 import { changePassword } from '../../actions/user';
 
 const ProfileChangePassword = (props) => {
-  const { setShowAside } = props;
+  const { setShowAside, userState } = props;
   const [state, setState] = useState({
     currentpassword: '',
     password: '',
@@ -16,7 +16,11 @@ const ProfileChangePassword = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.changePasswordAction(state.currentpassword, state.password, state.rpassword);
+    if (userState.user && userState.user.password === '') {
+      props.changePasswordAction('', state.password, state.rpassword);
+    } else {
+      props.changePasswordAction(state.currentpassword, state.password, state.rpassword);
+    }
   };
 
   const handleChange = (e) => {
@@ -59,26 +63,28 @@ const ProfileChangePassword = (props) => {
                         </h3>
                       </div>
                     </div>
-                    <div className="form-group row">
-                      <label className="col-xl-3 col-lg-3 col-form-label">
-                        Current Password
-                      </label>
-                      <div className="col-lg-9 col-xl-6">
-                        <input
-                          type="password"
-                          className="form-control"
-                          name="currentpassword"
-                          value={state.currentpassword}
-                          onChange={handleChange}
-                          placeholder="Current password"
-                        />
-                        <Link
-                          to={PATH.FORGOT_PASSWORD}
-                          class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">
-                          Forgot password ?
-                        </Link>
+                    {userState.user && userState.user.password !== '' && (
+                      <div className="form-group row">
+                        <label className="col-xl-3 col-lg-3 col-form-label">
+                          Current Password
+                        </label>
+                        <div className="col-lg-9 col-xl-6">
+                          <input
+                            type="password"
+                            className="form-control"
+                            name="currentpassword"
+                            value={state.currentpassword}
+                            onChange={handleChange}
+                            placeholder="Current password"
+                          />
+                          <Link
+                            to={PATH.FORGOT_PASSWORD}
+                            class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">
+                            Forgot password ?
+                          </Link>
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <div className="form-group row">
                       <label className="col-xl-3 col-lg-3 col-form-label">
                         New Password

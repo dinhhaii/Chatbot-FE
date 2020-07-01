@@ -18,7 +18,6 @@ const ChangePassword = (props) => {
     e.preventDefault();
     const { id, token } = match.params;
     const { password, rpassword } = state;
-    console.log(token);
     props.changePasswordWithoutConfirmAction(id, token, password, rpassword);
   };
 
