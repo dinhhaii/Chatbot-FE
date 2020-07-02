@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable no-underscore-dangle */
 import {
   takeLatest,
@@ -16,7 +17,7 @@ import {
   getCourseList, getCourseLecturerList, getCourse, getCourseByLessonId, createCourse, updateCourse,
 } from '../api/course';
 import {
-  getInvoiceLearnerList, getInvoiceLecturerList, createInvoice, updateInvoice, getInvoiceList,
+  getInvoiceLearnerList, getInvoiceLecturerList, createInvoice, updateInvoice, getInvoiceList, getInvoiceLearnersFromLesson,
 } from '../api/invoice';
 import { getSubjectList } from '../api/subject';
 import { createDiscount, updateDiscount } from '../api/discount';
@@ -41,6 +42,8 @@ import {
   fetchInvoiceList,
   fetchInvoiceListSuccess,
   fetchInvoiceListFailed,
+  fetchInvoiceLearnerLessonListSuccess,
+  fetchInvoiceLearnerLessonListFailed,
 } from '../actions/invoice';
 import { getLesson, createLesson, updateLesson } from '../api/lesson';
 import { fetchLessonSuccess, fetchLessonFailed } from '../actions/lesson';
@@ -57,6 +60,7 @@ function* rootSaga() {
   yield takeLatest(actionTypes.CREATE_INVOICE, createInvoiceSaga);
   yield takeLatest(actionTypes.UPDATE_INVOICE, updateInvoiceSaga);
   yield takeLatest(actionTypes.FETCH_INVOICE_LIST, fetchInvoiceListSaga);
+  yield takeLatest(actionTypes.FETCH_INVOICE_LEARNER_LESSON_LIST, fetchInvoiceLearnerLessonListSaga);
   yield takeLatest(actionTypes.FETCH_CART, fetchCartSaga);
   yield takeLatest(actionTypes.UPDATE_CART, updateCartSaga);
   yield takeLatest(actionTypes.ADD_TO_CART, addToCartSaga);
@@ -128,7 +132,8 @@ function* changePasswordSaga({ currentPassword, password, rpassword }) {
   yield put(showLoading());
   const state = yield select();
   const { user } = state.userState;
-  if (bcrypt.compareSync(currentPassword, user.password)) {
+
+  if (bcrypt.compareSync(currentPassword, user.password) || user.password == '') {
     if (password === rpassword) {
       const { data } = yield call(updateUser, {
         _idUser: user._id,
@@ -670,6 +675,26 @@ function* addToCartSaga({ idUser, _idCourse }) {
   } catch (e) {
     console.log(e);
     toast.error('Sorry, updated failed!');
+  } finally {
+    yield delay(1000);
+    yield put(hideLoading());
+  }
+}
+
+function* fetchInvoiceLearnerLessonListSaga({ _idUser, _idLesson }) {
+  yield put(showLoading());
+  try {
+    const { data } = yield call(getInvoiceLearnersFromLesson, _idUser, _idLesson);
+    if (data) {
+      yield put(fetchInvoiceLearnerLessonListSuccess(data.filter(e => !e.isDelete)));
+    } else {
+      yield put(fetchInvoiceLearnerLessonListFailed());
+      toast.error('Cannot fetch invoice learner list!');
+    }
+  } catch (e) {
+    console.log(e);
+    yield put(fetchInvoiceLearnerLessonListFailed());
+    toast.error('Cannot fetch invoice learner list!');
   } finally {
     yield delay(1000);
     yield put(hideLoading());

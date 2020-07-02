@@ -5,6 +5,8 @@ const initialState = {
   invoiceList: [],
   invoiceLearnerList: [],
   invoiceLecturerList: [],
+  invoiceLearnerOfLesson: [],
+  loadingInvoiceLearnerOfLesson: false,
 };
 
 const invoiceState = (state = initialState, action) => {
@@ -54,6 +56,24 @@ const invoiceState = (state = initialState, action) => {
       return {
         ...state,
         invoiceLecturerList: [],
+      };
+    case actionTypes.FETCH_INVOICE_LEARNER_LESSON_LIST:
+      return {
+        ...state,
+        invoiceLearnerOfLesson: [],
+        loadingInvoiceLearnerOfLesson: true,
+      };
+    case actionTypes.FETCH_INVOICE_LEARNER_LESSON_LIST_SUCCESS:
+      return {
+        ...state,
+        invoiceLearnerOfLesson: [...data],
+        loadingInvoiceLearnerOfLesson: false,
+      };
+    case actionTypes.FETCH_INVOICE_LEARNER_LESSON_LIST_FAILED:
+      return {
+        ...state,
+        invoiceLearnerOfLesson: [],
+        loadingInvoiceLearnerOfLesson: false,
       };
     default:
       return state;

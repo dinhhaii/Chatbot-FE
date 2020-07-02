@@ -9,10 +9,10 @@ import { toast } from 'react-toastify';
 import ReactPlayer from 'react-player';
 import LessonsList from '../components/lessons/lessons-list';
 import LessonComment from '../components/lessons/lessons-comments';
+import LessonLoader from '../components/lessons/lessons-loader';
 import { fetchLesson } from '../actions/lesson';
 import { fetchCourseByLesson } from '../actions/course';
-import { fetchInvoiceList, updateInvoice } from '../actions/invoice';
-import { usePrevious } from '../utils/helper';
+import { updateInvoice, fetchInvoiceLearnerLessonList } from '../actions/invoice';
 
 const { TabPane } = Tabs;
 const TABLESSON = {
@@ -26,12 +26,13 @@ const LessonDetail = (props) => {
   } = props;
 
   const [tabKey, setTabKey] = useState(TABLESSON.LESSONS);
-  const prevProps = usePrevious(props);
 
   useEffect(() => {
     props.fetchCourseByLessonAction(match.params.id);
     props.fetchLessonAction(match.params.id);
-    props.fetchInvoiceListAction();
+    if (userState.user) {
+      props.fetchInvoiceLearnerLessonListAction(userState.user._id, match.params.id);
+    }
     const urlParams = new URLSearchParams(location.search);
     const tab = urlParams.get('tab');
     if (tab) {
@@ -39,23 +40,22 @@ const LessonDetail = (props) => {
     }
   }, [match.params.id, commentState.comment]);
 
-  useEffect(() => {
-    if (userState.user && courseState.course && invoiceState.invoiceList.length !== 0 
-      && prevProps && prevProps.invoiceState.invoiceList !== invoiceState.invoiceList) {
-      const invoices = invoiceState.invoiceList.filter(item => item.user._id === userState.user._id && item.course._id === courseState.course._id);
+  const [loading, setLoading] = useState(null);
 
-      if (userState.user === null || invoices.length === 0 || !invoices.some(val => val.status === 'success')) {
+  useEffect(() => {
+    if (loading === false && invoiceState.loadingInvoiceLearnerOfLesson === false) {
+      if (invoiceState.invoiceLearnerOfLesson.length === 0) {
         history.push('/');
         toast.warn("You haven't registered for this course");
       } else {
-        invoices.forEach(invoice => {
+        invoiceState.invoiceLearnerOfLesson.forEach(invoice => {
           if (invoice.status === 'success') {
             const createdDate = new Date(invoice.createdAt).getTime();
-            const accessibleDay = courseState.course.accessibleDays * 86400000;
-  
+            const accessibleDay = invoice.course.accessibleDays * 86400000;
+    
             const date = createdDate + accessibleDay;
             const currentDate = new Date().getTime();
-  
+    
             if (currentDate >= date) {
               history.push('/');
               props.updateInvoiceAction({
@@ -68,13 +68,15 @@ const LessonDetail = (props) => {
         });
       }
     }
-  });
+    setLoading(invoiceState.loadingInvoiceLearnerOfLesson);
+  }, [invoiceState.loadingInvoiceLearnerOfLesson, loading]);
 
   if (!(lessonState.lesson && courseState.course)) {
     return null;
   }
   return (
     <div>
+      <LessonLoader isLoading={invoiceState.loadingInvoiceList} />
       <main>
         <div className="bg-dark position-relative" style={{ height: 75 }}>
           <div
@@ -139,7 +141,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchLessonAction: bindActionCreators(fetchLesson, dispatch),
     fetchCourseByLessonAction: bindActionCreators(fetchCourseByLesson, dispatch),
-    fetchInvoiceListAction: bindActionCreators(fetchInvoiceList, dispatch),
+    fetchInvoiceLearnerLessonListAction: bindActionCreators(fetchInvoiceLearnerLessonList, dispatch),
     updateInvoiceAction: bindActionCreators(updateInvoice, dispatch),
   };
 };

@@ -37,7 +37,6 @@ const LessonComment = (props) => {
       currentPage,
       data,
     });
-    console.log(pagination);
   };
 
   const handleWriteComment = (e) => {
@@ -50,7 +49,6 @@ const LessonComment = (props) => {
 
   const handleChange = e => {
     setState({ ...state, content: e.target.value });
-    console.log(pagination);
   };
 
   if (comments) {

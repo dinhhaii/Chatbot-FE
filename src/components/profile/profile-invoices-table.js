@@ -59,6 +59,12 @@ const InvoiceTable = (props) => {
         <tbody
           className="kt-datatable__body ps ps--active-y"
           style={{ maxHeight: `${447}px` }}>
+          {data.length === 0 && (
+            <tr className="text-center">
+              <td colSpan={9} className="pt-5 pb-5">You haven&apos;t paid for any courses.</td>
+            </tr>
+          )}
+            
           {data.map((element, index) => {
             const createdDate = new Date(element.invoice.createdAt).getTime();
             const accessibleDay = element.course.accessibleDays * 86400000;

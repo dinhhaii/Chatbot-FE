@@ -73,3 +73,24 @@ export const updateInvoice = (invoice) => {
     invoice,
   };
 };
+
+export const fetchInvoiceLearnerLessonList = (_idUser, _idLesson) => {
+  return {
+    type: actionTypes.FETCH_INVOICE_LEARNER_LESSON_LIST,
+    _idUser,
+    _idLesson,
+  };
+};
+
+export const fetchInvoiceLearnerLessonListSuccess = (data) => {
+  return {
+    type: actionTypes.FETCH_INVOICE_LEARNER_LESSON_LIST_SUCCESS,
+    data,
+  };
+};
+
+export const fetchInvoiceLearnerLessonListFailed = () => {
+  return {
+    type: actionTypes.FETCH_INVOICE_LEARNER_LESSON_LIST_FAILED,
+  };
+};

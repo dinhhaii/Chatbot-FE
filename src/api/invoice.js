@@ -20,3 +20,7 @@ export const createInvoice = (invoice) => {
 export const updateInvoice = (invoice) => {
   return AxiosService.post(`${SERVER_URL}/invoice/update`, { ...invoice });
 };
+
+export const getInvoiceLearnersFromLesson = (_idUser, _idLesson) => {
+  return AxiosService.post(`${SERVER_URL}/invoice/learner-lesson`, { _idUser, _idLesson });
+};
