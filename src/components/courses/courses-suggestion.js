@@ -1,17 +1,26 @@
 /* eslint-disable no-mixed-operators */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Carousel from 'nuka-carousel';
 import { addToCart } from '../../actions/cart';
-import { PATH } from '../../utils/constant';
+import { PATH, SEARCH } from '../../utils/constant';
 import 'antd/dist/antd.css';
+import { fetchSuggestCourses } from '../../actions/course';
 
 const CourseSuggestion = (props) => {
-  const { courses } = props;
+  const { userState, courseState } = props;
+
+  useEffect(() => {
+    const searchHistory = localStorage.getItem(SEARCH);
+    if (userState.user) {
+      props.fetchSuggestCourseAction(userState.user._id, searchHistory);
+      console.log('hi');
+    }
+  }, [userState.user]);
 
   return (
     <div>
@@ -22,7 +31,7 @@ const CourseSuggestion = (props) => {
         slidesToShow={1}
         slidesToScroll="auto"
         wrapAround>
-        {courses.map((course, index) => {
+        {courseState.suggestCourses.map((course, index) => {
           const discount = course.discount.find(item => item.status === 'available');
           return course.isDelete ? null : (
             <div className="item" key={index.toString()}>
@@ -57,12 +66,14 @@ const mapStateToProps = (state) => {
   return {
     cartState: state.cartState,
     userState: state.userState,
+    courseState: state.courseState,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     addToCartAction: bindActionCreators(addToCart, dispatch),
+    fetchSuggestCourseAction: bindActionCreators(fetchSuggestCourses, dispatch),
   };
 };
 

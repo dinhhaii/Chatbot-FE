@@ -5,7 +5,7 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Input } from 'antd';
 import 'antd/dist/antd.css';
-import { PATH } from '../../utils/constant';
+import { PATH, SEARCH } from '../../utils/constant';
 
 const { Search } = Input;
 
@@ -22,6 +22,11 @@ const CourseToolBar = ({ viewMode, setViewMode, filter, setFilter, handleChangeF
               onPressEnter={(e) => {
                 const { value } = e.target;
                 if (value) {
+                  const searchStorage = localStorage.getItem(SEARCH);
+                  const searchArray = JSON.parse(searchStorage);
+                  const item = JSON.stringify(searchArray ? [value, ...searchArray].slice(0, 10) : [value]);
+                  localStorage.setItem(SEARCH, item);
+
                   history.push(`/courses?search=${value}`);
                 }
               }}

@@ -14,7 +14,7 @@ import * as actionTypes from '../utils/actionTypes';
 import { AUTH_TOKEN } from '../utils/constant';
 import { getUser, updateUser, getUserList } from '../api/user';
 import {
-  getCourseList, getCourseLecturerList, getCourse, getCourseByLessonId, createCourse, updateCourse,
+  getCourseList, getCourseLecturerList, getCourse, getCourseByLessonId, createCourse, updateCourse, getSuggestCourses,
 } from '../api/course';
 import {
   getInvoiceLearnerList, getInvoiceLecturerList, createInvoice, updateInvoice, getInvoiceList, getInvoiceLearnersFromLesson,
@@ -32,6 +32,8 @@ import {
   fetchCourseLecturerListFailed,
   fetchCourseSuccess,
   fetchCourseFailed,
+  fetchSuggestCoursesSuccess,
+  fetchSuggestCoursesFailed,
 } from '../actions/course';
 import { fetchSubjectListSuccess, fetchSubjectListFailed } from '../actions/subject';
 import {
@@ -72,6 +74,7 @@ function* rootSaga() {
   yield takeLatest(actionTypes.CHANGE_PASSWORD, changePasswordSaga);
   yield takeLatest(actionTypes.CHANGE_PASSWORD_WITHOUT_CONFIRM, changePasswordWithoutConfirmSaga);
   yield takeLatest(actionTypes.FETCH_COURSE, fetchCourseSaga);
+  yield takeLatest(actionTypes.FETCH_SUGGESTION_COURSES, fetchSuggestCourseSaga);
   yield takeLatest(actionTypes.CREATE_COURSE, createCourseSaga);
   yield takeLatest(actionTypes.UPDATE_COURSE, updateCourseSaga);
   yield takeLatest(actionTypes.CREATE_DISCOUNT, createDiscountSaga);
@@ -701,4 +704,23 @@ function* fetchInvoiceLearnerLessonListSaga({ _idUser, _idLesson }) {
   }
 }
 
+function* fetchSuggestCourseSaga({ _idUser, searchHistory }) {
+  yield put(showLoading());
+  try {
+    const { data } = yield call(getSuggestCourses, _idUser, searchHistory);
+    if (data) {
+      yield put(fetchSuggestCoursesSuccess(data.filter(e => !e.isDelete && e.status === 'approved')));
+    } else {
+      yield put(fetchSuggestCoursesFailed());
+      toast.error('Cannot fetch suggest courses list!');
+    }
+  } catch (e) {
+    console.log(e);
+    yield put(fetchSuggestCoursesFailed());
+    toast.error('Cannot fetch suggest courses list!');
+  } finally {
+    yield delay(1000);
+    yield put(hideLoading());
+  }
+}
 export default rootSaga;

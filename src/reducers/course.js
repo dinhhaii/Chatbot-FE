@@ -5,6 +5,7 @@ const initialState = {
   course: null,
   courseList: [],
   courseLecturerList: [],
+  suggestCourses: [],
 };
 
 const courseState = (state = initialState, action) => {
@@ -69,6 +70,21 @@ const courseState = (state = initialState, action) => {
       return {
         ...state,
         course: null,
+      };
+    case actionTypes.FETCH_SUGGESTION_COURSES:
+      return {
+        ...state,
+        suggestCourses: [],
+      };
+    case actionTypes.FETCH_SUGGESTION_COURSES_SUCCESS:
+      return {
+        ...state,
+        suggestCourses: [...data],
+      };
+    case actionTypes.FETCH_SUGGESTION_COURSES_FAILED:
+      return {
+        ...state,
+        suggestCourses: [],
       };
     default:
       return state;

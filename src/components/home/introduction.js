@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
+import { SEARCH } from '../../utils/constant';
 
 const Introduction = (props) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -10,6 +11,11 @@ const Introduction = (props) => {
   const handleSubmit = e => {
     e.preventDefault();
     if (searchQuery.length !== 0) {
+      const searchStorage = localStorage.getItem(SEARCH);
+      const searchArray = JSON.parse(searchStorage);
+      const value = JSON.stringify(searchArray ? [searchQuery, ...searchArray].slice(0, 10) : [searchQuery]);
+      localStorage.setItem(SEARCH, value);
+
       props.history.push(`/courses?search=${searchQuery}`);
     }
   };

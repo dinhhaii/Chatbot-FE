@@ -4,7 +4,7 @@ import * as actionTypes from '../utils/actionTypes';
 export const fetchCourseList = (props) => {
   return {
     type: actionTypes.FETCH_COURSE_LIST,
-    props
+    props,
   };
 };
 
@@ -92,5 +92,26 @@ export const updateCourse = (course) => {
   return {
     type: actionTypes.UPDATE_COURSE,
     course,
+  };
+};
+
+export const fetchSuggestCourses = (_idUser, searchHistory) => {
+  return {
+    type: actionTypes.FETCH_SUGGESTION_COURSES,
+    _idUser,
+    searchHistory,
+  };
+};
+
+export const fetchSuggestCoursesSuccess = (data) => {
+  return {
+    type: actionTypes.FETCH_SUGGESTION_COURSES_SUCCESS,
+    data,
+  };
+};
+
+export const fetchSuggestCoursesFailed = () => {
+  return {
+    type: actionTypes.FETCH_SUGGESTION_COURSES_FAILED,
   };
 };

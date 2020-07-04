@@ -159,7 +159,7 @@ const Course = (props) => {
                 setFilter={setFilter}
                 handleChangeFilter={handleChangeFilter}
               />
-              <CourseSuggestion courses={courses} />
+              <CourseSuggestion />
             </aside>
 
             <div className="col-lg-9">

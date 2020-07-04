@@ -24,3 +24,7 @@ export const createCourse = (course) => {
 export const updateCourse = (course) => {
   return AxiosService.post(`${SERVER_URL}/course/update`, { ...course });
 };
+
+export const getSuggestCourses = (_idUser, searchHistory) => {
+  return AxiosService.post(`${SERVER_URL}/course/suggestion`, { _idUser, searchHistory });
+};

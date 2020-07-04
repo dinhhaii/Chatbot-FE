@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { hideSearchBar } from '../actions/general';
+import { SEARCH } from '../utils/constant';
 
 const Search = (props) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -15,6 +16,11 @@ const Search = (props) => {
   const handleSubmit = e => {
     e.preventDefault();
     if (searchQuery.length !== 0) {
+      const searchStorage = localStorage.getItem(SEARCH);
+      const searchArray = JSON.parse(searchStorage);
+      const value = JSON.stringify(searchArray ? [searchQuery, ...searchArray].slice(0, 10) : [searchQuery]);
+      localStorage.setItem(SEARCH, value);
+      
       props.history.push(`/courses?search=${searchQuery}`);
       props.hideSearchBarAction();
     }
