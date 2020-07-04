@@ -12,8 +12,8 @@ import { Rate, Spin } from 'antd';
 import { updateCart, addToCart } from '../../actions/cart';
 import { PATH } from '../../utils/constant';
 import { getRandom } from '../../utils/helper';
-import 'antd/dist/antd.css';
 import { fetchInvoiceLearnerList } from '../../actions/invoice';
+import 'antd/dist/antd.css';
 
 const CourseCarousel = (props) => {
   const { courseList, userState, invoiceState } = props;

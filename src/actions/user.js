@@ -85,3 +85,32 @@ export const setCountUnreadMessage = (data) => {
     data,
   };
 };
+
+export const fetchProgress = (_idUser) => {
+  return {
+    type: actionTypes.FETCH_PROGRESS,
+    _idUser,
+  };
+};
+
+export const fetchProgressSuccess = (data) => {
+  return {
+    type: actionTypes.FETCH_PROGRESS_SUCCESS,
+    data,
+  };
+};
+
+export const fetchProgressFailed = () => {
+  return {
+    type: actionTypes.FETCH_PROGRESS_FAILED,
+  };
+};
+
+export const addProgress = (_idUser, _idLesson, percentage) => {
+  return {
+    type: actionTypes.ADD_PROGRESS,
+    _idUser,
+    _idLesson,
+    percentage,
+  };
+};

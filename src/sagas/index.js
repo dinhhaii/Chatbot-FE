@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import bcrypt from 'bcryptjs';
 import * as actionTypes from '../utils/actionTypes';
 import { AUTH_TOKEN } from '../utils/constant';
-import { getUser, updateUser, getUserList } from '../api/user';
+import { getUser, updateUser, getUserList, getProgress, addProgress } from '../api/user';
 import {
   getCourseList, getCourseLecturerList, getCourse, getCourseByLessonId, createCourse, updateCourse, getSuggestCourses,
 } from '../api/course';
@@ -23,7 +23,7 @@ import { getSubjectList } from '../api/subject';
 import { createDiscount, updateDiscount } from '../api/discount';
 import { showLoading, hideLoading } from '../actions/general';
 import {
-  fetchUserSuccess, fetchUserFailed, setIsLogin, fetchUserListSuccess, fetchUserListFailed,
+  fetchUserSuccess, fetchUserFailed, setIsLogin, fetchUserListSuccess, fetchUserListFailed, fetchProgressSuccess, fetchProgressFailed,
 } from '../actions/user';
 import {
   fetchCourseListSuccess,
@@ -86,6 +86,9 @@ function* rootSaga() {
   yield takeLatest(actionTypes.FETCH_COURSE_BY_LESSON, fetchCourseByLessonSaga);
   yield takeLatest(actionTypes.FETCH_COURSE_LIST, fetchCourseListSaga);
   yield takeLatest(actionTypes.FETCH_SUBJECT_LIST, fetchSubjectListSaga);
+  yield takeLatest(actionTypes.FETCH_PROGRESS, fetchProgressSaga);
+  yield takeLatest(actionTypes.ADD_PROGRESS, addProgressSaga);
+
   yield takeLatest(
     actionTypes.FETCH_INVOICE_LEARNER_LIST,
     fetchInvoiceLearnerListSaga,
@@ -721,6 +724,42 @@ function* fetchSuggestCourseSaga({ _idUser, searchHistory }) {
   } finally {
     yield delay(1000);
     yield put(hideLoading());
+  }
+}
+
+function* fetchProgressSaga({ _idUser }) {
+  yield put(showLoading());
+  try {
+    const { data } = yield call(getProgress, _idUser);
+    if (data) {
+      yield put(fetchProgressSuccess(data.played));
+    } else {
+      yield put(fetchProgressFailed());
+      toast.error('Cannot fetch progress list!');
+    }
+  } catch (e) {
+    console.log(e);
+    yield put(fetchProgressFailed());
+    toast.error('Cannot fetch progress list!');
+  } finally {
+    yield delay(1000);
+    yield put(hideLoading());
+  }
+}
+
+function* addProgressSaga({ _idUser, _idLesson, percentage }) {
+  try {
+    const { data } = yield call(addProgress, _idUser, _idLesson, percentage);
+    if (data) {
+      yield put(fetchProgressSuccess(data.played));
+    } else {
+      yield put(fetchProgressFailed());
+      toast.error('Cannot add progress!');
+    }
+  } catch (e) {
+    console.log(e);
+    yield put(fetchProgressFailed());
+    toast.error('Cannot add progress!');
   }
 }
 export default rootSaga;

@@ -1,5 +1,6 @@
+/* eslint-disable no-mixed-operators */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import 'antd/dist/antd.css';
 import { Tabs } from 'antd';
 import { bindActionCreators } from 'redux';
@@ -13,6 +14,7 @@ import LessonLoader from '../components/lessons/lessons-loader';
 import { fetchLesson } from '../actions/lesson';
 import { fetchCourseByLesson } from '../actions/course';
 import { updateInvoice, fetchInvoiceLearnerLessonList } from '../actions/invoice';
+import { addProgress, fetchProgress } from '../actions/user';
 
 const { TabPane } = Tabs;
 const TABLESSON = {
@@ -26,11 +28,14 @@ const LessonDetail = (props) => {
   } = props;
 
   const [tabKey, setTabKey] = useState(TABLESSON.LESSONS);
+  const [loading, setLoading] = useState(null);
+  const player = useRef(null);
 
   useEffect(() => {
     props.fetchCourseByLessonAction(match.params.id);
     props.fetchLessonAction(match.params.id);
     if (userState.user) {
+      props.fetchProgressAction(userState.user._id);
       props.fetchInvoiceLearnerLessonListAction(userState.user._id, match.params.id);
     }
     const urlParams = new URLSearchParams(location.search);
@@ -40,7 +45,6 @@ const LessonDetail = (props) => {
     }
   }, [match.params.id, commentState.comment]);
 
-  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
     if (loading === false && invoiceState.loadingInvoiceLearnerOfLesson === false) {
@@ -57,12 +61,12 @@ const LessonDetail = (props) => {
             const currentDate = new Date().getTime();
     
             if (currentDate >= date) {
-              history.push('/');
               props.updateInvoiceAction({
                 _idInvoice: invoice._id,
                 status: 'canceled',
               });
               toast.warn('Your course has expired to access.');
+              history.push('/');
             }
           }
         });
@@ -88,6 +92,19 @@ const LessonDetail = (props) => {
                   <h2>{lessonState.lesson.name}</h2>
                   <div>
                     <ReactPlayer
+                      ref={player}
+                      onReady={() => {
+                        const progress = userState.progress.find(value => value._idLesson === match.params.id);
+                        if (progress) {
+                          player.current.seekTo(progress.percentage / 100, 'fraction');
+                        }
+                      }}
+                      onPause={() => {
+                        const duration = player.current.getDuration();
+                        const played = player.current.getCurrentTime();
+                        const percentage = played * 100 / duration;
+                        props.addProgressAction(userState.user._id, lessonState.lesson._id, percentage);
+                      }}
                       url={lessonState.lesson.lectureURL}
                       controls
                       width="100%"
@@ -143,6 +160,8 @@ const mapDispatchToProps = (dispatch) => {
     fetchCourseByLessonAction: bindActionCreators(fetchCourseByLesson, dispatch),
     fetchInvoiceLearnerLessonListAction: bindActionCreators(fetchInvoiceLearnerLessonList, dispatch),
     updateInvoiceAction: bindActionCreators(updateInvoice, dispatch),
+    addProgressAction: bindActionCreators(addProgress, dispatch),
+    fetchProgressAction: bindActionCreators(fetchProgress, dispatch),
   };
 };
 

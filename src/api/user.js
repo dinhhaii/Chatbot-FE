@@ -42,3 +42,13 @@ export const updateUser = (props) => {
 export const getUserList = () => {
   return AxiosService.get(`${SERVER_URL}/user`);
 };
+
+export const getProgress = (_idUser) => {
+  return AxiosService.get(`${SERVER_URL}/progress/${_idUser}`);
+};
+
+export const addProgress = (_idUser, _idLesson, percentage) => {
+  return AxiosService.post(`${SERVER_URL}/progress/add-lesson`, {
+    _idUser, _idLesson, percentage,
+  });
+};

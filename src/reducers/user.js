@@ -7,6 +7,7 @@ const initialState = {
   isLogin: false,
   userList: [],
   countUnreadMessages: {},
+  progress: []
 };
 
 const userState = (state = initialState, action) => {
@@ -62,6 +63,24 @@ const userState = (state = initialState, action) => {
         ...state,
         countUnreadMessages: data,
       };
+    case actionTypes.FETCH_PROGRESS: {
+      return {
+        ...state,
+        progress: [],
+      };
+    }
+    case actionTypes.FETCH_PROGRESS_SUCCESS: {
+      return {
+        ...state,
+        progress: data,
+      };
+    }
+    case actionTypes.FETCH_PROGRESS_FAILED: {
+      return {
+        ...state,
+        progress: [],
+      };
+    }
     default:
       return state;
   }
