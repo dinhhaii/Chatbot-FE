@@ -97,7 +97,7 @@ const InvoiceTable = (props) => {
                 </td>
 
                 <td className="kt-datatable__cell text-center">
-                  <span className="kt-font-bold">{formatDateToString2(element.invoice.payDay)}</span>
+                  <span className="kt-font-bold">{formatDateToString2(element.invoice.payDay).substr(0, 10)}</span>
                 </td>
 
                 <td className="kt-datatable__cell text-nowrap">
@@ -108,7 +108,7 @@ const InvoiceTable = (props) => {
 
                 <td className="kt-datatable__cell text-center">
                   <span className="kt-font-bold">
-                    {formatDateToString2(expiredDate)}
+                    {formatDateToString2(expiredDate).substr(0, 10)}
                   </span>
                 </td>
 
