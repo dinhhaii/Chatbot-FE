@@ -25,7 +25,7 @@ const LessonsList = (props) => {
       props.fetchProgressAction(userState.user._id);
       props.fetchInvoiceLearnerLessonListAction(userState.user._id, lessons[0]._id);
     }
-  }, [lessons]);
+  }, [lessons, userState.user]);
 
   useEffect(() => {
     setIsRegistered(false);
