@@ -11,14 +11,14 @@ import { updateCart, addToCart } from '../../actions/cart';
 const CoursePurchase = (props) => {
   const { course, isRegistered, userState } = props;
 
-  const aDiscount = course.discount.find(value => value.status === 'available');
+  const aDiscount = course.discount && course.discount.find(value => value.status === 'available');
 
   return (
     <aside className="col-lg-4" id="sidebar">
       <div className="box_detail">
         <figure>
           <Link
-            to={`${PATH.LESSON_DETAIL}/${course.lessons[0]._id}`}
+            to={`${PATH.LESSON_DETAIL}/${course.lessons && course.lessons[0]._id}`}
             className="video">
             <i className="arrow_triangle-right" />
             <img src={course.imageURL} className="img-fluid w-100" alt="" />
@@ -49,7 +49,7 @@ const CoursePurchase = (props) => {
                 </>
               )}
             </div>
-            {course.discount.some((value) => value.status === 'coupon') && (
+            {course.discount && course.discount.some((value) => value.status === 'coupon') && (
               <div className="price">
                 <h4>Coupon</h4>
                 {course.discount.map((value, index) => {

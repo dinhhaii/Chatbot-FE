@@ -1,6 +1,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Rate } from 'antd';
 import 'antd/dist/antd.css';
 import { withRouter } from 'react-router-dom';
@@ -11,9 +11,15 @@ import { fetchUserList } from '../../actions/user';
 import { IMAGE_URL } from '../../utils/constant';
 
 const CourseReview = (props) => {
-  let { feedback } = props;
-  feedback = feedback.filter((e) => !e.isDelete);
-  const rateAverage = (feedback.reduce((total, num) => total + num.rate, 0) / feedback.length).toFixed(1);
+  const { feedback } = props;
+  const rateAverage = useMemo(() => {
+    if (feedback) {
+      return feedback
+        .filter((e) => !e.isDelete)
+        .reduce((total, num) => total + num.rate, 0) / feedback.length.toFixed(1);
+    }
+    return null;
+  }, [feedback]);
 
   useEffect(() => {
     props.fetchUserListAction();
@@ -22,8 +28,8 @@ const CourseReview = (props) => {
   const rates = () => {
     const result = [];
     for (let i = 5; i >= 1; i--) {
-      const totalRate = feedback.filter((e) => e.rate === i).length;
-      const percentRate = (totalRate * 100) / feedback.length;
+      const totalRate = feedback && feedback.filter((e) => e.rate === i).length;
+      const percentRate = totalRate && feedback && (totalRate * 100) / feedback.length;
       result.push(
         <div className="row">
           <div className="col-lg-10 col-9">
@@ -61,7 +67,7 @@ const CourseReview = (props) => {
                   disabled
                 />
               </div>
-              <small>Based on {feedback.length} reviews</small>
+              <small>Based on {feedback && feedback.length} reviews</small>
             </div>
           </div>
           <div className="col-lg-9">{rates().map((value) => value)}</div>
@@ -71,7 +77,7 @@ const CourseReview = (props) => {
       <hr />
 
       <div className="reviews-container">
-        {feedback.map((value, index) => {
+        {feedback && feedback.map((value, index) => {
           const user = props.userState.userList.find((e) => e._id === value._idUser);
           return (
             <div className="review-box clearfix" key={index.toString()}>

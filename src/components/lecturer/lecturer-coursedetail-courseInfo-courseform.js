@@ -212,6 +212,7 @@ const LecturerCourseDetailCourseForm = (props) => {
                     className="form-control"
                     id="selectSubject"
                     name="_idSubject"
+                    style={{ padding: 5, height: 35 }}
                     value={course._idSubject}
                     onChange={handleChange}>
                     <option value="" selected>

@@ -27,6 +27,7 @@ const initCourse = {
   duration: '',
   imageURL: `${SERVER_URL}/images/no-avatar.png`,
   tags: [],
+  subject: {},
 };
 
 const LecturerCourseDetailCourseCreateForm = (props) => {
@@ -209,6 +210,7 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
                 <div className="col-10">
                   <select
                     className="form-control"
+                    style={{ padding: 5, height: 35 }}
                     id="selectSubject"
                     name="_idSubject"
                     value={course._idSubject}

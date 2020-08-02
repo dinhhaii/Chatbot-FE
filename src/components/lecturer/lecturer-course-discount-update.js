@@ -53,6 +53,7 @@ const LecturerCourseDiscountUpdate = (props) => {
           <div className="col-8">
             <select
               className="form-control"
+              style={{ padding: 5, height: 35 }}
               id="selectIdCourseDiscount"
               name="_idCourse"
               value={discount._idCourse}
@@ -103,6 +104,7 @@ const LecturerCourseDiscountUpdate = (props) => {
           <div className="col-8">
             <select
               className="form-control"
+              style={{ padding: 5, height: 35 }}
               id="selectStatusDiscount"
               name="status"
               value={discount.status}

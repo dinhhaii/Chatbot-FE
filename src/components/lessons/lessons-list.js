@@ -21,11 +21,11 @@ const LessonsList = (props) => {
   const [isRegistered, setIsRegistered] = useState(false);
   
   useEffect(() => {
-    if (userState.user && lessons.length !== 0) {
+    if (userState.user && lessons && lessons.length !== 0) {
       props.fetchProgressAction(userState.user._id);
       props.fetchInvoiceLearnerLessonListAction(userState.user._id, lessons[0]._id);
     }
-  }, []);
+  }, [lessons]);
 
   useEffect(() => {
     setIsRegistered(false);
@@ -57,19 +57,19 @@ const LessonsList = (props) => {
 
   return (
     <section id="lessons">
-      {lessons.length === 0 
+      {lessons && lessons.length === 0 
         ? <p>There are no lessons</p> 
         : (
           <>
             <div className="intro_title">
               <h2>Lessons</h2>
               <ul>
-                <li>{lessons.length} lessons</li>
+                <li>{lessons && lessons.length} lessons</li>
               </ul>
             </div>
             <div id="accordion_lessons" role="tablist" className="add_bottom_45">
               <Collapse defaultActiveKey={[]}>
-                {lessons.map((value, index) => {
+                {lessons && lessons.map((value, index) => {
                   const progress = userState.progress.find(item => item._idLesson == value._id);
                   const percentage = progress ? progress.percentage.toFixed(1) : 0;
                   return (
