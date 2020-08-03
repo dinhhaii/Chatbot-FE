@@ -9,6 +9,7 @@
     "no-use-before-define": "off",
     "no-console": "off",
     "arrow-parens": "off",
+    "no-nested-ternary": "off",
     "no-param-reassign": "off",
     "no-unused-vars": "off",
     "no-trailing-spaces": "off",

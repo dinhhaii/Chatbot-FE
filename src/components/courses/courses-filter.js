@@ -125,7 +125,7 @@ const CourseFilter = ({
             }}
             step={25}
             range
-            defaultValue={[0, 100]}
+            defaultValue={[0, 0]}
             tipFormatter={value => `${value / 25 + 1}`}
             onAfterChange={(value) => {
               value = value[1] / 25 + 1;

@@ -28,6 +28,7 @@ const Course = (props) => {
     rate: null,
     popular: 0,
     price: [0, 100],
+    level: 1,
   };
 
   const [filter, setFilter] = useState(initFilter);
@@ -53,6 +54,7 @@ const Course = (props) => {
     const popularParam = urlParams.get('popular');
     const priceParam = urlParams.get('price');
     const rateParam = urlParams.get('rate');
+    const levelParam = urlParams.get('level');
 
     const newFilter = {
       ...filter,
@@ -61,6 +63,7 @@ const Course = (props) => {
       popular: popularParam,
       price: priceParam || [0, 100],
       rate: rateParam || null,
+      level: levelParam || 1,
     };
 
     setFilter(newFilter);
@@ -96,7 +99,7 @@ const Course = (props) => {
 
   const handleChangeFilter = (_filter) => {
     const data = handleFilter(courses, _filter).slice(0, dataPerPage);
-    
+
     setPagination({
       ...pagination,
       data,
@@ -104,8 +107,10 @@ const Course = (props) => {
   };
 
   const handleFilter = (list, _filter) => {
-    const { subject, rate, price } = _filter;
-    let result = price[0] !== 0 && price[1] !== 100 
+    const {
+      subject, rate, price, level,
+    } = _filter;
+    let result = price[0] !== 0 && price[1] !== 100
       ? list.sort((a, b) => a.price - b.price)
       : list;
     result = rate
@@ -118,6 +123,7 @@ const Course = (props) => {
     return result
       .filter((e) => subject.length === 0 || subject.some(name => name === e.subject.name))
       .filter((e) => e.price >= price[0] * 5 && e.price <= price[1] * 5)
+      .filter((e) => e.level === level)
       .filter((e) => {
         if (!rate) {
           return true;
@@ -127,7 +133,7 @@ const Course = (props) => {
       });
   };
 
-  
+
   return (
     <div>
       <main>

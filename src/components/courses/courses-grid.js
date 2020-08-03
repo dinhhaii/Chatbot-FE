@@ -32,7 +32,7 @@ const CoursesGrid = (props) => {
                   <Link to={`${PATH.COURSE_DETAIL}/${value._id}`}>
                     <img src={value.imageURL} className="img-fluid w-100" alt="" />
                   </Link>
-                  {discount 
+                  {discount
                     ? <div className="price">${Math.floor(value.price * (100 - discount.percentage) / 100)} <del style={{ color: 'red', fontSize: '10pt' }}>${value.price}</del></div>
                     : <div className="price">${value.price}</div>}
                   <div className="preview" onClick={() => props.history.push(`${PATH.COURSE_DETAIL}/${value._id}`)}>
@@ -58,12 +58,34 @@ const CoursesGrid = (props) => {
                   </div>
                 </div>
                 <ul>
+                  {value.level === 1 ? (
+                    <li>
+                      Novice
+                    </li>
+                  ) : value.level === 2 ? (
+                    <li>
+                      Advanced Beginner
+                    </li>
+                  ) : value.level === 3 ? (
+                    <li>
+                      Competent
+                    </li>
+                  ) : value.level === 4 ? (
+                    <li>
+                      Proficient
+                    </li>
+                  ) : value.level === 5 ? (
+                    <li>
+                      Expert
+                    </li>
+                  ) : null}
+                  <br />
                   <li>
                     <i className="icon_clock_alt" /> {value.duration}
                   </li>
                   {userState.user && userState.user.role === 'learner' ? (
                     <li>
-                      {invoiceState.invoiceLearnerList.some(item => item.invoice.status !== 'canceled' && item.course._id === value._id) 
+                      {invoiceState.invoiceLearnerList.some(item => item.invoice.status !== 'canceled' && item.course._id === value._id)
                         ? (
                           <Link className="preview-btn">
                             <i className="icon-check-1" /> Purchased
@@ -82,7 +104,7 @@ const CoursesGrid = (props) => {
                   ) : (
                     <li>
                       <Link
-                        className="preview-btn" 
+                        className="preview-btn"
                         to={`${PATH.COURSE_DETAIL}/${value._id}`}>
                         Preview
                       </Link>

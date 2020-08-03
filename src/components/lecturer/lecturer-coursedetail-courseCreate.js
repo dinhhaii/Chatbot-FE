@@ -24,6 +24,7 @@ const initCourse = {
   description: '',
   price: '',
   accessibleDays: '',
+  level: 1,
   duration: '',
   imageURL: `${SERVER_URL}/images/no-avatar.png`,
   tags: [],
@@ -202,6 +203,38 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
                 </div>
               </div>
 
+              {/* LEVEL */}
+              <div className="form-group row">
+                <label htmlFor="selectLevel" className="col-2 col-form-label">
+                  Level
+                </label>
+                <div className="col-10">
+                  <select
+                    className="form-control"
+                    style={{ padding: 5, height: 35 }}
+                    id="selectLevel"
+                    name="level"
+                    value={course.level}
+                    onChange={handleChange}>
+                    <option key="course-level-1" value={1}>
+                      Novice
+                    </option>
+                    <option key="course-level-2" value={2}>
+                      Advanced Beginner
+                    </option>
+                    <option key="course-level-3" value={3}>
+                      Competent
+                    </option>
+                    <option key="course-level-4" value={4}>
+                      Proficient
+                    </option>
+                    <option key="course-level-5" value={5}>
+                      Expert
+                    </option>
+                  </select>
+                </div>
+              </div>
+
               {/* SUBJECT */}
               <div className="form-group row">
                 <label htmlFor="selectSubject" className="col-2 col-form-label">
@@ -360,7 +393,7 @@ const LecturerCourseDetailCourseCreateForm = (props) => {
             </div>
           </div>
         </div>
-        
+
 
         <div className="kt-portlet__foot">
           <div className="kt-form__actions">

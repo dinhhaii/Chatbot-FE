@@ -27,21 +27,21 @@ const CourseDetail = (props) => {
   }, [match.params.id]);
 
   useEffect(() => {
-    if (userState.user && courseState.course && invoiceState.invoiceList.length !== 0 
+    if (userState.user && courseState.course && invoiceState.invoiceList.length !== 0
       && prevProps && prevProps.invoiceState.invoiceList !== invoiceState.invoiceList) {
       const invoices = invoiceState.invoiceList.filter(item => {
         if (item.course && item.user) {
-          return item.user._id === userState.user._id && item.course._id === courseState.course._id; 
+          return item.user._id === userState.user._id && item.course._id === courseState.course._id;
         }
         return false;
       });
-        
+
       if (userState.user !== null && invoices.length !== 0 && invoices.some(val => val.status === 'success')) {
         invoices.forEach(invoice => {
           if (invoice.status === 'success') {
             const createdDate = new Date(invoice.createdAt).getTime();
             const accessibleDay = courseState.course.accessibleDays * 86400000;
-  
+
             const date = createdDate + accessibleDay;
             const currentDate = new Date().getTime();
             if (currentDate < date) {
@@ -79,6 +79,15 @@ const CourseDetail = (props) => {
                       {`${capitalize(courseState.course.lecturer.firstName)} ${capitalize(courseState.course.lecturer.lastName)}`}
                     </Link>
                   )}
+                </p>
+                <br/>
+                <p style={{ fontSize: '12px' }}>
+                  preferable to&nbsp;
+                  {courseState.course.level === 1 ? 'Novice'
+                    : courseState.course.level === 2 ? 'Advanced Beginner'
+                      : courseState.course.level === 3 ? 'Competent'
+                        : courseState.course.level === 4 ? 'Proficient'
+                          : courseState.course.level === 5 ? 'Expert' : null}
                 </p>
               </div>
             </div>
