@@ -3,12 +3,22 @@
 import React, { useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import {
-  Checkbox, Slider, Rate, Radio, 
+  Checkbox, Slider, Rate, Radio, Popover, Button,
 } from 'antd';
 import 'antd/dist/antd.css';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchSubjectList } from '../../actions/subject';
+
+const levels = (
+  <div>
+    <p>1: Novice</p>
+    <p>2: Advanced Beginner</p>
+    <p>3: Competent</p>
+    <p>4: Proficient</p>
+    <p>5: Expert</p>
+  </div>
+);
 
 const CourseFilter = ({
   filter,
@@ -93,6 +103,34 @@ const CourseFilter = ({
             onAfterChange={(value) => {
               setFilter({ ...filter, price: value });
               handleChangeFilter({ ...filter, price: value });
+            }}
+          />
+        </div>
+
+        <div className="filter_type">
+          <h6>Level &nbsp;
+            <Popover content={levels} title="Levels" trigger="hover">
+              <Button type="dashed" shape="circle" size="small">
+                ?
+              </Button>
+            </Popover>
+          </h6>
+          <Slider
+            marks={{
+              0: '1',
+              25: '2',
+              50: '3',
+              75: '4',
+              100: '5',
+            }}
+            step={25}
+            range
+            defaultValue={[0, 100]}
+            tipFormatter={value => `${value / 25 + 1}`}
+            onAfterChange={(value) => {
+              value = value[1] / 25 + 1;
+              setFilter({ ...filter, level: value });
+              handleChangeFilter({ ...filter, level: value });
             }}
           />
         </div>
