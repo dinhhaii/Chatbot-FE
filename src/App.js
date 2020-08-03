@@ -59,19 +59,30 @@ function Hacademy(props) {
       .then((response) => {
         const { data } = response;
         if (data) {
-          const { firstName, lastName, _id, role } = data;
+          const { firstName, lastName, _id, role, status } = data;
           props.fetchUserListAction();
-
-          if (!userState.isLogin && _id) {
-            updateStatusUser(_id);
-            props.setIsLoginAction();
-            props.fetchCartAction(_id);
-            props.fetchUserSuccessAction({ user: data });
-            toast.success(`Hi, ${firstName} ${lastName}!`);
-            if (!role) {
-              props.setRoleAction(true);
-            } else {
-              props.setRoleAction(false);
+          if (!userState.isLogin && _id && status) {
+            switch (status) {
+              case 'banned':
+                toast.warn(
+                  'Your account was banned. Please contact to administrator.',
+                );
+                if (token) {
+                  localStorage.removeItem(AUTH_TOKEN);
+                }
+                break;
+              default:
+                updateStatusUser(_id);
+                props.setIsLoginAction();
+                props.fetchCartAction(_id);
+                props.fetchUserSuccessAction({ user: data });
+                toast.success(`Hi, ${firstName} ${lastName}!`);
+                if (!role) {
+                  props.setRoleAction(true);
+                } else {
+                  props.setRoleAction(false);
+                }
+                break;
             }
           }
         }

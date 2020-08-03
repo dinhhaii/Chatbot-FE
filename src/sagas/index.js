@@ -197,13 +197,18 @@ function* fetchUserSaga({ email, password }) {
     yield put(showLoading());
     const { data } = yield call(getUser, email, password);
     if (data) {
-      yield put(fetchUserSuccess(data));
-      yield put(setIsLogin());
-      yield select((state) => {
-        const { firstName, lastName } = state.userState.user;
-        localStorage.setItem(AUTH_TOKEN, state.userState.token);
-        toast.success(`Hi ${firstName} ${lastName}`);
-      });
+      if (data.user.status === 'banned') {
+        toast.warn('Your account was banned. Please contact to administrator.');
+        yield put(fetchUserFailed());
+      } else {
+        yield put(fetchUserSuccess(data));
+        yield put(setIsLogin());
+        yield select((state) => {
+          const { firstName, lastName } = state.userState.user;
+          localStorage.setItem(AUTH_TOKEN, state.userState.token);
+          toast.success(`Hi ${firstName} ${lastName}`);
+        });
+      }
     } else {
       yield put(fetchUserFailed());
       toast.error('Sorry, fetching user failed!');

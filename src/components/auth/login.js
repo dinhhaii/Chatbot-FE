@@ -40,9 +40,7 @@ const Login = (props) => {
         localStorage.removeItem('checkbox');
       } else {
         localStorage.setItem('email', props.userState.user.email);
-        console.log(localStorage);
       }
-
       props.history.push('/');
     }
   });

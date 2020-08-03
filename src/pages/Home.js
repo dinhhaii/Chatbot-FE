@@ -17,15 +17,24 @@ import { PATH } from '../utils/constant';
 import { fetchCourseList } from '../actions/course';
 import { fetchSubjectList } from '../actions/subject';
 import { fetchInvoiceLearnerList } from '../actions/invoice';
+import { toast } from 'react-toastify';
 
 const Home = (props) => {
+  const { courseState, subjectState, userState, history } = props;
+  const courseList = courseState.courseList.filter(item => item.status === 'approved');
+  
   useEffect(() => {
     props.fetchCourseListAction();
     props.fetchSubjectListAction();
   }, []);
 
-  const { courseState, subjectState } = props;
-  const courseList = courseState.courseList.filter(item => item.status === 'approved');
+  useEffect(() => {
+    if (userState.user && userState.user.status === 'unverified') {
+      toast.warn('Your account need to be verified.');
+      history.push(PATH.PROFILE);
+    }
+  }, [userState.user]);
+
 
   return (
     <div>

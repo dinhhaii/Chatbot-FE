@@ -29,7 +29,12 @@ const CourseDetail = (props) => {
   useEffect(() => {
     if (userState.user && courseState.course && invoiceState.invoiceList.length !== 0 
       && prevProps && prevProps.invoiceState.invoiceList !== invoiceState.invoiceList) {
-      const invoices = invoiceState.invoiceList.filter(item => item.user._id === userState.user._id && item.course._id === courseState.course._id);
+      const invoices = invoiceState.invoiceList.filter(item => {
+        if (item.course && item.user) {
+          return item.user._id === userState.user._id && item.course._id === courseState.course._id; 
+        }
+        return false;
+      });
         
       if (userState.user !== null && invoices.length !== 0 && invoices.some(val => val.status === 'success')) {
         invoices.forEach(invoice => {
@@ -67,13 +72,13 @@ const CourseDetail = (props) => {
                 </h1>
                 <p>
                   Created by{' '}
-                  <Link
-                    to={`${PATH.PROFILE_USER}/${courseState.course.lecturer._id}`}
-                    className="font-weight-bold">
-                    {`${capitalize(courseState.course.lecturer.firstName)} ${capitalize(
-                      courseState.course.lecturer.lastName,
-                    )}`}
-                  </Link>
+                  {courseState.course.lecturer && (
+                    <Link
+                      to={`${PATH.PROFILE_USER}/${courseState.course.lecturer._id}`}
+                      className="font-weight-bold">
+                      {`${capitalize(courseState.course.lecturer.firstName)} ${capitalize(courseState.course.lecturer.lastName)}`}
+                    </Link>
+                  )}
                 </p>
               </div>
             </div>
