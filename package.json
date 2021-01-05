@@ -6,7 +6,7 @@
     "@ckeditor/ckeditor5-build-classic": "^19.0.1",
     "@ckeditor/ckeditor5-react": "^2.1.0",
     "antd": "^4.0.4",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "chart.js": "^2.9.3",
     "dotenv": "^8.2.0",
